@@ -1,0 +1,23 @@
+{
+  // Prettier
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.semi": true,
+  "prettier.singleQuote": true,
+  "prettier.jsxSingleQuote": true,
+
+  // Editor
+  "editor.minimap.enabled": false,
+  "editor.fontSize": 13,
+  "editor.glyphMargin": false,
+  "editor.formatOnSave": true,
+
+  // UI
+  "window.zoomLevel": 3,
+  "window.commandCenter": false,
+  "workbench.sideBar.location": "left",
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.layoutControl.enabled": false,
+
+  // Lint
+  "css.validate": false
+}

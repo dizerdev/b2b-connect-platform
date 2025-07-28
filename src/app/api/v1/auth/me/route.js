@@ -1,5 +1,5 @@
 import { requireAuth } from 'lib/authMiddleware';
-import { db } from 'lib/db';
+import db from 'lib/db';
 
 export async function GET(req) {
   const auth = await requireAuth(req);

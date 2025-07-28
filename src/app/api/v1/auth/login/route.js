@@ -1,4 +1,4 @@
-import { db } from 'lib/db';
+import db from 'lib/db';
 import { verifyPassword } from 'lib/hash';
 import { signToken } from 'lib/jwt';
 

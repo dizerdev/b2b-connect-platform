@@ -8,7 +8,7 @@ export async function GET(req, { params }) {
   }
 
   const user = auth.payload;
-  const { id } = await params;
+  const { id: catalogoId } = await params;
 
   try {
     // 1. Pega o catálogo
@@ -18,7 +18,7 @@ export async function GET(req, { params }) {
       FROM catalogos
       WHERE id = $1
     `,
-      [id]
+      [catalogoId]
     );
 
     if (catalogoRes.rowCount === 0) {
@@ -50,42 +50,58 @@ export async function GET(req, { params }) {
       FROM colecoes
       WHERE catalogo_id = $1
     `,
-      [id]
+      [catalogoId]
     );
 
-    // 4. Produtos e grades
-    const produtosRes = await db.query(
+    // 4. Produtos + Grades (1 query)
+    const produtosComGradesRes = await db.query(
       `
-      SELECT pc.id as produto_catalogo_id, p.id, p.nome, p.descricao, p.imagens, pc.preco, pc.destaque
-      FROM produtos_catalogo pc
-      JOIN produtos p ON pc.produto_id = p.id
+      SELECT 
+        p.id AS produto_id,
+        p.nome,
+        p.descricao,
+        p.imagens,
+        pc.preco,
+        pc.destaque,
+        pc.id AS produto_catalogo_id,
+        g.cor,
+        g.tamanho,
+        g.estoque
+      FROM produtos p
+      JOIN produtos_catalogo pc ON pc.produto_id = p.id
+      LEFT JOIN grades g ON g.produto_catalogo_id = pc.id
       WHERE pc.catalogo_id = $1
+      ORDER BY p.id, g.tamanho
     `,
-      [id]
+      [catalogoId]
     );
 
-    const produtos = await Promise.all(
-      produtosRes.rows.map(async (produto) => {
-        const gradesRes = await db.query(
-          `
-        SELECT cor, tamanho, estoque
-        FROM grades
-        WHERE produto_catalogo_id = $1
-      `,
-          [produto.produto_catalogo_id]
-        );
+    // Agrupa os produtos
+    const produtosMap = new Map();
 
-        return {
-          id: produto.id,
-          nome: produto.nome,
-          descricao: produto.descricao,
-          imagens: produto.imagens,
-          preco: produto.preco,
-          destaque: produto.destaque,
-          grades: gradesRes.rows,
-        };
-      })
-    );
+    for (const row of produtosComGradesRes.rows) {
+      if (!produtosMap.has(row.produto_id)) {
+        produtosMap.set(row.produto_id, {
+          id: row.produto_id,
+          nome: row.nome,
+          descricao: row.descricao,
+          imagens: row.imagens,
+          preco: parseFloat(row.preco),
+          destaque: row.destaque,
+          grades: [],
+        });
+      }
+
+      if (row.cor && row.tamanho) {
+        produtosMap.get(row.produto_id).grades.push({
+          cor: row.cor,
+          tamanho: row.tamanho,
+          estoque: row.estoque,
+        });
+      }
+    }
+
+    const produtos = Array.from(produtosMap.values());
 
     return Response.json({
       catalogo: {

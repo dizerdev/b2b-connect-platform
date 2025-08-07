@@ -1,6 +1,7 @@
 import db from 'lib/db';
 import { verifyPassword } from 'lib/hash';
 import { signToken } from 'lib/jwt';
+import * as cookie from 'cookie';
 
 export async function POST(req) {
   try {
@@ -34,15 +35,32 @@ export async function POST(req) {
 
     const token = signToken({ sub: usuario.id, papel: usuario.papel });
 
-    return Response.json({
-      token,
-      usuario: {
-        id: usuario.id,
-        nome: usuario.nome,
-        email: usuario.email,
-        papel: usuario.papel,
-      },
+    const setCookie = cookie.serialize('token', token, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7, // 7 dias
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
     });
+
+    return new Response(
+      JSON.stringify({
+        token,
+        usuario: {
+          id: usuario.id,
+          nome: usuario.nome,
+          email: usuario.email,
+          papel: usuario.papel,
+        },
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Set-Cookie': setCookie,
+        },
+      }
+    );
   } catch (err) {
     console.error('Erro no login:', err);
     return Response.json({ error: 'Erro interno' }, { status: 500 });

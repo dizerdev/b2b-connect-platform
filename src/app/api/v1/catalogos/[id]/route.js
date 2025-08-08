@@ -63,13 +63,13 @@ export async function GET(req, { params }) {
         p.imagens,
         pc.preco,
         pc.destaque,
-        pc.id AS produto_catalogo_id,
+        pc.produto_id,
         g.cor,
         g.tamanho,
         g.estoque
       FROM produtos p
       JOIN produtos_catalogo pc ON pc.produto_id = p.id
-      LEFT JOIN grades g ON g.produto_catalogo_id = pc.id
+      LEFT JOIN grades g ON g.produto_id = pc.produto_id
       WHERE pc.catalogo_id = $1
       ORDER BY p.id, g.tamanho
     `,

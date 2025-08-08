@@ -8,7 +8,7 @@ export async function PATCH(req, { params }) {
   }
 
   const { sub: userId, papel } = auth.payload;
-  const { pid: produtoCatalogoId } = await params;
+  const { pid: produtoId } = await params;
   const updates = await req.json();
 
   if (!Array.isArray(updates) || updates.length === 0) {
@@ -33,12 +33,13 @@ export async function PATCH(req, { params }) {
     // Verifica se o produto_catalogo pertence ao usuário ou se é admin
     const res = await db.query(
       `
-      SELECT c.fornecedor_id
+      SELECT pc.catalogo_id, c.fornecedor_id
       FROM produtos_catalogo pc
       JOIN catalogos c ON c.id = pc.catalogo_id
-      WHERE pc.id = $1
+      JOIN produtos p ON p.id = pc.produto_id
+      WHERE pc.produto_id = $1
     `,
-      [produtoCatalogoId]
+      [produtoId]
     );
 
     if (res.rowCount === 0) {
@@ -62,9 +63,9 @@ export async function PATCH(req, { params }) {
         `
         UPDATE grades
         SET estoque = $1
-        WHERE produto_catalogo_id = $2 AND cor = $3 AND tamanho = $4
+        WHERE produto_id = $2 AND cor = $3 AND tamanho = $4
       `,
-        [estoque, produtoCatalogoId, cor, tamanho]
+        [estoque, produtoId, cor, tamanho]
       );
     }
 

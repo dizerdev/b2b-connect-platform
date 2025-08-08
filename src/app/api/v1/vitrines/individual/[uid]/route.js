@@ -39,7 +39,7 @@ export async function GET(req, { params }) {
       `
       SELECT c.id, c.nome, c.status, c.rating
       FROM catalogos c
-      WHERE c.fornecedor_id = $1 AND c.status = 'aprovado'
+      WHERE c.fornecedor_id = $1 AND c.status = 'publicado'
       ORDER BY ${order}
     `,
       [usuarioId]

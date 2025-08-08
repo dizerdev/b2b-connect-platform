@@ -58,9 +58,9 @@ export async function POST(req, { params }) {
     // 2. Associa ao catálogo com atributos específicos
     const assoc = await db.query(
       `
-      INSERT INTO produtos_catalogo (id, catalogo_id, produto_id, preco, destaque, created_at)
-      VALUES (gen_random_uuid(), $1, $2, $3, $4, NOW())
-      RETURNING id, preco, destaque
+      INSERT INTO produtos_catalogo (catalogo_id, produto_id, preco, destaque, created_at)
+      VALUES ($1, $2, $3, $4, NOW())
+      RETURNING produto_id, preco, destaque
     `,
       [catalogoId, produto.id, preco, destaque || false]
     );
@@ -72,7 +72,6 @@ export async function POST(req, { params }) {
           nome: produto.nome,
           descricao: produto.descricao,
           imagens: produto.imagens,
-          id_prod: assoc.rows[0].id,
           preco: assoc.rows[0].preco,
           destaque: assoc.rows[0].destaque,
         },

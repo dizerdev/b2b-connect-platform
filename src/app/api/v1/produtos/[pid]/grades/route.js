@@ -8,7 +8,7 @@ export async function POST(req, { params }) {
   }
 
   const { sub: userId, papel } = auth.payload;
-  const { pid: produtoCatalogoId } = await params;
+  const { pid: produtoId } = await params;
 
   let grades;
   try {
@@ -40,9 +40,10 @@ export async function POST(req, { params }) {
       SELECT pc.catalogo_id, c.fornecedor_id
       FROM produtos_catalogo pc
       JOIN catalogos c ON c.id = pc.catalogo_id
-      WHERE pc.id = $1
+      JOIN produtos p ON p.id = pc.produto_id
+      WHERE pc.produto_id = $1
     `,
-      [produtoCatalogoId]
+      [produtoId]
     );
 
     if (res.rowCount === 0) {
@@ -68,14 +69,14 @@ export async function POST(req, { params }) {
     const flatValues = grades.flatMap((g) => [g.cor, g.tamanho, g.estoque]);
 
     const query = `
-      INSERT INTO grades (produto_catalogo_id, cor, tamanho, estoque)
+      INSERT INTO grades (produto_id, cor, tamanho, estoque)
       VALUES ${values}
-      ON CONFLICT (produto_catalogo_id, cor, tamanho) DO UPDATE
+      ON CONFLICT (produto_id, cor, tamanho) DO UPDATE
       SET estoque = EXCLUDED.estoque
       RETURNING cor, tamanho, estoque, created_at
     `;
 
-    const result = await db.query(query, [produtoCatalogoId, ...flatValues]);
+    const result = await db.query(query, [produtoId, ...flatValues]);
 
     return Response.json({ grades: result.rows }, { status: 201 });
   } catch (err) {

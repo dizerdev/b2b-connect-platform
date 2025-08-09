@@ -75,7 +75,7 @@ export async function PATCH(req, { params }) {
     // Insere ou atualiza metadados com JSONB
     await db.query(
       `
-      INSERT INTO catalogo_metadados (catalogo_id, continente, pais, categoria, especificacoes)
+      INSERT INTO catalogo_metadados (catalogo_id, continente, pais, categoria, especificacao)
       VALUES ($1, $2, $3, $4, $5::jsonb)
       ON CONFLICT (catalogo_id)
       DO UPDATE SET continente = EXCLUDED.continente,

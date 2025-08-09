@@ -81,7 +81,7 @@ export async function PATCH(req, { params }) {
       DO UPDATE SET continente = EXCLUDED.continente,
         pais = EXCLUDED.pais,
         categoria = EXCLUDED.categoria,
-        especificacoes = EXCLUDED.especificacoes
+        especificacao = EXCLUDED.especificacao
       `,
       [catalogoId, continente, pais, categoria, JSON.stringify(especificacao)]
     );

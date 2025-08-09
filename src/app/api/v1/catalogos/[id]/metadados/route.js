@@ -72,22 +72,18 @@ export async function PATCH(req, { params }) {
       return Response.json({ error: 'Acesso negado' }, { status: 403 });
     }
 
-    // Apaga especificações antigas
-    await db.query(`DELETE FROM catalogo_metadados WHERE catalogo_id = $1`, [
-      catalogoId,
-    ]);
-
-    // Insere novas especificações
-    const insertValues = especificacao
-      .map((_, i) => `($1, $2, $3, $4, $${i + 5})`)
-      .join(', ');
-
+    // Insere ou atualiza metadados com JSONB
     await db.query(
       `
-      INSERT INTO catalogo_metadados (catalogo_id, continente, pais, categoria, especificacao)
-      VALUES ${insertValues}
+      INSERT INTO catalogo_metadados (catalogo_id, continente, pais, categoria, especificacoes)
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT (catalogo_id)
+      DO UPDATE SET continente = EXCLUDED.continente,
+                    pais = EXCLUDED.pais,
+                    categoria = EXCLUDED.categoria,
+                    especificacoes = EXCLUDED.especificacoes
       `,
-      [catalogoId, continente, pais, categoria, ...especificacao]
+      [catalogoId, continente, pais, categoria, JSON.stringify(especificacao)]
     );
 
     return Response.json({ success: true });

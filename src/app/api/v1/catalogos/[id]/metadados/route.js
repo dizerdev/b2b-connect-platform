@@ -76,12 +76,12 @@ export async function PATCH(req, { params }) {
     await db.query(
       `
       INSERT INTO catalogo_metadados (catalogo_id, continente, pais, categoria, especificacoes)
-      VALUES ($1, $2, $3, $4, $5)
+      VALUES ($1, $2, $3, $4, $5::jsonb)
       ON CONFLICT (catalogo_id)
       DO UPDATE SET continente = EXCLUDED.continente,
-                    pais = EXCLUDED.pais,
-                    categoria = EXCLUDED.categoria,
-                    especificacoes = EXCLUDED.especificacoes
+        pais = EXCLUDED.pais,
+        categoria = EXCLUDED.categoria,
+        especificacoes = EXCLUDED.especificacoes
       `,
       [catalogoId, continente, pais, categoria, JSON.stringify(especificacao)]
     );

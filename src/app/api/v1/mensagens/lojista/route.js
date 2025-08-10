@@ -22,14 +22,14 @@ export async function GET(req) {
         c.nome AS catalogo_nome,
         m.mensagem,
         m.status,
-        m.criado_em,
+        m.created_at,
         ra.resposta,
         ra.created_at AS resposta_data_hora
-      FROM mensagens m
+      FROM mensagens_contato m
       JOIN catalogos c ON c.id = m.catalogo_id
       LEFT JOIN respostas_admin ra ON ra.mensagem_id = m.id
       WHERE m.lojista_id = $1
-      ORDER BY m.criado_em DESC
+      ORDER BY m.created_at DESC
       LIMIT 50
     `,
       [userId]

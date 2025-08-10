@@ -12,9 +12,9 @@ export async function PATCH(req, { params }) {
   }
 
   const { id } = await params;
-  const { nome, email, papel } = await req.json();
+  const { nome, email, papel, nome_fantasia } = await req.json();
 
-  if (!nome && !email && !papel) {
+  if (!nome && !email && !papel && !nome_fantasia) {
     return Response.json({ error: 'Nada para atualizar' }, { status: 400 });
   }
 
@@ -22,14 +22,19 @@ export async function PATCH(req, { params }) {
   const values = [];
   let index = 1;
 
+  if (email) {
+    fields.push(`email = $${index++}`);
+    values.push(email);
+  }
+
   if (nome) {
     fields.push(`nome = $${index++}`);
     values.push(nome);
   }
 
-  if (email) {
-    fields.push(`email = $${index++}`);
-    values.push(email);
+  if (nome_fantasia) {
+    fields.push(`nome_fantasia = $${index++}`);
+    values.push(nome_fantasia);
   }
 
   if (papel) {
@@ -52,7 +57,7 @@ export async function PATCH(req, { params }) {
     UPDATE usuarios
     SET ${fields.join(', ')}
     WHERE id = $${index}
-    RETURNING id, nome, email, papel, ativo, criado_em
+    RETURNING id, email, nome, nome_fantasia, ativo, criado_em
   `;
 
   try {

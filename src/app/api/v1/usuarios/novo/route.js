@@ -14,9 +14,9 @@ export async function POST(req) {
   }
 
   try {
-    const { nome, email, senha, papel } = await req.json();
+    const { nome, email, senha, papel, nome_fantasia } = await req.json();
 
-    if (!nome || !email || !senha || !papel) {
+    if (!nome || !email || !senha || !papel || !nome_fantasia) {
       return Response.json(
         { error: 'Campos obrigatórios ausentes' },
         { status: 400 }
@@ -37,11 +37,11 @@ export async function POST(req) {
 
     const result = await db.query(
       `
-      INSERT INTO usuarios (id, nome, email, senha_hash, papel, ativo, criado_em)
-      VALUES (gen_random_uuid(), $1, $2, $3, $4, true, NOW())
+      INSERT INTO usuarios (id, email, nome, nome_fantasia, papel, senha_hash, vitrine_id, ativo, criado_em)
+      VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, true, NOW())
       RETURNING id, nome, email, papel, ativo, criado_em
     `,
-      [nome, email, senha_hash, papel]
+      [email, nome, nome_fantasia, papel, senha]
     );
 
     return Response.json({ usuario: result.rows[0] }, { status: 201 });

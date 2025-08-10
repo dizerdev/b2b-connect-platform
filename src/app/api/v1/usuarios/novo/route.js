@@ -37,11 +37,11 @@ export async function POST(req) {
 
     const result = await db.query(
       `
-      INSERT INTO usuarios (id, email, nome, nome_fantasia, papel, senha_hash, vitrine_id, ativo, criado_em)
+      INSERT INTO usuarios (id, email, nome, nome_fantasia, papel, senha_hash, ativo, criado_em)
       VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, true, NOW())
       RETURNING id, nome, email, papel, ativo, criado_em
     `,
-      [email, nome, nome_fantasia, papel, senha]
+      [email, nome, nome_fantasia, papel, senha_hash]
     );
 
     return Response.json({ usuario: result.rows[0] }, { status: 201 });

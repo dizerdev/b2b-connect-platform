@@ -21,7 +21,8 @@
     "node-pg-migrate": "^8.0.3",
     "pg": "^8.16.3",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "zod": "^4.0.16"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

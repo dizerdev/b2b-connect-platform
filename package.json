@@ -7,6 +7,7 @@
     "services:up": "docker compose -f infra/compose-pg.yaml up -d",
     "services:stop": "docker compose -f infra/compose-pg.yaml stop",
     "services:down": "docker compose -f infra/compose-pg.yaml down",
+    "seed": "node ./lib/seed.js",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -18,12 +19,14 @@
     "dotenv": "^17.2.1",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.539.0",
     "next": "15.4.4",
     "node-pg-migrate": "^8.0.3",
     "pg": "^8.16.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "zod": "^4.0.16"
+    "zod": "^4.0.16",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

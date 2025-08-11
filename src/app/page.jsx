@@ -1,19 +1,19 @@
 // app/page.jsx
 'use client';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-// import Cookies from 'js-cookie';
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 export default function SplashPage() {
   const router = useRouter();
 
   useEffect(() => {
     const checkSession = async () => {
-      // const token = Cookies.get('token');
+      const token = Cookies.get('token');
 
       if (!token) {
-        router.replace('/login');
+        router.replace('/mapa');
         return;
       }
 
@@ -22,12 +22,12 @@ export default function SplashPage() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            // Cookie: `token=${token}`,
+            Cookie: `token=${token}`,
           },
         });
 
         if (!res.ok) {
-          router.replace('/login');
+          router.replace('/mapa');
           return;
         }
 
@@ -43,10 +43,10 @@ export default function SplashPage() {
             router.replace('/lojista/dashboard');
             break;
           default:
-            router.replace('/login');
+            router.replace('/mapa');
         }
       } catch {
-        router.replace('/login');
+        router.replace('/mapa');
       }
     };
 

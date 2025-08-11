@@ -66,7 +66,7 @@ export default function LoginPage() {
           router.push('/lojista/dashboard');
           break;
         default:
-          router.push('/');
+          router.push('/mapa');
       }
     } catch (err) {
       setErro(err.message);

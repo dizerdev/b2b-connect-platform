@@ -1,5 +1,7 @@
+'use client';
+
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useAuthStore } from 'stores/useAuthStore';
 
 export default function LogoutButton() {

@@ -12,7 +12,7 @@ export async function PATCH(req, { params }) {
     return Response.json({ error: 'Acesso negado' }, { status: 403 });
   }
 
-  const { id } = params;
+  const { id } = await params;
   const { ativo } = await req.json();
 
   if (typeof ativo !== 'boolean') {

@@ -3,11 +3,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const marcas = [
-  { src: '/logos/marca1.png', alt: 'Marca 1' },
-  { src: '/logos/marca2.png', alt: 'Marca 2' },
-  { src: '/logos/marca3.png', alt: 'Marca 3' },
-  { src: '/logos/marca4.png', alt: 'Marca 4' },
-  // adicione mais...
+  { src: '/assets/logos/logo_adidas.png', alt: 'Adidas' },
+  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
+  { src: '/assets/logos/logo_vans.png', alt: 'Vans' },
+  { src: '/assets/logos/logo_asics.png', alt: 'Asics' },
+  { src: '/assets/logos/logo_nike.png', alt: 'Nike' },
+  {
+    src: '/assets/logos/logo_sneakers_brasil.png',
+    alt: 'Sneakers Brasil',
+  },
+  { src: '/assets/logos/logo_vans.png', alt: 'Vans' },
+  { src: '/assets/logos/logo_nike.png', alt: 'Nike' },
 ];
 
 export default function MapaLayout({ children }) {
@@ -35,8 +41,8 @@ export default function MapaLayout({ children }) {
               key={i}
               src={marca.src}
               alt={marca.alt}
-              width={100}
-              height={50}
+              width={150}
+              height={100}
               className='object-contain'
             />
           ))}

@@ -1,4 +1,3 @@
-// app/page.jsx
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -33,14 +32,17 @@ export default function SplashPage() {
 
         const data = await res.json();
         switch (data.usuario.papel) {
-          case 'admin':
-            router.replace('/admin/dashboard');
+          case 'administrador':
+            router.replace('/dashboard/admin');
+            break;
+          case 'representante':
+            router.replace('/dashboard/parceiro');
             break;
           case 'fornecedor':
-            router.replace('/fornecedor/dashboard');
+            router.replace('/dashboard/parceiro');
             break;
           case 'lojista':
-            router.replace('/lojista/dashboard');
+            router.replace('/dashboard/lojista');
             break;
           default:
             router.replace('/mapa');

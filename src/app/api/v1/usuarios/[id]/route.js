@@ -1,78 +1,41 @@
 import db from 'lib/db';
 import { requireAuth } from 'lib/authMiddleware';
 
-export async function PATCH(req, { params }) {
+export async function GET(req, { params }) {
   const auth = await requireAuth(req);
+
   if (!auth.isAuthorized) {
     return Response.json({ error: auth.message }, { status: auth.status });
   }
 
-  if (auth.payload.papel !== 'administrador') {
+  const { papel } = auth.payload;
+
+  if (papel !== 'administrador') {
     return Response.json({ error: 'Acesso negado' }, { status: 403 });
   }
 
-  const { id } = await params;
-  const { nome, email, papel, nome_fantasia } = await req.json();
-
-  if (!nome && !email && !papel && !nome_fantasia) {
-    return Response.json({ error: 'Nada para atualizar' }, { status: 400 });
-  }
-
-  const fields = [];
-  const values = [];
-  let index = 1;
-
-  if (email) {
-    fields.push(`email = $${index++}`);
-    values.push(email);
-  }
-
-  if (nome) {
-    fields.push(`nome = $${index++}`);
-    values.push(nome);
-  }
-
-  if (nome_fantasia) {
-    fields.push(`nome_fantasia = $${index++}`);
-    values.push(nome_fantasia);
-  }
-
-  if (papel) {
-    const papeisValidos = [
-      'administrador',
-      'fornecedor',
-      'representante',
-      'lojista',
-    ];
-    if (!papeisValidos.includes(papel)) {
-      return Response.json({ error: 'Papel inválido' }, { status: 400 });
-    }
-    fields.push(`papel = $${index++}`);
-    values.push(papel);
-  }
-
-  values.push(id); // para WHERE
-
-  const query = `
-    UPDATE usuarios
-    SET ${fields.join(', ')}
-    WHERE id = $${index}
-    RETURNING id, email, nome, nome_fantasia, ativo, criado_em
-  `;
-
   try {
-    const result = await db.query(query, values);
+    const { id } = await params;
+    const result = await db.query(
+      `
+      SELECT id, nome, nome_fantasia, email, papel, ativo, criado_em, vitrine_id
+      FROM usuarios
+      WHERE id = $1
+      LIMIT 1
+    `,
+      [id]
+    );
 
-    if (result.rowCount === 0) {
+    if (result.rows.length === 0) {
       return Response.json(
         { error: 'Usuário não encontrado' },
         { status: 404 }
       );
     }
 
-    return Response.json({ usuario: result.rows[0] });
+    return Response.json(result.rows[0]);
   } catch (err) {
-    console.error('Erro ao atualizar usuário:', err);
+    console.error('Erro ao buscar usuário:', err);
     return Response.json({ error: 'Erro interno' }, { status: 500 });
   }
 }

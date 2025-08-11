@@ -56,14 +56,17 @@ export default function LoginPage() {
 
       // Redirecionar conforme papel
       switch (data.usuario.papel) {
-        case 'admin':
-          router.push('/admin/dashboard');
+        case 'administrador':
+          router.push('/dashboard/admin');
           break;
         case 'fornecedor':
-          router.push('/fornecedor/dashboard');
+          router.push('/dashboard/parceiro');
+          break;
+        case 'representante':
+          router.push('/dashboard/parceiro');
           break;
         case 'lojista':
-          router.push('/lojista/dashboard');
+          router.push('/dashboard/lojista');
           break;
         default:
           router.push('/mapa');

@@ -56,6 +56,11 @@ export default function DashboardAdmin() {
             </Link>
           </li>
           <li>
+            <Link href='/dashboard/admin/catalogos' className='hover:underline'>
+              Catalogos
+            </Link>
+          </li>
+          <li>
             <Link href='/dashboard/admin/produtos' className='hover:underline'>
               Produtos
             </Link>

@@ -26,8 +26,6 @@ export async function GET(req) {
   }
 
   const where = `WHERE ${filters.join(' AND ')}`;
-  console.log(where);
-  console.log(values);
   try {
     const result = await db.query(
       `

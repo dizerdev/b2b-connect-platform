@@ -9,7 +9,8 @@ export default function MapaMundi({ parceiros }) {
       className='
         relative
         items-center 
-        w-[95vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[90vw]
+        xl:h-[73vh]
+        w-[90vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[90vw]
         aspect-[2/1] 
         border border-gray-300 rounded-lg overflow-hidden shadow-lg
       '
@@ -34,7 +35,7 @@ export default function MapaMundi({ parceiros }) {
             top: p.y,
           }}
         >
-          <Globe2 className='text-blue-600 group-hover:shadow-xl shadow-blue-500 text-blue-800 transition-colors w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 ' />
+          <Globe2 className='text-blue-600 group-hover:shadow-xl shadow-blue-100 text-blue-800 transition-colors w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 ' />
         </div>
       ))}
     </div>

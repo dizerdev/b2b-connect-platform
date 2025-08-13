@@ -41,7 +41,7 @@ export default function MapaLayout({ children }) {
               key={i}
               src={marca.src}
               alt={marca.alt}
-              width={150}
+              width={100}
               height={100}
               className='object-contain'
             />

@@ -1,4 +1,3 @@
-// app/catalogos/[id]/page.jsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -29,11 +28,11 @@ export default function CatalogoDetalhesPage() {
   }
 
   function handleAdicionarColecao() {
-    router.push(`/dashboard/parceiro/catalogos/${id}/colecoes/nova`);
+    router.push(`/dashboard/parceiro/catalogos/${id}/colecoes/cadastrar`);
   }
 
   function handleAdicionarProduto() {
-    router.push(`/dashboard/parceiro/catalogos/${id}/produtos/novo`);
+    router.push(`/dashboard/parceiro/catalogos/${id}/produtos/cadastrar`);
   }
 
   function handleDefinirMetadados() {
@@ -86,9 +85,9 @@ export default function CatalogoDetalhesPage() {
               + Adicionar coleção
             </button>
           </div>
-          {catalogo.colecoes?.length ? (
+          {catalogo.catalogo.colecoes?.length ? (
             <ul className='list-disc pl-6'>
-              {catalogo.colecoes.map((c) => (
+              {catalogo.catalogo.colecoes.map((c) => (
                 <li key={c.id}>{c.nome}</li>
               ))}
             </ul>
@@ -105,9 +104,9 @@ export default function CatalogoDetalhesPage() {
               + Adicionar produto
             </button>
           </div>
-          {catalogo.produtos?.length ? (
+          {catalogo.catalogo.produtos?.length ? (
             <ul className='list-disc pl-6'>
-              {catalogo.produtos.map((p) => (
+              {catalogo.catalogo.produtos.map((p) => (
                 <li key={p.id}>{p.nome}</li>
               ))}
             </ul>

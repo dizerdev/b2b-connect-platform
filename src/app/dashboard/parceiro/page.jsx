@@ -1,30 +1,22 @@
 'use client';
 
-import AdminGuard from 'components/AdminGuard';
 import Link from 'next/link';
+import PartnerGuard from 'components/PartnerGuard';
 
-export default function DashboardAdmin() {
+export default function DashboardParceiro() {
   return (
-    <AdminGuard>
+    <PartnerGuard>
       <div className='min-h-screen flex flex-col'>
         <nav className='bg-gray-800 text-white p-4'>
           <ul className='flex space-x-6'>
             <li>
-              <Link href='/dashboard/admin' className='hover:underline'>
+              <Link href='/dashboard/parceiro' className='hover:underline'>
                 Dashboard
               </Link>
             </li>
             <li>
               <Link
-                href='/dashboard/admin/usuarios'
-                className='hover:underline'
-              >
-                Usuários
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/dashboard/admin/catalogos'
+                href='/dashboard/parceiro/catalogos'
                 className='hover:underline'
               >
                 Catalogos
@@ -32,7 +24,7 @@ export default function DashboardAdmin() {
             </li>
             <li>
               <Link
-                href='/dashboard/admin/produtos'
+                href='/dashboard/parceiro/produtos'
                 className='hover:underline'
               >
                 Produtos
@@ -41,8 +33,8 @@ export default function DashboardAdmin() {
           </ul>
         </nav>
 
-        <main className='flex-1 p-6'>Dashboard Admin</main>
+        <main className='flex-1 p-6'>Dashboard Parceiro</main>
       </div>
-    </AdminGuard>
+    </PartnerGuard>
   );
 }

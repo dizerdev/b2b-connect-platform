@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import AdminGuard from 'components/AdminGuard';
 
 export default function EditarUsuarioPage() {
   const router = useRouter();
@@ -59,7 +60,7 @@ export default function EditarUsuarioPage() {
     setMessage('');
 
     // Validação simples
-    if (!form.nome || !form.email || !form.papel) {
+    if (!form.nome || !form.nome_fantasia || !form.email || !form.papel) {
       setMessage('Preencha todos os campos obrigatórios');
       return;
     }
@@ -94,67 +95,69 @@ export default function EditarUsuarioPage() {
   if (loading) return <p>Carregando...</p>;
 
   return (
-    <div className='max-w-lg mx-auto p-4'>
-      <h1 className='text-xl font-bold mb-4'>Editar Usuário</h1>
-      {message && <p className='mb-2 text-sm text-green-500'>{message}</p>}
-      <form onSubmit={handleSubmit} className='space-y-4'>
-        <div>
-          <label className='block text-sm font-medium'>Nome *</label>
-          <input
-            type='text'
-            name='nome'
-            value={form.nome}
-            onChange={handleChange}
-            className='w-full border px-2 py-1 rounded'
-          />
-        </div>
+    <AdminGuard>
+      <div className='max-w-lg mx-auto p-4'>
+        <h1 className='text-xl font-bold mb-4'>Editar Usuário</h1>
+        {message && <p className='mb-2 text-sm text-green-500'>{message}</p>}
+        <form onSubmit={handleSubmit} className='space-y-4'>
+          <div>
+            <label className='block text-sm font-medium'>Nome *</label>
+            <input
+              type='text'
+              name='nome'
+              value={form.nome}
+              onChange={handleChange}
+              className='w-full border px-2 py-1 rounded'
+            />
+          </div>
 
-        <div>
-          <label className='block text-sm font-medium'>Nome Fantasia</label>
-          <input
-            type='text'
-            name='nome_fantasia'
-            value={form.nome_fantasia}
-            onChange={handleChange}
-            className='w-full border px-2 py-1 rounded'
-          />
-        </div>
+          <div>
+            <label className='block text-sm font-medium'>Nome Fantasia</label>
+            <input
+              type='text'
+              name='nome_fantasia'
+              value={form.nome_fantasia}
+              onChange={handleChange}
+              className='w-full border px-2 py-1 rounded'
+            />
+          </div>
 
-        <div>
-          <label className='block text-sm font-medium'>E-mail *</label>
-          <input
-            type='email'
-            name='email'
-            value={form.email}
-            onChange={handleChange}
-            className='w-full border px-2 py-1 rounded'
-          />
-        </div>
+          <div>
+            <label className='block text-sm font-medium'>E-mail *</label>
+            <input
+              type='email'
+              name='email'
+              value={form.email}
+              onChange={handleChange}
+              className='w-full border px-2 py-1 rounded'
+            />
+          </div>
 
-        <div>
-          <label className='block text-sm font-medium'>Papel *</label>
-          <select
-            name='papel'
-            value={form.papel}
-            onChange={handleChange}
-            className='w-full border px-2 py-1 rounded'
+          <div>
+            <label className='block text-sm font-medium'>Papel *</label>
+            <select
+              name='papel'
+              value={form.papel}
+              onChange={handleChange}
+              className='w-full border px-2 py-1 rounded'
+            >
+              <option value=''>Selecione...</option>
+              {papeis.map((papel) => (
+                <option key={papel} value={papel}>
+                  {papel}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <button
+            type='submit'
+            className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700'
           >
-            <option value=''>Selecione...</option>
-            {papeis.map((papel) => (
-              <option key={papel} value={papel}>
-                {papel}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <button
-          type='submit'
-          className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700'
-        >
-          Salvar alterações
-        </button>
-      </form>
-    </div>
+            Salvar alterações
+          </button>
+        </form>
+      </div>
+    </AdminGuard>
   );
 }

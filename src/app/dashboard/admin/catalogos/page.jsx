@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function ListaCatalogosPage() {
   const router = useRouter();
@@ -24,7 +25,6 @@ export default function ListaCatalogosPage() {
         const data = await res.json();
         setCatalogos(data.catalogos);
 
-        // Busca perfil do usuário logado (para regras de negócio)
         const userRes = await fetch('/api/v1/auth/me');
         if (!userRes.ok) throw new Error('Erro ao carregar usuário');
         const userData = await userRes.json();
@@ -39,21 +39,18 @@ export default function ListaCatalogosPage() {
     fetchData();
   }, [statusFilter]);
 
-  function handleCriar() {
-    router.push('/catalogos/novo');
-  }
-
   function handleEditar(id) {
-    router.push(`/catalogos/${id}/editar`);
+    router.push(`dashboard/admin/catalogos/${id}/editar`);
   }
 
   async function handlePublicar(id) {
     try {
       const res = await fetch(`/api/v1/catalogos/${id}/publicar`, {
-        method: 'PATCH',
+        method: 'POST',
       });
       if (!res.ok) throw new Error('Erro ao publicar catálogo');
       setMessage('Catálogo publicado com sucesso');
+      router.refresh();
     } catch (err) {
       setMessage('Erro ao publicar catálogo');
     }
@@ -62,10 +59,11 @@ export default function ListaCatalogosPage() {
   async function handleAprovar(id) {
     try {
       const res = await fetch(`/api/v1/catalogos/${id}/aprovar`, {
-        method: 'PATCH',
+        method: 'POST',
       });
       if (!res.ok) throw new Error('Erro ao aprovar catálogo');
       setMessage('Catálogo aprovado com sucesso');
+      router.refresh();
     } catch (err) {
       setMessage('Erro ao aprovar catálogo');
     }
@@ -74,12 +72,13 @@ export default function ListaCatalogosPage() {
   async function handleAvaliar(id, rating) {
     try {
       const res = await fetch(`/api/v1/catalogos/${id}/rating`, {
-        method: 'PATCH',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ rating }),
       });
       if (!res.ok) throw new Error('Erro ao avaliar catálogo');
       setMessage('Avaliação registrada com sucesso');
+      router.refresh();
     } catch (err) {
       setMessage('Erro ao avaliar catálogo');
     }
@@ -89,21 +88,13 @@ export default function ListaCatalogosPage() {
 
   return (
     <div className='p-4'>
-      <div className='flex justify-between items-center mb-4'>
-        <h1 className='text-xl font-bold'>Catálogos</h1>
-        {(userRole === 'admin' ||
-          userRole === 'fornecedor' ||
-          userRole === 'representante') && (
-          <button
-            onClick={handleCriar}
-            className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700'
-          >
-            Novo Catálogo
-          </button>
-        )}
+      <div className='flex justify-between items-center mb-6'>
+        <h1 className='text-2xl font-bold'>Lista de Catálogos</h1>
+        <Link href='/dashboard/admin' className='text-blue-500 hover:underline'>
+          ← Voltar
+        </Link>
       </div>
-
-      {message && <p className='mb-2 text-sm text-red-500'>{message}</p>}
+      {message && <p className='mb-2 text-sm text-green-500'>{message}</p>}
 
       <div className='flex gap-4 mb-4'>
         <select
@@ -112,7 +103,7 @@ export default function ListaCatalogosPage() {
           className='border px-2 py-1 rounded'
         >
           <option value=''>Todos os status</option>
-          <option value='pendente'>Pendente</option>
+          <option value='pendente_aprovacao'>Pendente</option>
           <option value='aprovado'>Aprovado</option>
           <option value='publicado'>Publicado</option>
         </select>
@@ -135,7 +126,7 @@ export default function ListaCatalogosPage() {
               <td className='border px-2 py-1'>
                 <span
                   className={`px-2 py-1 rounded text-white ${
-                    cat.status === 'pendente'
+                    cat.status === 'pendente_aprovacao'
                       ? 'bg-yellow-500'
                       : cat.status === 'aprovado'
                       ? 'bg-green-500'
@@ -158,11 +149,9 @@ export default function ListaCatalogosPage() {
                 </button>
 
                 {/* Regras: Admin pode editar qualquer um; fornecedor/representante só pendente/aprovado próprios */}
-                {(userRole === 'admin' ||
-                  ((userRole === 'fornecedor' ||
-                    userRole === 'representante') &&
-                    (cat.status === 'pendente' ||
-                      cat.status === 'aprovado'))) && (
+                {(userRole === 'administrador' ||
+                  cat.status === 'pendente_aprovacao' ||
+                  cat.status === 'aprovado') && (
                   <button
                     onClick={() => handleEditar(cat.id)}
                     className='text-green-600 underline'
@@ -172,16 +161,17 @@ export default function ListaCatalogosPage() {
                 )}
 
                 {/* Admin publica/aprova */}
-                {userRole === 'admin' && cat.status === 'pendente' && (
-                  <button
-                    onClick={() => handleAprovar(cat.id)}
-                    className='text-yellow-600 underline'
-                  >
-                    Aprovar
-                  </button>
-                )}
+                {userRole === 'administrador' &&
+                  cat.status === 'pendente_aprovacao' && (
+                    <button
+                      onClick={() => handleAprovar(cat.id)}
+                      className='text-yellow-600 underline'
+                    >
+                      Aprovar
+                    </button>
+                  )}
 
-                {userRole === 'admin' && cat.status === 'aprovado' && (
+                {userRole === 'administrador' && cat.status === 'aprovado' && (
                   <button
                     onClick={() => handlePublicar(cat.id)}
                     className='text-purple-600 underline'
@@ -191,7 +181,7 @@ export default function ListaCatalogosPage() {
                 )}
 
                 {/* Admin avalia */}
-                {userRole === 'admin' && (
+                {userRole === 'administrador' && (
                   <select
                     value={cat.rating || ''}
                     onChange={(e) =>

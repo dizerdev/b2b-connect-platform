@@ -14,6 +14,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@uploadthing/react": "^7.3.2",
     "bcrypt": "^6.0.0",
     "cookie": "^1.0.2",
     "dotenv": "^17.2.1",
@@ -26,6 +27,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hot-toast": "^2.5.2",
+    "uploadthing": "^7.7.3",
     "zod": "^4.0.16",
     "zustand": "^5.0.7"
   },

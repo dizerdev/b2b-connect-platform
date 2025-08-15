@@ -14,6 +14,8 @@ const marcas = [
   },
   { src: '/assets/logos/logo_vans.png', alt: 'Vans' },
   { src: '/assets/logos/logo_nike.png', alt: 'Nike' },
+  { src: '/assets/logos/logo_nike.png', alt: 'Nike' },
+  { src: '/assets/logos/logo_nike.png', alt: 'Nike' },
 ];
 
 export default function MapaLayout({ children }) {

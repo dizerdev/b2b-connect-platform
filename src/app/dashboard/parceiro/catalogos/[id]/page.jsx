@@ -28,11 +28,15 @@ export default function CatalogoDetalhesPage() {
   }
 
   function handleAdicionarColecao() {
-    router.push(`/dashboard/parceiro/catalogos/${id}/colecoes/cadastrar`);
+    router.push(`/dashboard/parceiro/catalogos/${id}/colecoes`);
+  }
+
+  function handleVerProduto(produtoId) {
+    router.push(`/dashboard/parceiro/produtos/${produtoId}`);
   }
 
   function handleAdicionarProduto() {
-    router.push(`/dashboard/parceiro/catalogos/${id}/produtos/cadastrar`);
+    router.push(`/dashboard/parceiro/catalogos/${id}/produtos`);
   }
 
   function handleDefinirMetadados() {
@@ -107,7 +111,15 @@ export default function CatalogoDetalhesPage() {
           {catalogo.catalogo.produtos?.length ? (
             <ul className='list-disc pl-6'>
               {catalogo.catalogo.produtos.map((p) => (
-                <li key={p.id}>{p.nome}</li>
+                <li key={p.id} className='flex items-center gap-2'>
+                  {p.nome}
+                  <button
+                    onClick={() => handleVerProduto(p.id)}
+                    className='text-blue-500 hover:underline'
+                  >
+                    Ver detalhes
+                  </button>
+                </li>
               ))}
             </ul>
           ) : (

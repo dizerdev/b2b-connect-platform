@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import PartnerGuard from 'components/PartnerGuard';
+import Link from 'next/link';
 
 export default function ListaCatalogosPage() {
   const router = useRouter();
@@ -46,12 +47,20 @@ export default function ListaCatalogosPage() {
       <div className='p-4'>
         <div className='flex justify-between items-center mb-4'>
           <h1 className='text-xl font-bold'>Catálogos</h1>
-          <button
-            onClick={handleCriar}
-            className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700'
-          >
-            Novo Catálogo
-          </button>
+          <div>
+            <Link
+              href='/dashboard/parceiro'
+              className='text-blue-500 hover:underline'
+            >
+              ← Voltar
+            </Link>
+            <button
+              onClick={handleCriar}
+              className='bg-blue-600 text-white ml-5 px-4 py-2 rounded hover:bg-blue-700'
+            >
+              Novo Catálogo
+            </button>
+          </div>
         </div>
 
         {message && <p className='mb-2 text-sm text-red-500'>{message}</p>}

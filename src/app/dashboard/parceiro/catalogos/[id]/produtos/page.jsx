@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import PartnerGuard from 'components/PartnerGuard';
+import Image from 'next/image';
 
 export default function CadastroProdutoPage() {
   const router = useRouter();
@@ -17,17 +18,76 @@ export default function CadastroProdutoPage() {
   const [destaque, setDestaque] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleImagemChange = (index, value) => {
-    const novasImagens = [...imagens];
-    novasImagens[index] = value;
-    setImagens(novasImagens);
+  const handleFileChange = async (file, index) => {
+    try {
+      setLoading(true);
+
+      const prepareRes = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          files: [
+            {
+              name: file.name,
+              size: file.size,
+              type: file.type,
+              customId: null,
+            },
+          ],
+          callbackUrl: 'https://meusite.com/api/upload/callback', // opcional
+          callbackSlug: 'imageUploader',
+        }),
+      });
+
+      if (!prepareRes.ok) throw new Error('Erro ao preparar upload');
+      const { uploadUrls } = await prepareRes.json();
+      const uploadData = uploadUrls[0];
+      console.log(uploadData);
+      // 2️⃣ Faz upload direto
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(uploadData.fields)) {
+        formData.append(key, value);
+      }
+      formData.append('file', file);
+
+      const uploadRes = await fetch(uploadData.url, {
+        method: 'POST',
+        body: formData,
+      });
+      if (!uploadRes.ok) throw new Error('Erro no upload do arquivo');
+
+      // 3️⃣ Poll até o upload concluir
+      let status = 'still working';
+      while (status === 'still working') {
+        const pollRes = await fetch(
+          `/api/pollUpload?fileKey=${uploadData.key}`
+        );
+        const pollData = await pollRes.json();
+        console.log(pollData);
+        status = pollData.status;
+        if (status === 'still working')
+          await new Promise((r) => setTimeout(r, 1000));
+      }
+
+      // 4️⃣ Atualiza array de imagens com URL final
+      setImagens((prev) => {
+        const newImgs = [...prev];
+        newImgs[index] = uploadData.ufsUrl;
+        return newImgs;
+      });
+      console.log(imagens);
+      toast.success('Upload concluído!');
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || 'Erro no upload');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const adicionarImagem = () => setImagens([...imagens, '']);
-  const removerImagem = (index) => {
-    const novasImagens = imagens.filter((_, i) => i !== index);
-    setImagens(novasImagens);
-  };
+  const removerImagem = (index) =>
+    setImagens(imagens.filter((_, i) => i !== index));
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -128,13 +188,22 @@ export default function CadastroProdutoPage() {
             <label className='block text-sm font-medium mb-1'>Imagens</label>
             {imagens.map((img, idx) => (
               <div key={idx} className='flex gap-2 items-center'>
-                <input
-                  type='text'
-                  placeholder='URL da imagem'
-                  className='w-full border rounded p-2'
-                  value={img}
-                  onChange={(e) => handleImagemChange(idx, e.target.value)}
-                />
+                {img ? (
+                  <img
+                    src={img}
+                    alt={`Imagem ${idx}`}
+                    className='w-20 h-20 object-cover rounded'
+                  />
+                ) : (
+                  <input
+                    type='file'
+                    onChange={(e) =>
+                      e.target.files[0] &&
+                      handleFileChange(e.target.files[0], idx)
+                    }
+                    disabled={loading}
+                  />
+                )}
                 <button
                   type='button'
                   onClick={() => removerImagem(idx)}

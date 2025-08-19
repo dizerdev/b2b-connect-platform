@@ -131,14 +131,14 @@ export default function DetalhesProdutoPage() {
         </section>
 
         {/* Imagens do produto */}
-        {produto.fotos && produto.fotos.length > 0 && (
+        {produto.produto.imagens && produto.produto.imagens.length > 0 && (
           <section className='bg-white shadow rounded p-4'>
             <h2 className='text-lg font-semibold mb-4'>Fotos</h2>
             <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
-              {produto.fotos.map((foto, idx) => (
+              {produto.produto.imagens.map((url, idx) => (
                 <img
                   key={idx}
-                  src={foto.url}
+                  src={url}
                   alt={`Foto ${idx + 1}`}
                   className='w-full h-40 object-cover rounded'
                 />

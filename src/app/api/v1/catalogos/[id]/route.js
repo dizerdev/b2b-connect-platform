@@ -53,7 +53,7 @@ export async function GET(req, { params }) {
       [catalogoId]
     );
 
-    // 4. Produtos + Grades (1 query)
+    // 4. Produtos + Grades
     const produtosComGradesRes = await db.query(
       `
       SELECT 
@@ -76,7 +76,6 @@ export async function GET(req, { params }) {
       [catalogoId]
     );
 
-    // Agrupa os produtos
     const produtosMap = new Map();
 
     for (const row of produtosComGradesRes.rows) {
@@ -103,6 +102,18 @@ export async function GET(req, { params }) {
 
     const produtos = Array.from(produtosMap.values());
 
+    // 5. Metadados do catálogo
+    const metadadosRes = await db.query(
+      `
+      SELECT continente, pais, categoria, especificacao
+      FROM catalogo_metadados
+      WHERE catalogo_id = $1
+    `,
+      [catalogoId]
+    );
+
+    const metadados = metadadosRes.rowCount > 0 ? metadadosRes.rows[0] : null;
+
     return Response.json({
       catalogo: {
         id: catalogo.id,
@@ -112,6 +123,7 @@ export async function GET(req, { params }) {
         rating: catalogo.rating,
         colecoes: colecoesRes.rows,
         produtos,
+        metadados,
       },
     });
   } catch (err) {

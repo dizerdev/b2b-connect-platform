@@ -131,18 +131,29 @@ export default function CatalogoDetalhesPage() {
         <section className='mb-6'>
           <h2 className='text-lg font-semibold mb-2'>Metadados</h2>
           <p>
-            <strong>Continente:</strong> {catalogo.metadados?.continente || '-'}
+            <strong>Continente:</strong>{' '}
+            {catalogo.catalogo.metadados?.continente || '-'}
           </p>
           <p>
-            <strong>País:</strong> {catalogo.metadados?.pais || '-'}
+            <strong>País:</strong> {catalogo.catalogo.metadados?.pais || '-'}
           </p>
           <p>
-            <strong>Categoria:</strong> {catalogo.metadados?.categoria || '-'}
+            <strong>Categoria:</strong>{' '}
+            {catalogo.catalogo.metadados?.categoria || '-'}
           </p>
-          <p>
+          <div>
             <strong>Especificações:</strong>{' '}
-            {catalogo.metadados?.especificacoes || '-'}
-          </p>
+            {Array.isArray(catalogo.catalogo.metadados?.especificacao) &&
+            catalogo.catalogo.metadados.especificacao.length > 0 ? (
+              <ul className='list-disc pl-6 mt-1'>
+                {catalogo.catalogo.metadados.especificacao.map((esp, idx) => (
+                  <li key={idx}>{esp}</li>
+                ))}
+              </ul>
+            ) : (
+              <span>-</span>
+            )}
+          </div>
           <button
             onClick={handleDefinirMetadados}
             className='btn-secondary mt-2'

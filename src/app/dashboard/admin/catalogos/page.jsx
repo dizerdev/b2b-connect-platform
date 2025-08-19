@@ -1,9 +1,9 @@
-// app/catalogos/page.jsx
 'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import AdminGuard from 'components/AdminGuard';
 
 export default function ListaCatalogosPage() {
   const router = useRouter();
@@ -87,121 +87,127 @@ export default function ListaCatalogosPage() {
   if (loading) return <p>Carregando...</p>;
 
   return (
-    <div className='p-4'>
-      <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-2xl font-bold'>Lista de Catálogos</h1>
-        <Link href='/dashboard/admin' className='text-blue-500 hover:underline'>
-          ← Voltar
-        </Link>
-      </div>
-      {message && <p className='mb-2 text-sm text-green-500'>{message}</p>}
+    <AdminGuard>
+      <div className='p-4'>
+        <div className='flex justify-between items-center mb-6'>
+          <h1 className='text-2xl font-bold'>Lista de Catálogos</h1>
+          <Link
+            href='/dashboard/admin'
+            className='text-blue-500 hover:underline'
+          >
+            ← Voltar
+          </Link>
+        </div>
+        {message && <p className='mb-2 text-sm text-green-500'>{message}</p>}
 
-      <div className='flex gap-4 mb-4'>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className='border px-2 py-1 rounded'
-        >
-          <option value=''>Todos os status</option>
-          <option value='pendente_aprovacao'>Pendente</option>
-          <option value='aprovado'>Aprovado</option>
-          <option value='publicado'>Publicado</option>
-        </select>
-      </div>
+        <div className='flex gap-4 mb-4'>
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className='border px-2 py-1 rounded'
+          >
+            <option value=''>Todos os status</option>
+            <option value='pendente_aprovacao'>Pendente</option>
+            <option value='aprovado'>Aprovado</option>
+            <option value='publicado'>Publicado</option>
+          </select>
+        </div>
 
-      <table className='w-full border-collapse border border-gray-300'>
-        <thead>
-          <tr className='bg-gray-100'>
-            <th className='border px-2 py-1'>Nome</th>
-            <th className='border px-2 py-1'>Status</th>
-            <th className='border px-2 py-1'>Rating</th>
-            <th className='border px-2 py-1'>Criado em</th>
-            <th className='border px-2 py-1'>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {catalogos.map((cat) => (
-            <tr key={cat.id}>
-              <td className='border px-2 py-1'>{cat.nome}</td>
-              <td className='border px-2 py-1'>
-                <span
-                  className={`px-2 py-1 rounded text-white ${
-                    cat.status === 'pendente_aprovacao'
-                      ? 'bg-yellow-500'
-                      : cat.status === 'aprovado'
-                      ? 'bg-green-500'
-                      : 'bg-blue-600'
-                  }`}
-                >
-                  {cat.status}
-                </span>
-              </td>
-              <td className='border px-2 py-1'>{cat.rating || '-'}</td>
-              <td className='border px-2 py-1'>
-                {new Date(cat.criadoEm).toLocaleDateString()}
-              </td>
-              <td className='border px-2 py-1 flex gap-2'>
-                <button
-                  onClick={() => router.push(`/catalogos/${cat.id}`)}
-                  className='text-blue-600 underline'
-                >
-                  Ver
-                </button>
-
-                {/* Regras: Admin pode editar qualquer um; fornecedor/representante só pendente/aprovado próprios */}
-                {(userRole === 'administrador' ||
-                  cat.status === 'pendente_aprovacao' ||
-                  cat.status === 'aprovado') && (
-                  <button
-                    onClick={() => handleEditar(cat.id)}
-                    className='text-green-600 underline'
+        <table className='w-full border-collapse border border-gray-300'>
+          <thead>
+            <tr className='bg-gray-100'>
+              <th className='border px-2 py-1'>Nome</th>
+              <th className='border px-2 py-1'>Status</th>
+              <th className='border px-2 py-1'>Rating</th>
+              <th className='border px-2 py-1'>Criado em</th>
+              <th className='border px-2 py-1'>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {catalogos.map((cat) => (
+              <tr key={cat.id}>
+                <td className='border px-2 py-1'>{cat.nome}</td>
+                <td className='border px-2 py-1'>
+                  <span
+                    className={`px-2 py-1 rounded text-white ${
+                      cat.status === 'pendente_aprovacao'
+                        ? 'bg-yellow-500'
+                        : cat.status === 'aprovado'
+                        ? 'bg-green-500'
+                        : 'bg-blue-600'
+                    }`}
                   >
-                    Editar
+                    {cat.status}
+                  </span>
+                </td>
+                <td className='border px-2 py-1'>{cat.rating || '-'}</td>
+                <td className='border px-2 py-1'>
+                  {new Date(cat.criadoEm).toLocaleDateString()}
+                </td>
+                <td className='border px-2 py-1 flex gap-2'>
+                  <button
+                    onClick={() => router.push(`/catalogos/${cat.id}`)}
+                    className='text-blue-600 underline'
+                  >
+                    Ver
                   </button>
-                )}
 
-                {/* Admin publica/aprova */}
-                {userRole === 'administrador' &&
-                  cat.status === 'pendente_aprovacao' && (
+                  {/* Regras: Admin pode editar qualquer um; fornecedor/representante só pendente/aprovado próprios */}
+                  {(userRole === 'administrador' ||
+                    cat.status === 'pendente_aprovacao' ||
+                    cat.status === 'aprovado') && (
                     <button
-                      onClick={() => handleAprovar(cat.id)}
-                      className='text-yellow-600 underline'
+                      onClick={() => handleEditar(cat.id)}
+                      className='text-green-600 underline'
                     >
-                      Aprovar
+                      Editar
                     </button>
                   )}
 
-                {userRole === 'administrador' && cat.status === 'aprovado' && (
-                  <button
-                    onClick={() => handlePublicar(cat.id)}
-                    className='text-purple-600 underline'
-                  >
-                    Publicar
-                  </button>
-                )}
+                  {/* Admin publica/aprova */}
+                  {userRole === 'administrador' &&
+                    cat.status === 'pendente_aprovacao' && (
+                      <button
+                        onClick={() => handleAprovar(cat.id)}
+                        className='text-yellow-600 underline'
+                      >
+                        Aprovar
+                      </button>
+                    )}
 
-                {/* Admin avalia */}
-                {userRole === 'administrador' && (
-                  <select
-                    value={cat.rating || ''}
-                    onChange={(e) =>
-                      handleAvaliar(cat.id, Number(e.target.value))
-                    }
-                    className='border px-1 py-0 rounded text-sm'
-                  >
-                    <option value=''>Avaliar</option>
-                    {[1, 2, 3, 4, 5].map((n) => (
-                      <option key={n} value={n}>
-                        {n}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+                  {userRole === 'administrador' &&
+                    cat.status === 'aprovado' && (
+                      <button
+                        onClick={() => handlePublicar(cat.id)}
+                        className='text-purple-600 underline'
+                      >
+                        Publicar
+                      </button>
+                    )}
+
+                  {/* Admin avalia */}
+                  {userRole === 'administrador' && (
+                    <select
+                      value={cat.rating || ''}
+                      onChange={(e) =>
+                        handleAvaliar(cat.id, Number(e.target.value))
+                      }
+                      className='border px-1 py-0 rounded text-sm'
+                    >
+                      <option value=''>Avaliar</option>
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <option key={n} value={n}>
+                          {n}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </AdminGuard>
   );
 }

@@ -9,6 +9,61 @@ const ESPECIFICACOES_VALIDAS = [
   'Estampado',
 ];
 
+export async function GET(req, { params }) {
+  const auth = await requireAuth(req);
+  if (!auth.isAuthorized) {
+    return Response.json({ error: auth.message }, { status: auth.status });
+  }
+
+  const { sub: userId, papel } = auth.payload;
+  const { id: catalogoId } = await params;
+
+  try {
+    // Verifica se o catálogo existe e de quem é
+    const res = await db.query(
+      `SELECT fornecedor_id FROM catalogos WHERE id = $1`,
+      [catalogoId]
+    );
+
+    if (res.rowCount === 0) {
+      return Response.json(
+        { error: 'Catálogo não encontrado' },
+        { status: 404 }
+      );
+    }
+
+    const fornecedorId = res.rows[0].fornecedor_id;
+    const isAdmin = papel === 'administrador';
+    const isDono = userId === fornecedorId;
+
+    if (!isAdmin && !isDono) {
+      return Response.json({ error: 'Acesso negado' }, { status: 403 });
+    }
+
+    // Busca os metadados do catálogo
+    const metaRes = await db.query(
+      `
+      SELECT continente, pais, categoria, especificacao
+      FROM catalogo_metadados
+      WHERE catalogo_id = $1
+      `,
+      [catalogoId]
+    );
+
+    if (metaRes.rowCount === 0) {
+      return Response.json(
+        { message: 'Nenhum metadado definido para este catálogo' },
+        { status: 200 }
+      );
+    }
+
+    return Response.json(metaRes.rows[0], { status: 200 });
+  } catch (err) {
+    console.error('Erro ao buscar metadados:', err);
+    return Response.json({ error: 'Erro interno' }, { status: 500 });
+  }
+}
+
 export async function PATCH(req, { params }) {
   const auth = await requireAuth(req);
   if (!auth.isAuthorized) {

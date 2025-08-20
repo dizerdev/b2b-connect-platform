@@ -1,3 +1,5 @@
+'use server';
+
 import { pollUpload } from 'lib/uploadthingService';
 
 export async function GET(req) {

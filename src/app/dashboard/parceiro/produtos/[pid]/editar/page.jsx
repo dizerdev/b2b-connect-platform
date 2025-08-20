@@ -3,7 +3,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { toast } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
+import { extractFileKey } from 'lib/utils';
 
 export default function EdicaoProdutoPage() {
   const router = useRouter();
@@ -42,17 +43,92 @@ export default function EdicaoProdutoPage() {
     }
   }
 
-  const handleImagemChange = (index, value) => {
-    const novas = [...imagens];
-    novas[index] = value;
-    setImagens(novas);
+  const handleFileChange = async (file, index) => {
+    try {
+      setLoading(true);
+
+      const prepareRes = await fetch('/api/v1/uploadthing/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          files: [
+            {
+              name: file.name,
+              size: file.size,
+              type: file.type,
+              customId: null,
+            },
+          ],
+          callbackUrl: 'https://meusite.com/api/upload/callback',
+          callbackSlug: 'imageUploader',
+        }),
+      });
+
+      if (!prepareRes.ok) throw new Error('Erro ao preparar upload');
+      const { uploadUrls } = await prepareRes.json();
+      const uploadData = uploadUrls[0];
+
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(uploadData.fields)) {
+        formData.append(key, value);
+      }
+      formData.append('file', file);
+
+      const uploadRes = await fetch(uploadData.url, {
+        method: 'POST',
+        body: formData,
+      });
+      if (!uploadRes.ok) throw new Error('Erro no upload do arquivo');
+
+      let status = 'still working';
+      while (status === 'still working') {
+        const pollRes = await fetch(
+          `/api/v1/uploadthing/pollUpload?fileKey=${uploadData.key}`
+        );
+        const pollData = await pollRes.json();
+        status = pollData.status;
+        if (status === 'still working') {
+          await new Promise((r) => setTimeout(r, 1000));
+        }
+      }
+
+      setImagens((prev) => {
+        const newImgs = [...prev];
+        newImgs[index] = uploadData.ufsUrl;
+        return newImgs;
+      });
+
+      toast.success('Upload concluído!');
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || 'Erro no upload');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (fileKey) => {
+    try {
+      const res = await fetch('/api/v1/uploadthing/deleteFile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fileKey }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erro ao deletar arquivo');
+
+      alert('Imagem deletada com sucesso!');
+      // Atualizar estado da página, remover imagem da lista
+    } catch (err) {
+      console.error(err);
+      alert('Erro: ' + err.message);
+    }
   };
 
   const adicionarImagem = () => setImagens([...imagens, '']);
-  const removerImagem = (index) => {
-    const novas = imagens.filter((_, i) => i !== index);
-    setImagens(novas);
-  };
+  const removerImagem = (index) =>
+    setImagens(imagens.filter((_, i) => i !== index));
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -146,24 +222,40 @@ export default function EdicaoProdutoPage() {
 
         <div className='space-y-2'>
           <label className='block text-sm font-medium mb-1'>Imagens</label>
-          {imagens.map((img, idx) => (
-            <div key={idx} className='flex gap-2 items-center'>
-              <input
-                type='text'
-                placeholder='URL da imagem'
-                className='w-full border rounded p-2'
-                value={img}
-                onChange={(e) => handleImagemChange(idx, e.target.value)}
-              />
-              <button
-                type='button'
-                onClick={() => removerImagem(idx)}
-                className='bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700'
-              >
-                Remover
-              </button>
-            </div>
-          ))}
+          {imagens.map((img, idx) => {
+            const key = extractFileKey(img);
+            return (
+              <div key={idx} className='flex gap-2 items-center'>
+                {img ? (
+                  <img
+                    src={img}
+                    alt={`Imagem ${idx}`}
+                    className='w-20 h-20 object-cover rounded'
+                  />
+                ) : (
+                  <input
+                    type='file'
+                    onChange={(e) =>
+                      e.target.files[0] &&
+                      handleFileChange(e.target.files[0], idx)
+                    }
+                    disabled={loading}
+                  />
+                )}
+
+                <button
+                  type='button'
+                  onClick={() => {
+                    handleDelete(key); // nunca undefined
+                    removerImagem(idx); // remove a url do array de imagens
+                  }}
+                  className='bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700'
+                >
+                  Remover
+                </button>
+              </div>
+            );
+          })}
           <button
             type='button'
             onClick={adicionarImagem}
@@ -201,6 +293,7 @@ export default function EdicaoProdutoPage() {
             Cancelar
           </button>
         </div>
+        <Toaster />
       </form>
     </div>
   );

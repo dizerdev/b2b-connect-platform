@@ -39,10 +39,6 @@ export default function ListaCatalogosPage() {
     fetchData();
   }, [statusFilter]);
 
-  function handleEditar(id) {
-    router.push(`dashboard/admin/catalogos/${id}/editar`);
-  }
-
   async function handlePublicar(id) {
     try {
       const res = await fetch(`/api/v1/catalogos/${id}/publicar`, {
@@ -50,7 +46,9 @@ export default function ListaCatalogosPage() {
       });
       if (!res.ok) throw new Error('Erro ao publicar catálogo');
       setMessage('Catálogo publicado com sucesso');
-      router.refresh();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (err) {
       setMessage('Erro ao publicar catálogo');
     }
@@ -63,7 +61,9 @@ export default function ListaCatalogosPage() {
       });
       if (!res.ok) throw new Error('Erro ao aprovar catálogo');
       setMessage('Catálogo aprovado com sucesso');
-      router.refresh();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (err) {
       setMessage('Erro ao aprovar catálogo');
     }
@@ -78,7 +78,9 @@ export default function ListaCatalogosPage() {
       });
       if (!res.ok) throw new Error('Erro ao avaliar catálogo');
       setMessage('Avaliação registrada com sucesso');
-      router.refresh();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (err) {
       setMessage('Erro ao avaliar catálogo');
     }
@@ -146,23 +148,13 @@ export default function ListaCatalogosPage() {
                 </td>
                 <td className='border px-2 py-1 flex gap-2'>
                   <button
-                    onClick={() => router.push(`/catalogos/${cat.id}`)}
+                    onClick={() =>
+                      router.push(`/dashboard/admin/catalogos/${cat.id}`)
+                    }
                     className='text-blue-600 underline'
                   >
                     Ver
                   </button>
-
-                  {/* Regras: Admin pode editar qualquer um; fornecedor/representante só pendente/aprovado próprios */}
-                  {(userRole === 'administrador' ||
-                    cat.status === 'pendente_aprovacao' ||
-                    cat.status === 'aprovado') && (
-                    <button
-                      onClick={() => handleEditar(cat.id)}
-                      className='text-green-600 underline'
-                    >
-                      Editar
-                    </button>
-                  )}
 
                   {/* Admin publica/aprova */}
                   {userRole === 'administrador' &&

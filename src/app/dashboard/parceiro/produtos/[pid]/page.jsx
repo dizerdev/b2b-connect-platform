@@ -8,7 +8,6 @@ import PartnerGuard from 'components/PartnerGuard';
 
 export default function DetalhesProdutoPage() {
   const { pid } = useParams();
-  const router = useRouter();
 
   const [produto, setProduto] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -37,7 +36,7 @@ export default function DetalhesProdutoPage() {
     <PartnerGuard>
       <div className='p-6 space-y-6'>
         <header className='flex justify-between items-center'>
-          <h1 className='text-2xl font-bold'>Lista de Catálogos</h1>
+          <h1 className='text-2xl font-bold'>Detalhes do Produto</h1>
           <Link
             href={`/dashboard/parceiro/catalogos/${produto.catalogos[0].catalogo_id}`}
             className='text-blue-500 hover:underline'
@@ -114,12 +113,6 @@ export default function DetalhesProdutoPage() {
               className='px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700'
             >
               Gerenciar Grades
-            </Link>
-            <Link
-              href={`/dashboard/parceiro/produtos/${pid}/fotos`}
-              className='px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700'
-            >
-              Gerenciar Fotos
             </Link>
             <Link
               href={`/dashboard/parceiro/produtos/${pid}/editar`}

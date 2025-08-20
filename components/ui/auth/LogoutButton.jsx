@@ -2,10 +2,8 @@
 
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from 'stores/useAuthStore';
 
 export default function LogoutButton() {
-  const { logout } = useAuthStore();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -22,7 +20,6 @@ export default function LogoutButton() {
     } catch (error) {
       console.error(error);
     } finally {
-      logout();
       router.replace('/login');
     }
   };

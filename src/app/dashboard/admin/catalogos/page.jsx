@@ -85,7 +85,7 @@ export default function ListaCatalogosPage() {
       setMessage('Erro ao avaliar catálogo');
     }
   }
-
+  console.log(catalogos);
   if (loading) return <p>Carregando...</p>;
 
   return (
@@ -144,7 +144,7 @@ export default function ListaCatalogosPage() {
                 </td>
                 <td className='border px-2 py-1'>{cat.rating || '-'}</td>
                 <td className='border px-2 py-1'>
-                  {new Date(cat.criadoEm).toLocaleDateString()}
+                  {new Date(cat.created_at).toLocaleDateString()}
                 </td>
                 <td className='border px-2 py-1 flex gap-2'>
                   <button

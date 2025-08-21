@@ -32,10 +32,10 @@ export default function DashboardAdmin() {
             </li>
             <li>
               <Link
-                href='/dashboard/admin/produtos'
+                href='/dashboard/admin/mensagens'
                 className='hover:underline'
               >
-                Produtos
+                Mensagens
               </Link>
             </li>
           </ul>

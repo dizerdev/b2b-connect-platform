@@ -111,7 +111,10 @@ export default function DetalhesVitrinePage() {
           >
             Voltar
           </button>
-          <button className='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700'>
+          <button
+            className='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700'
+            onClick={() => router.push(`/dashboard/lojista/mensagens/${id}`)}
+          >
             Solicitar Contato
           </button>
         </div>

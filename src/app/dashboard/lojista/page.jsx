@@ -51,10 +51,10 @@ export default function DashboardParceiro() {
             </li>
             <li>
               <Link
-                href='/dashboard/lojista/produtos'
+                href='/dashboard/lojista/mensagens'
                 className='hover:underline'
               >
-                Produtos
+                Mensagens
               </Link>
             </li>
           </ul>

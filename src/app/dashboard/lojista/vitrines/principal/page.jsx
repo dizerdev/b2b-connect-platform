@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import SellerGuard from 'components/SellerGuard';
 import Banner from 'components/shared/Banner';
+import Link from 'next/link';
 
 export default function VitrinePrincipalPage() {
   const [catalogos, setCatalogos] = useState([]);
@@ -19,7 +20,7 @@ export default function VitrinePrincipalPage() {
 
   async function fetchCatalogos(query = '') {
     try {
-      const res = await fetch(`/api/v1/vitrines/principal${query}`, {
+      const res = await fetch(`/api/v1/vitrines/search${query}`, {
         cache: 'no-store',
       });
       if (!res.ok) throw new Error('Erro ao carregar catálogos');
@@ -50,12 +51,22 @@ export default function VitrinePrincipalPage() {
   return (
     <SellerGuard>
       <div className='p-6'>
-        <br />
-        <h1 className='text-2xl font-bold mb-6'>Vitrine Principal</h1>
+        <div className='flex justify-between items-center mb-4'>
+          <h1 className='text-2xl font-bold'>Catálogos Disponíveis</h1>
+          <div>
+            <Link
+              href='/dashboard/lojista'
+              className='text-blue-500 hover:underline'
+            >
+              ← Voltar
+            </Link>
+          </div>
+        </div>
         <Banner
           src='https://nu6xzmkg6n.ufs.sh/f/1BGrcyVEf97rGRBBqlTMpjSVUXsT8xvoO2kCJE1P9WMnBA5N'
           alt='Catálogo X'
         />
+        <br />
         {/* Filtros */}
         <div className='grid grid-cols-2 md:grid-cols-4 gap-4 mb-6'>
           <select

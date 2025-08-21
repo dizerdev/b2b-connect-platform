@@ -3,19 +3,20 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const marcas = [
-  { src: '/assets/logos/logo_adidas.png', alt: 'Adidas' },
+  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
   { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
-  { src: '/assets/logos/logo_vans.png', alt: 'Vans' },
-  { src: '/assets/logos/logo_asics.png', alt: 'Asics' },
-  { src: '/assets/logos/logo_nike.png', alt: 'Nike' },
+  { src: '/assets/logos/shoesnetworld.png', alt: 'Shoesnetworld' },
+  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
+  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
   {
-    src: '/assets/logos/logo_sneakers_brasil.png',
-    alt: 'Sneakers Brasil',
+    src: '/assets/logos/logo_palm_springs.jpg',
+    alt: 'Palm Springs',
   },
-  { src: '/assets/logos/logo_vans.png', alt: 'Vans' },
-  { src: '/assets/logos/logo_nike.png', alt: 'Nike' },
-  { src: '/assets/logos/logo_nike.png', alt: 'Nike' },
-  { src: '/assets/logos/logo_nike.png', alt: 'Nike' },
+  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
+  { src: '/assets/logos/shoesnetworld.png', alt: 'Shoesnetworld' },
+  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
+  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
+  { src: '/assets/logos/logo_sneakers_brasil.png', alt: 'Sneakers Brasil' },
 ];
 
 export default function MapaLayout({ children }) {
@@ -23,7 +24,15 @@ export default function MapaLayout({ children }) {
     <div className='flex min-h-screen flex-col'>
       {/* Header */}
       <header className='flex items-center justify-between bg-gray-900 px-6 py-4 text-white'>
-        <h1 className='text-lg font-bold'>Plataforma</h1>
+        <div className='flex items-center'>
+          <Image
+            src='/assets/logos/shoesnetworld.png'
+            width={50}
+            height={50}
+            alt='Shoesnetworld Logo'
+          />
+          <h1 className='text-lg font-bold pl-5'>Shoesnetworld</h1>
+        </div>
         <Link
           href='/login'
           className='rounded bg-white px-4 py-2 text-gray-900 hover:bg-gray-200'

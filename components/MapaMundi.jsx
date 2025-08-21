@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { Globe2 } from 'lucide-react'; // Ícone para representar países parceiros
+import Link from 'next/link';
+import { Globe2 } from 'lucide-react';
 
 export default function MapaMundi({ parceiros }) {
   return (
@@ -29,13 +30,15 @@ export default function MapaMundi({ parceiros }) {
         <div
           key={i}
           title={p.nome}
-          className='absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer group'
+          className='absolute -translate-x-1/2 -translate-y-1/2'
           style={{
             left: p.x,
             top: p.y,
           }}
         >
-          <Globe2 className='text-blue-600 group-hover:shadow-xl shadow-blue-100 text-blue-800 transition-colors w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 ' />
+          <Link href={p.href || '#'} className='group'>
+            <Globe2 className='text-blue-600 group-hover:shadow-xl shadow-blue-100 text-blue-800 transition-colors w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 cursor-pointer' />
+          </Link>
         </div>
       ))}
     </div>

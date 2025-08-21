@@ -11,7 +11,6 @@ export async function GET(req, { params }) {
   const { pid: produtoId } = await params;
 
   try {
-    // Verifica se produto existe e obtém fornecedor
     const res = await db.query(
       `
       SELECT c.fornecedor_id, pc.catalogo_id
@@ -33,8 +32,9 @@ export async function GET(req, { params }) {
     const { fornecedor_id } = res.rows[0];
     const isAdmin = papel === 'administrador';
     const isDono = userId === fornecedor_id;
+    const isLojista = papel === 'lojista';
 
-    if (!isAdmin && !isDono) {
+    if (!isAdmin && !isDono && !isLojista) {
       return Response.json({ error: 'Acesso negado' }, { status: 403 });
     }
 
@@ -47,7 +47,7 @@ export async function GET(req, { params }) {
     // Busca catálogos vinculados
     const catalogosRes = await db.query(
       `
-      SELECT pc.catalogo_id, c.nome AS catalogo_nome, pc.preco, pc.destaque, pc.created_at
+      SELECT pc.catalogo_id, c.nome AS catalogo_nome, c.fornecedor_id, pc.preco, pc.destaque, pc.created_at
       FROM produtos_catalogo pc
       JOIN catalogos c ON c.id = pc.catalogo_id
       WHERE pc.produto_id = $1

@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Globe2 } from 'lucide-react';
 
 export default function MapaMundi({ parceiros }) {
   return (
@@ -18,7 +17,7 @@ export default function MapaMundi({ parceiros }) {
     >
       {/* Fundo do mapa */}
       <Image
-        src='/assets/mapamundi_shoesnetworld.jpg'
+        src='/assets/mapashoesnetworld.jpg'
         alt='Mapa Mundi'
         fill
         className='object-cover'
@@ -37,7 +36,13 @@ export default function MapaMundi({ parceiros }) {
           }}
         >
           <Link href={p.href || '#'} className='group'>
-            <Globe2 className='text-blue-600 group-hover:shadow-xl shadow-blue-100 text-blue-800 transition-colors w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 cursor-pointer' />
+            <Image
+              src='/icons/bolsa.svg'
+              alt='Globo'
+              width={24}
+              height={24}
+              className='text-white-100 hover:text-blue-400 hover:brightness-200 hover:drop-shadow-[0_0_20px_rgba(59,130,246,1)] transition-all w-7 h-7 cursor-pointer'
+            />
           </Link>
         </div>
       ))}

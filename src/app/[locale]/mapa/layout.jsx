@@ -1,6 +1,10 @@
 // app/mapa/layout.tsx
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
+import Loader from 'components/shared/Loader';
+import FlipCardGroup from 'components/shared/FlipCardGroup';
+import GradientButton from 'components/shared/GradientButton';
 
 const marcas = [
   { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
@@ -8,10 +12,7 @@ const marcas = [
   { src: '/assets/logos/shoesnetworld.png', alt: 'Shoesnetworld' },
   { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
   { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
-  {
-    src: '/assets/logos/logo_palm_springs.jpg',
-    alt: 'Palm Springs',
-  },
+  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
   { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
   { src: '/assets/logos/shoesnetworld.png', alt: 'Shoesnetworld' },
   { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
@@ -20,6 +21,7 @@ const marcas = [
 ];
 
 export default function MapaLayout({ children }) {
+  const t = useTranslations('MapPage');
   return (
     <div className='flex min-h-screen flex-col'>
       {/* Header */}
@@ -32,13 +34,9 @@ export default function MapaLayout({ children }) {
             alt='Shoesnetworld Logo'
           />
           <h1 className='text-lg font-bold pl-5'>Shoesnetworld</h1>
+          <Loader />
         </div>
-        <Link
-          href='/login'
-          className='rounded bg-white px-4 py-2 text-gray-900 hover:bg-gray-200'
-        >
-          Login
-        </Link>
+        <GradientButton text={t('Login')} href='/login' />
       </header>
 
       {/* Conteúdo da página */}
@@ -60,14 +58,19 @@ export default function MapaLayout({ children }) {
         </div>
       </div>
 
+      {/* Seção dos 3 cards */}
+      <FlipCardGroup />
+
       {/* Footer */}
       <footer className='bg-gray-900 px-6 py-4 text-sm text-white'>
         <div className='flex flex-col items-center space-y-2 sm:flex-row sm:justify-between sm:space-y-0'>
-          <span>&copy; {new Date().getFullYear()} Plataforma</span>
+          <span>
+            &copy; {new Date().getFullYear()} {t('Owner')}
+          </span>
           <div className='flex space-x-4'>
-            <Link href='/contato'>Contato</Link>
-            <Link href='/suporte'>Suporte</Link>
-            <Link href='/sobre'>Sobre</Link>
+            <Link href='/contato'>{t('Contact')}</Link>
+            <Link href='/suporte'>{t('Support')}</Link>
+            <Link href='/sobre'>{t('About')}</Link>
           </div>
         </div>
       </footer>

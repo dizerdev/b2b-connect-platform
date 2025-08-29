@@ -1,0 +1,21 @@
+{
+  "RootPage": {
+    "VerifingSession": "Verificando Sessão..."
+  },
+  "MapPage": {
+    "Login": "Entrar",
+    "Contact": "Contato",
+    "Support": "Suporte",
+    "About": "Sobre",
+    "Owner": "shoesnetworld"
+  },
+  "LoaderComponent": {
+    "HereYouCanFind": "Aqui você encontra",
+    "Components": "Componentes",
+    "Footwear": "Calçados",
+    "Leathers": "Couros",
+    "Accessories": "Acessórios",
+    "Machines": "Maquinas",
+    "Chemicals": "Químicos"
+  }
+}

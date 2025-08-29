@@ -1,0 +1,131 @@
+@import 'tailwindcss';
+
+@import 'uploadthing/tw/v4';
+@source "../node_modules/@uploadthing/react/dist";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  animation: marquee 20s linear infinite;
+}
+
+@layer utilities {
+  /*Card Flip*/
+  .card-flip {
+    @apply w-72 h-48 transition-transform duration-500;
+    transform-style: preserve-3d;
+  }
+
+  .card-flip:hover {
+    transform: rotateY(180deg) scale(1.1);
+    transition: 1s;
+  }
+
+  .card-inner {
+    @apply relative w-full h-full;
+    transform-style: preserve-3d;
+  }
+
+  .card-front,
+  .card-back {
+    @apply absolute top-0 left-0 w-full h-full flex justify-center items-center rounded-lg shadow-lg;
+    backface-visibility: hidden;
+  }
+
+  .card-front {
+    background: linear-gradient(to bottom right, #67b26f, #4ca2cd);
+    box-shadow: 0 0 20px rgba(103, 178, 111, 0.5);
+    transform: rotateY(0deg);
+  }
+
+  .card-back {
+    background: linear-gradient(to bottom right, #fccb90, #d57eeb);
+    box-shadow: 0 0 20px rgba(252, 203, 144, 0.5);
+    transform: rotateY(180deg);
+  }
+  /*Loader*/
+  .loader-words {
+    @apply relative overflow-hidden;
+  }
+
+  .loader-words::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+  }
+
+  .word {
+    display: block;
+    height: 100%;
+    padding-left: 6px;
+    color: #956afa;
+    animation: spin_4991 8s infinite;
+  }
+
+  @keyframes spin_4991 {
+    10% {
+      transform: translateY(-102%);
+    }
+    20% {
+      transform: translateY(-100%);
+    }
+    30% {
+      transform: translateY(-202%);
+    }
+    40% {
+      transform: translateY(-200%);
+    }
+    50% {
+      transform: translateY(-302%);
+    }
+    60% {
+      transform: translateY(-300%);
+    }
+    70% {
+      transform: translateY(-402%);
+    }
+    80% {
+      transform: translateY(-400%);
+    }
+    90% {
+      transform: translateY(-502%);
+    }
+    100% {
+      transform: translateY(-500%);
+    }
+  }
+}

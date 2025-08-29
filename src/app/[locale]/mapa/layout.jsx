@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import Loader from 'components/shared/Loader';
 import FlipCardGroup from 'components/shared/FlipCardGroup';
 import GradientButton from 'components/shared/GradientButton';
+import WhatsappButton from 'components/shared/WhatsappButton';
 
 const marcas = [
   { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
@@ -60,6 +61,8 @@ export default function MapaLayout({ children }) {
 
       {/* Seção dos 3 cards */}
       <FlipCardGroup />
+
+      <WhatsappButton />
 
       {/* Footer */}
       <footer className='bg-gray-900 px-6 py-4 text-sm text-white'>

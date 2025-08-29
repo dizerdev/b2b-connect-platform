@@ -148,8 +148,10 @@ export default function CadastroProdutoPage() {
 
   return (
     <PartnerGuard>
-      <div className='p-6 max-w-2xl mx-auto'>
-        <h1 className='text-2xl font-bold mb-4'>Cadastrar Produto</h1>
+      <div className='p-6 max-w-3xl mx-auto'>
+        <h1 className='text-3xl font-bold mb-6 text-gray-800'>
+          Cadastrar Produto
+        </h1>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>

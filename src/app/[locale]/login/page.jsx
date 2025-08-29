@@ -79,42 +79,66 @@ export default function LoginPage() {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-50 px-4'>
-      <div className='max-w-md w-full bg-white rounded-xl shadow-lg p-8'>
-        <h1 className='text-2xl font-bold text-center mb-6'>Login</h1>
+    <div
+      className='relative min-h-screen flex items-center justify-center bg-cover bg-center'
+      style={{
+        backgroundImage: "url('/assets/fundo_login.jpg')", // substitua pela sua imagem
+      }}
+    >
+      {/* Overlay com opacidade */}
+      <div className='absolute inset-0 bg-black/70'></div>
+
+      {/* Card glass */}
+      <div className='relative z-10 max-w-md w-full bg-white/20 backdrop-blur-lg rounded-2xl shadow-xl p-8'>
+        <h1 className='text-3xl font-bold text-center text-white mb-6'>
+          Login
+        </h1>
+
         <form onSubmit={handleLogin} className='space-y-4'>
           {erro && (
-            <div className='bg-red-100 text-red-700 p-2 rounded text-sm'>
+            <div className='bg-red-500/20 text-red-300 p-2 rounded text-sm'>
               {erro}
             </div>
           )}
 
           <div>
-            <label className='block text-sm font-medium'>E-mail</label>
+            <label className='block text-sm font-medium text-white'>
+              E-mail
+            </label>
             <input
               type='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className='mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300'
+              className='mt-1 w-full border border-gray-300/40 bg-white/30 text-white placeholder-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-400'
               placeholder='exemplo@email.com'
             />
           </div>
 
           <div>
-            <label className='block text-sm font-medium'>Senha</label>
+            <label className='block text-sm font-medium text-white'>
+              Senha
+            </label>
             <input
               type='password'
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
-              className='mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300'
+              className='mt-1 w-full border border-gray-300/40 bg-white/30 text-white placeholder-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-400'
               placeholder='••••••••'
             />
+            <div className='text-right mt-2'>
+              <a
+                href='/recuperar-senha'
+                className='text-sm text-blue-300 hover:underline'
+              >
+                Esqueceu a senha?
+              </a>
+            </div>
           </div>
 
           <button
             type='submit'
             disabled={loading}
-            className='w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50'
+            className='w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50'
           >
             {loading ? 'Entrando...' : 'Entrar'}
           </button>

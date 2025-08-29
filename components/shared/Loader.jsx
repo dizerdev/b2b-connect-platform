@@ -8,8 +8,8 @@ export default function Loader() {
       <div className='flex items-center text-neutral-200 font-medium text-xl rounded-lg h-10'>
         <p className='mb-3'>{t('HereYouCanFind')}</p>
         <div className='loader-words ml-2 h-10'>
-          <span className='word'>{t('Components')}</span>
           <span className='word'>{t('Footwear')}</span>
+          <span className='word'>{t('Components')}</span>
           <span className='word'>{t('Leathers')}</span>
           <span className='word'>{t('Accessories')}</span>
           <span className='word'>{t('Machines')}</span>

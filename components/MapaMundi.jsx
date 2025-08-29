@@ -35,14 +35,37 @@ export default function MapaMundi({ parceiros }) {
             top: p.y,
           }}
         >
-          <Link href={p.href || '#'} className='group'>
+          <Link
+            href={p.href || '#'}
+            className='group flex flex-col items-center'
+          >
+            {/* Ícone */}
             <Image
-              src='/icons/bolsa.svg'
+              src='/icons/ping.svg'
               alt='Globo'
               width={24}
               height={24}
-              className='text-white-100 hover:text-blue-400 hover:brightness-200 hover:drop-shadow-[0_0_20px_rgba(59,130,246,1)] transition-all w-7 h-7 cursor-pointer'
+              className='
+                text-white-100 
+                hover:text-blue-400 
+                hover:brightness-200 
+                hover:drop-shadow-[0_0_20px_rgba(59,130,246,1)]
+                transition-all w-7 h-7 cursor-pointer
+              '
             />
+
+            {/* Tooltip com nome */}
+            <span
+              className='
+                mt-1 px-2 py-1 rounded-lg text-xs font-semibold
+                bg-gray-900 text-white opacity-0 scale-90
+                group-hover:opacity-100 group-hover:scale-100
+                group-hover:drop-shadow-[0_0_15px_rgba(59,130,246,1)]
+                transition-all duration-300
+              '
+            >
+              {p.nome}
+            </span>
           </Link>
         </div>
       ))}

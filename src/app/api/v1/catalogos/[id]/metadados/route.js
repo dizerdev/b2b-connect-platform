@@ -1,12 +1,71 @@
 import db from 'lib/db';
 import { requireAuth } from 'lib/authMiddleware';
 
-const CONTINENTES = ['América', 'Europa', 'Ásia'];
-const CATEGORIAS = ['Moda Masculina', 'Fitness', 'Moda Feminina'];
+const CONTINENTES = [
+  'América do Norte',
+  'América Central',
+  'América do Sul',
+  'Ásia',
+  'África',
+  'Oceânia',
+];
+const PAISES = [
+  'China',
+  'Vietnã',
+  'Indonésia',
+  'Alemanha',
+  'Itália',
+  'Bélgica',
+  'França',
+  'Países Baixos',
+  'Espanha',
+  'Índia',
+  'Turquia',
+  'Portugal',
+  'Bangladesh',
+  'México',
+  'Polônia',
+  'Brasil',
+  'Paquistão',
+  'Canadá',
+  'Egito',
+];
+const CATEGORIAS = [
+  'Calçados',
+  'Acessórios',
+  'Componentes',
+  'Couros',
+  'Máquinas',
+  'Serviços',
+  'Químicos',
+];
+const SUBCATEGORIAS = [
+  'Masculino',
+  'Feminino',
+  'Infantil',
+  'Meias',
+  'Cintos',
+  'Bolsas',
+  'Malas',
+  'Palmilha',
+  'Sola',
+  'Salto',
+  'Cabedal',
+  'Injetoras',
+  'Costura',
+  'Presponto',
+  'Manutenção',
+  'Sapataria',
+  'Vendedores',
+  'Curtume',
+];
 const ESPECIFICACOES_VALIDAS = [
-  'Algodão orgânico',
-  'Tecido técnico',
+  'Couro',
+  'Tecido Premium',
   'Estampado',
+  'Vulcanizado',
+  'Costura',
+  'Verniz',
 ];
 
 export async function GET(req, { params }) {
@@ -43,7 +102,7 @@ export async function GET(req, { params }) {
     // Busca os metadados do catálogo
     const metaRes = await db.query(
       `
-      SELECT continente, pais, categoria, especificacao
+      SELECT continente, pais, categoria, sub_categoria, especificacao
       FROM catalogo_metadados
       WHERE catalogo_id = $1
       `,
@@ -72,12 +131,14 @@ export async function PATCH(req, { params }) {
 
   const { sub: userId, papel } = auth.payload;
   const { id: catalogoId } = await params;
-  const { continente, pais, categoria, especificacao } = await req.json();
+  const { continente, pais, categoria, sub_categoria, especificacao } =
+    await req.json();
 
   if (
     !continente ||
     !pais ||
     !categoria ||
+    !sub_categoria ||
     !Array.isArray(especificacao) ||
     especificacao.length === 0
   ) {
@@ -93,8 +154,17 @@ export async function PATCH(req, { params }) {
   if (!CONTINENTES.includes(continente)) {
     return Response.json({ error: 'Continente inválido' }, { status: 400 });
   }
+
+  if (!PAISES.includes(pais)) {
+    return Response.json({ error: 'Continente inválido' }, { status: 400 });
+  }
+
   if (!CATEGORIAS.includes(categoria)) {
     return Response.json({ error: 'Categoria inválida' }, { status: 400 });
+  }
+
+  if (!SUBCATEGORIAS.includes(sub_categoria)) {
+    return Response.json({ error: 'Subcategoria inválida' }, { status: 400 });
   }
 
   for (const espec of especificacao) {
@@ -130,15 +200,23 @@ export async function PATCH(req, { params }) {
     // Insere ou atualiza metadados com JSONB
     await db.query(
       `
-      INSERT INTO catalogo_metadados (catalogo_id, continente, pais, categoria, especificacao)
-      VALUES ($1, $2, $3, $4, $5::jsonb)
+      INSERT INTO catalogo_metadados (catalogo_id, continente, pais, categoria, sub_categoria, especificacao)
+      VALUES ($1, $2, $3, $4, $5, $6::jsonb)
       ON CONFLICT (catalogo_id)
       DO UPDATE SET continente = EXCLUDED.continente,
         pais = EXCLUDED.pais,
         categoria = EXCLUDED.categoria,
+        sub_categoria = EXCLUDED.sub_categoria,
         especificacao = EXCLUDED.especificacao
       `,
-      [catalogoId, continente, pais, categoria, JSON.stringify(especificacao)]
+      [
+        catalogoId,
+        continente,
+        pais,
+        categoria,
+        sub_categoria,
+        JSON.stringify(especificacao),
+      ]
     );
 
     return Response.json({ success: true });

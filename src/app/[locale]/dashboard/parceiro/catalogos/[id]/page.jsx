@@ -173,6 +173,10 @@ export default function CatalogoDetalhesPage() {
             <strong>Categoria:</strong>{' '}
             {catalogo.catalogo.metadados?.categoria || '-'}
           </p>
+          <p>
+            <strong>Subcategoria:</strong>{' '}
+            {catalogo.catalogo.metadados?.sub_categoria || '-'}
+          </p>
           {Array.isArray(catalogo.catalogo.metadados?.especificacao) &&
           catalogo.catalogo.metadados.especificacao.length > 0 ? (
             <ul className='list-disc pl-6'>

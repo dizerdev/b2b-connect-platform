@@ -16,7 +16,7 @@ export default function WhatsappButton() {
         alt='WhatsApp'
         width={60}
         height={60}
-        className='rounded-40 shadow-lg hover:scale-110 active:scale-95 transition-transform cursor-pointer'
+        className='rounded-40 hover:scale-110 active:scale-95 transition-transform cursor-pointer'
       />
     </Link>
   );

@@ -8,7 +8,7 @@ export default function MapaMundi({ parceiros }) {
     <div
       className='
         relative
-        items-center 
+        justify-items-center 
         xl:h-[73vh]
         w-[90vw] sm:w-[90vw] md:w-[80vw] lg:w-[70vw] xl:w-[90vw]
         aspect-[2/1] 

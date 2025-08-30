@@ -4,13 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AdminGuard from 'components/AdminGuard';
-import {
-  Eye,
-  CheckCircle,
-  Upload,
-  Star,
-  Image as ImageIcon,
-} from 'lucide-react';
+import { Eye, CheckCircle, Upload, Star } from 'lucide-react';
 
 export default function ListaCatalogosPage() {
   const router = useRouter();
@@ -148,7 +142,11 @@ export default function ListaCatalogosPage() {
                   <td className='px-4 py-3'>
                     <div className='w-16 h-16 bg-gray-200 rounded flex items-center justify-center overflow-hidden'>
                       {/* Quando tiver imagem real, trocar src pelo cat.capa */}
-                      <ImageIcon className='text-gray-400 w-8 h-8' />
+                      <img
+                        src={cat.imagem_url || '/assets/empty.jpg'}
+                        alt={`Imagem ${idx}`}
+                        className='w-20 h-20 object-cover rounded'
+                      />
                     </div>
                   </td>
 

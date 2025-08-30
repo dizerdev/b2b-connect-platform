@@ -105,7 +105,7 @@ export async function GET(req, { params }) {
     // 5. Metadados do catálogo
     const metadadosRes = await db.query(
       `
-      SELECT continente, pais, categoria, especificacao
+      SELECT continente, pais, categoria, sub_categoria, especificacao
       FROM catalogo_metadados
       WHERE catalogo_id = $1
     `,

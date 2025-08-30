@@ -1,4 +1,3 @@
-// app/catalogos/[id]/metadados/page.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -7,12 +6,71 @@ import { toast } from 'react-hot-toast';
 import PartnerGuard from 'components/PartnerGuard';
 import { X } from 'lucide-react';
 
-const CONTINENTES = ['América', 'Europa', 'Ásia'];
-const CATEGORIAS = ['Moda Masculina', 'Fitness', 'Moda Feminina'];
+const CONTINENTES = [
+  'América do Norte',
+  'América Central',
+  'América do Sul',
+  'Ásia',
+  'África',
+  'Oceânia',
+];
+const PAISES = [
+  'China',
+  'Vietnã',
+  'Indonésia',
+  'Alemanha',
+  'Itália',
+  'Bélgica',
+  'França',
+  'Países Baixos',
+  'Espanha',
+  'Índia',
+  'Turquia',
+  'Portugal',
+  'Bangladesh',
+  'México',
+  'Polônia',
+  'Brasil',
+  'Paquistão',
+  'Canadá',
+  'Egito',
+];
+const CATEGORIAS = [
+  'Calçados',
+  'Acessórios',
+  'Componentes',
+  'Couros',
+  'Máquinas',
+  'Serviços',
+  'Químicos',
+];
+const SUBCATEGORIAS = [
+  'Masculino',
+  'Feminino',
+  'Infantil',
+  'Meias',
+  'Cintos',
+  'Bolsas',
+  'Malas',
+  'Palmilha',
+  'Sola',
+  'Salto',
+  'Cabedal',
+  'Injetoras',
+  'Costura',
+  'Presponto',
+  'Manutenção',
+  'Sapataria',
+  'Vendedores',
+  'Curtume',
+];
 const ESPECIFICACOES_VALIDAS = [
-  'Algodão orgânico',
-  'Tecido técnico',
+  'Couro',
+  'Tecido Premium',
   'Estampado',
+  'Vulcanizado',
+  'Costura',
+  'Verniz',
 ];
 
 export default function DefinicaoMetadadosPage() {
@@ -22,6 +80,7 @@ export default function DefinicaoMetadadosPage() {
   const [continente, setContinente] = useState('');
   const [pais, setPais] = useState('');
   const [categoria, setCategoria] = useState('');
+  const [subcategoria, setSubcategoria] = useState('');
   const [especificacao, setEspecificacao] = useState([]);
 
   const [loading, setLoading] = useState(true);
@@ -37,6 +96,7 @@ export default function DefinicaoMetadadosPage() {
         setContinente(data.continente || '');
         setPais(data.pais || '');
         setCategoria(data.categoria || '');
+        setSubcategoria(data.sub_categoria || '');
         setEspecificacao(data.especificacao || []);
       } catch (err) {
         toast.error(err.message);
@@ -65,6 +125,7 @@ export default function DefinicaoMetadadosPage() {
           continente,
           pais,
           categoria,
+          sub_categoria: subcategoria,
           especificacao,
         }),
       });
@@ -106,13 +167,19 @@ export default function DefinicaoMetadadosPage() {
 
           <div>
             <label className='block font-medium mb-1'>País</label>
-            <input
-              type='text'
+            <select
               value={pais}
               onChange={(e) => setPais(e.target.value)}
               className='w-full border px-3 py-2 rounded'
               required
-            />
+            >
+              <option value=''>Selecione</option>
+              {PAISES.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
@@ -125,6 +192,23 @@ export default function DefinicaoMetadadosPage() {
             >
               <option value=''>Selecione</option>
               {CATEGORIAS.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className='block font-medium mb-1'>Sub Categoria</label>
+            <select
+              value={subcategoria}
+              onChange={(e) => setSubcategoria(e.target.value)}
+              className='w-full border px-3 py-2 rounded'
+              required
+            >
+              <option value=''>Selecione</option>
+              {SUBCATEGORIAS.map((c) => (
                 <option key={c} value={c}>
                   {c}
                 </option>

@@ -8,10 +8,21 @@ export async function GET(req) {
   }
 
   const { searchParams } = new URL(req.url);
-  const continente = searchParams.get('continente');
-  const pais = searchParams.get('pais');
-  const categoria = searchParams.get('categoria');
-  const especificacoes = searchParams.getAll('especificacao'); // array de strings, pode estar vazio
+  const continente = searchParams.get('continente')
+    ? decodeURIComponent(searchParams.get('continente'))
+    : null;
+  const pais = searchParams.get('pais')
+    ? decodeURIComponent(searchParams.get('pais'))
+    : null;
+  const categoria = searchParams.get('categoria')
+    ? decodeURIComponent(searchParams.get('categoria'))
+    : null;
+  const subcategoria = searchParams.get('subcategoria')
+    ? decodeURIComponent(searchParams.get('subcategoria'))
+    : null;
+  const especificacoes = searchParams
+    .getAll('especificacao')
+    .map((s) => decodeURIComponent(s));
   const limit = parseInt(searchParams.get('limit')) || 50;
 
   const filters = [];
@@ -29,6 +40,10 @@ export async function GET(req) {
   if (categoria) {
     filters.push(`m.categoria = $${i++}`);
     values.push(categoria);
+  }
+  if (subcategoria) {
+    filters.push(`m.sub_categoria = $${i++}`);
+    values.push(subcategoria);
   }
   if (especificacoes.length > 0) {
     // monta OR entre as especificações para buscar qualquer uma delas
@@ -53,6 +68,7 @@ export async function GET(req) {
       SELECT 
         c.id,
         c.nome,
+        c.imagem_url,
         c.status,
         c.rating,
         c.fornecedor_id,
@@ -68,8 +84,6 @@ export async function GET(req) {
       `,
       [...values, limit]
     );
-    console.log(where);
-    console.log(values);
     return Response.json({ catalogos: result.rows });
   } catch (err) {
     console.error('Erro ao buscar catálogos:', err);

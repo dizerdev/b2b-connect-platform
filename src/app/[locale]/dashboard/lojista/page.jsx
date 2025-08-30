@@ -1,10 +1,10 @@
 'use client';
 
+import Link from 'next/link';
 import SellerGuard from 'components/SellerGuard';
 import MapaMundi from 'components/MapaMundi';
-import Carousel from 'components/shared/Carrousel';
 
-export default function DashboardParceiro() {
+export default function DashboardLojista() {
   const parceiros = [
     {
       nome: 'Brasil',
@@ -22,64 +22,20 @@ export default function DashboardParceiro() {
       nome: 'Portugal',
       x: '50%',
       y: '40%',
-      href: '/dashboard/lojista/vitrines/principal?pais=portugal',
+      href: '/dashboard/lojista/vitrines/principal?pais=Portugal',
     },
     {
       nome: 'China',
       x: '72%',
       y: '48%',
-      href: '/dashboard/lojista/vitrines/principal?pais=china',
-    },
-  ];
-
-  const items = [
-    {
-      nome: 'Parceiro A',
-      status: 'Ativo',
-      rating: 4.5,
-      criadoEm: '2025-08-01',
-    },
-    {
-      nome: 'Parceiro B',
-      status: 'Inativo',
-      rating: 3.8,
-      criadoEm: '2025-07-20',
-    },
-    {
-      nome: 'Parceiro C',
-      status: 'Ativo',
-      rating: 5.0,
-      criadoEm: '2025-06-15',
-    },
-    {
-      nome: 'Parceiro C',
-      status: 'Ativo',
-      rating: 5.0,
-      criadoEm: '2025-06-15',
-    },
-    {
-      nome: 'Parceiro C',
-      status: 'Ativo',
-      rating: 5.0,
-      criadoEm: '2025-06-15',
-    },
-    {
-      nome: 'Parceiro C',
-      status: 'Ativo',
-      rating: 5.0,
-      criadoEm: '2025-06-15',
+      href: '/dashboard/lojista/vitrines/principal?pais=China',
     },
   ];
   return (
     <SellerGuard>
-      <div className='min-h-[70vh] flex flex-col bg-gray-50'>
-        <main className='flex-1 flex items-center justify-center p-6'>
-          <div className='w-full max-w-6xl'>
-            <MapaMundi parceiros={parceiros} />
-          </div>
-        </main>
+      <div className='min-h-[30vh] flex flex-col'>
+        <MapaMundi parceiros={parceiros} />
       </div>
-      <Carousel items={items} />
     </SellerGuard>
   );
 }

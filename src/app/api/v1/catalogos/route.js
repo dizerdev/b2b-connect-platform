@@ -34,6 +34,7 @@ export async function GET(req) {
         c.nome,
         c.status,
         c.imagem_url,
+        c.created_at,
         c.rating,
         c.fornecedor_id,
         f.nome AS fornecedor_nome

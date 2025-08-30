@@ -40,7 +40,7 @@ export default function Carousel({ items }) {
   }
 
   return (
-    <div className='relative w-full overflow-hidden'>
+    <div className='relative w-full overflow-hidden p-6'>
       {/* Container */}
       <div
         className='flex transition-transform duration-500 ease-in-out'
@@ -63,7 +63,7 @@ export default function Carousel({ items }) {
                 Rating: {item.rating || '-'}
               </p>
               <p className='text-sm text-gray-600'>
-                Criado em: {new Date(item.criadoEm).toLocaleDateString()}
+                Criado em: {new Date(`${item.criadoEm}`).toLocaleDateString()}
               </p>
             </div>
           </div>

@@ -9,9 +9,9 @@ export async function PATCH(req, { params }) {
 
   const { sub: userId, papel } = auth.payload;
   const { id } = await params;
-  const { nome, descricao } = await req.json();
+  const { nome, descricao, imagem_url } = await req.json();
 
-  if (!nome && !descricao) {
+  if (!nome && !descricao && !imagem_url) {
     return Response.json(
       { error: 'Nenhum campo para atualizar' },
       { status: 400 }
@@ -58,13 +58,18 @@ export async function PATCH(req, { params }) {
       values.push(descricao);
     }
 
+    if (imagem_url !== undefined) {
+      fields.push(`imagem_url = $${idx++}`);
+      values.push(imagem_url);
+    }
+
     values.push(id); // para o WHERE
 
     const updateQuery = `
       UPDATE catalogos
       SET ${fields.join(', ')}
       WHERE id = $${idx}
-      RETURNING id, nome, descricao, status, rating, created_at
+      RETURNING id, nome, descricao, imagem_url, status, rating, created_at
     `;
 
     const updated = await db.query(updateQuery, values);

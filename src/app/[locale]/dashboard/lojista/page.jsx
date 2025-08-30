@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import SellerGuard from 'components/SellerGuard';
 import MapaMundi from 'components/MapaMundi';
+import Carousel from 'components/shared/Carrousel';
 
 export default function DashboardParceiro() {
   const parceiros = [
@@ -31,39 +31,55 @@ export default function DashboardParceiro() {
       href: '/dashboard/lojista/vitrines/principal?pais=china',
     },
   ];
+
+  const items = [
+    {
+      nome: 'Parceiro A',
+      status: 'Ativo',
+      rating: 4.5,
+      criadoEm: '2025-08-01',
+    },
+    {
+      nome: 'Parceiro B',
+      status: 'Inativo',
+      rating: 3.8,
+      criadoEm: '2025-07-20',
+    },
+    {
+      nome: 'Parceiro C',
+      status: 'Ativo',
+      rating: 5.0,
+      criadoEm: '2025-06-15',
+    },
+    {
+      nome: 'Parceiro C',
+      status: 'Ativo',
+      rating: 5.0,
+      criadoEm: '2025-06-15',
+    },
+    {
+      nome: 'Parceiro C',
+      status: 'Ativo',
+      rating: 5.0,
+      criadoEm: '2025-06-15',
+    },
+    {
+      nome: 'Parceiro C',
+      status: 'Ativo',
+      rating: 5.0,
+      criadoEm: '2025-06-15',
+    },
+  ];
   return (
     <SellerGuard>
-      <div className='min-h-screen flex flex-col'>
-        <nav className='bg-gray-800 text-white p-4'>
-          <ul className='flex space-x-6'>
-            <li>
-              <Link href='/dashboard/lojista' className='hover:underline'>
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/dashboard/lojista/vitrines/principal'
-                className='hover:underline'
-              >
-                Catalogos
-              </Link>
-            </li>
-            <li>
-              <Link
-                href='/dashboard/lojista/mensagens'
-                className='hover:underline'
-              >
-                Mensagens
-              </Link>
-            </li>
-          </ul>
-        </nav>
-
-        <main className='flex-1 p-6'>
-          <MapaMundi parceiros={parceiros} />
+      <div className='min-h-[70vh] flex flex-col bg-gray-50'>
+        <main className='flex-1 flex items-center justify-center p-6'>
+          <div className='w-full max-w-6xl'>
+            <MapaMundi parceiros={parceiros} />
+          </div>
         </main>
       </div>
+      <Carousel items={items} />
     </SellerGuard>
   );
 }

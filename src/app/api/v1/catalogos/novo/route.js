@@ -16,7 +16,7 @@ export async function POST(req) {
     );
   }
 
-  const { nome, descricao } = await req.json();
+  const { nome, descricao, imagem_url } = await req.json();
 
   if (!nome) {
     return Response.json(
@@ -28,11 +28,11 @@ export async function POST(req) {
   try {
     const result = await db.query(
       `
-      INSERT INTO catalogos (id, fornecedor_id, nome, descricao, status, rating, created_at, updated_at)
-      VALUES (gen_random_uuid(), $1, $2, $3, 'pendente_aprovacao', 5, NOW(), NOW())
+      INSERT INTO catalogos (id, fornecedor_id, nome, descricao, imagem_url, status, rating, created_at, updated_at)
+      VALUES (gen_random_uuid(), $1, $2, $3, $4, 'pendente_aprovacao', 5, NOW(), NOW())
       RETURNING id, fornecedor_id, nome, descricao, status, rating, created_at, updated_at
     `,
-      [userId, nome, descricao || null]
+      [userId, nome, descricao || null, imagem_url]
     );
 
     return Response.json({ catalogo: result.rows[0] }, { status: 201 });

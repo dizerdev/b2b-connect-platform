@@ -1,17 +1,38 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function Carousel({ items }) {
   const [current, setCurrent] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
+
+  // Ajusta quantidade de cards conforme largura da tela
+  useEffect(() => {
+    function updateItemsPerPage() {
+      if (window.innerWidth >= 1280) {
+        setItemsPerPage(4); // telas grandes
+      } else if (window.innerWidth >= 1024) {
+        setItemsPerPage(3);
+      } else if (window.innerWidth >= 640) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(1);
+      }
+    }
+    updateItemsPerPage();
+    window.addEventListener('resize', updateItemsPerPage);
+    return () => window.removeEventListener('resize', updateItemsPerPage);
+  }, []);
 
   function prev() {
-    setCurrent((prev) => (prev === 0 ? items.length - 1 : prev - 1));
+    setCurrent((prev) =>
+      prev === 0 ? Math.max(items.length - itemsPerPage, 0) : prev - 1
+    );
   }
 
   function next() {
-    setCurrent((prev) => (prev === items.length - 1 ? 0 : prev + 1));
+    setCurrent((prev) => (prev >= items.length - itemsPerPage ? 0 : prev + 1));
   }
 
   if (!items || items.length === 0) {
@@ -23,14 +44,17 @@ export default function Carousel({ items }) {
       {/* Container */}
       <div
         className='flex transition-transform duration-500 ease-in-out'
-        style={{ transform: `translateX(-${current * 100}%)` }}
+        style={{
+          transform: `translateX(-${(current * 100) / itemsPerPage}%)`,
+        }}
       >
         {items.map((item, idx) => (
           <div
             key={idx}
-            className='min-w-full flex-shrink-0 p-4 flex justify-center'
+            className='w-full flex-shrink-0 px-2'
+            style={{ flex: `0 0 ${100 / itemsPerPage}%` }}
           >
-            <div className='w-full max-w-sm bg-white rounded-2xl shadow-lg border p-4'>
+            <div className='bg-white rounded-2xl shadow-lg border p-4 h-full'>
               <h2 className='text-lg font-bold mb-2'>{item.nome}</h2>
               <p className='text-sm text-gray-600 mb-2'>
                 Status: {item.status}
@@ -62,13 +86,15 @@ export default function Carousel({ items }) {
 
       {/* Indicadores */}
       <div className='absolute bottom-2 left-0 right-0 flex justify-center gap-2'>
-        {items.map((_, idx) => (
+        {Array.from({
+          length: Math.ceil((items.length / itemsPerPage) * 2),
+        }).map((_, idx) => (
           <div
             key={idx}
             className={`w-3 h-3 rounded-full ${
               idx === current ? 'bg-blue-600' : 'bg-gray-300'
             }`}
-          ></div>
+          />
         ))}
       </div>
     </div>

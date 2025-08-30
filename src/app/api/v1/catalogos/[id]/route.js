@@ -14,7 +14,7 @@ export async function GET(req, { params }) {
     // 1. Pega o catálogo
     const catalogoRes = await db.query(
       `
-      SELECT id, fornecedor_id, nome, descricao, status, rating
+      SELECT id, fornecedor_id, nome, descricao, imagem_url, status, rating
       FROM catalogos
       WHERE id = $1
     `,
@@ -119,6 +119,7 @@ export async function GET(req, { params }) {
         id: catalogo.id,
         nome: catalogo.nome,
         descricao: catalogo.descricao,
+        imagem_url: catalogo.imagem_url,
         status: catalogo.status,
         rating: catalogo.rating,
         colecoes: colecoesRes.rows,

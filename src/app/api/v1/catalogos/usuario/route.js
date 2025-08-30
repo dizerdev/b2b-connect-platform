@@ -32,6 +32,9 @@ export async function GET(req) {
       SELECT 
         c.id,
         c.nome,
+        c.descricao,
+        c.imagem_url,
+        c.created_at,
         c.status,
         c.rating,
         c.fornecedor_id,

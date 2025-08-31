@@ -41,7 +41,10 @@ export async function PATCH(req, { params }) {
     const isDono = userId === catalogo.fornecedor_id;
 
     if (!isAdmin && (!isDono || catalogo.status === 'publicado')) {
-      return Response.json({ error: 'Acesso negado' }, { status: 403 });
+      return Response.json(
+        { error: 'Somente catálogos não publicados. Contate o administrador' },
+        { status: 403 }
+      );
     }
 
     const fields = [];

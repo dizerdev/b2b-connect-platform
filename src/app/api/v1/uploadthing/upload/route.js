@@ -27,12 +27,11 @@ export async function POST(req) {
       );
     }
 
-    // 1. Solicita presigned URLs
     const uploadUrls = await prepareUpload({
       files,
       callbackUrl,
       callbackSlug,
-      routeConfig: ['image'], // ou outro tipo de rota
+      routeConfig: ['image'],
     });
 
     return new Response(JSON.stringify({ uploadUrls }), { status: 200 });

@@ -4,33 +4,46 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SellerGuard from 'components/SellerGuard';
 import Banner from 'components/shared/Banner';
+import Section from 'components/shared/Section';
 import Link from 'next/link';
 import Dropdown from 'components/shared/Dropdown';
 
 export default function VitrinePrincipalPage() {
   const searchParams = useSearchParams();
   const paisParam = searchParams.get('pais') || '';
+  const categoriaParam = searchParams.get('categoria') || '';
   const [catalogos, setCatalogos] = useState([]);
+
+  const [topCalcados, setTopCalcados] = useState([]);
+  const [topAcessorios, setTopAcessorios] = useState([]);
+  const [topMaquinas, setTopMaquinas] = useState([]);
+  const [topCouros, setTopCouros] = useState([]);
+
   const [filtros, setFiltros] = useState({
     continente: '',
     pais: paisParam,
-    categoria: '',
+    categoria: categoriaParam,
     subcategoria: '',
     especificacao: '',
   });
 
   useEffect(() => {
     aplicarFiltros();
+    aplicarFiltros();
+    fetchCatalogos('?categoria=Calçados', setTopCalcados);
+    fetchCatalogos('?categoria=Acessórios', setTopAcessorios);
+    fetchCatalogos('?categoria=Máquinas', setTopMaquinas);
+    fetchCatalogos('?categoria=Couros', setTopCouros);
   }, []);
 
-  async function fetchCatalogos(query = '') {
+  async function fetchCatalogos(query = '', setter = setCatalogos) {
     try {
       const res = await fetch(`/api/v1/vitrines/search${query}`, {
         cache: 'no-store',
       });
       if (!res.ok) throw new Error('Erro ao carregar catálogos');
       const data = await res.json();
-      setCatalogos(data.catalogos);
+      setter(data.catalogos);
     } catch (err) {
       console.error(err);
     }
@@ -68,7 +81,7 @@ export default function VitrinePrincipalPage() {
 
   return (
     <SellerGuard>
-      <div className='md:py-3 md:px-10 md:min-w-screen'>
+      <div className='px-4 py-3 md:px-10 md:py-3 w-full'>
         <div className='flex justify-between items-center mb-4'>
           <h1 className='text-2xl font-bold'>
             Produtos & Serviços Disponíveis
@@ -87,7 +100,7 @@ export default function VitrinePrincipalPage() {
           alt='Catálogo X'
         />
 
-        <div className='mt-6 flex justify-center gap-6'>
+        <div className='mt-6 flex flex-col sm:flex-row flex-wrap justify-center gap-4'>
           <Dropdown
             label='Continente'
             options={[
@@ -241,6 +254,12 @@ export default function VitrinePrincipalPage() {
             ))
           )}
         </div>
+
+        {/* SECTIONS FIXAS */}
+        <Section title='Top Calçados' data={topCalcados} />
+        <Section title='Top Acessórios' data={topAcessorios} />
+        <Section title='Top Máquinas' data={topMaquinas} />
+        <Section title='Top Couros' data={topCouros} />
       </div>
     </SellerGuard>
   );

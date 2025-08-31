@@ -220,42 +220,70 @@ export default function EdicaoProdutoPage() {
           />
         </div>
 
-        <div className='space-y-2'>
+        <div className='space-y-4'>
           <label className='block text-sm font-medium mb-1'>Imagens</label>
-          {imagens.map((img, idx) => {
-            const key = extractFileKey(img);
-            return (
-              <div key={idx} className='flex gap-2 items-center'>
-                {img ? (
-                  <img
-                    src={img}
-                    alt={`Imagem ${idx}`}
-                    className='w-20 h-20 object-cover rounded'
-                  />
-                ) : (
-                  <input
-                    type='file'
-                    onChange={(e) =>
-                      e.target.files[0] &&
-                      handleFileChange(e.target.files[0], idx)
-                    }
-                    disabled={loading}
-                  />
-                )}
 
-                <button
-                  type='button'
-                  onClick={() => {
-                    handleDelete(key); // nunca undefined
-                    removerImagem(idx); // remove a url do array de imagens
-                  }}
-                  className='bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700'
-                >
-                  Remover
-                </button>
-              </div>
-            );
-          })}
+          {/* Grid de imagens */}
+          <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
+            {imagens.slice().map((img, idx) => {
+              const key = extractFileKey(img);
+
+              return (
+                <div key={idx} className='flex flex-col items-center'>
+                  {img ? (
+                    <div className='flex flex-col items-center gap-2'>
+                      <img
+                        src={img}
+                        alt={`Imagem ${idx}`}
+                        className='w-20 h-20 object-cover rounded'
+                      />
+                      <button
+                        type='button'
+                        onClick={() => {
+                          handleDelete(key);
+                          removerImagem(idx);
+                        }}
+                        className='bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700'
+                      >
+                        Remover
+                      </button>
+                    </div>
+                  ) : (
+                    <div className='flex flex-col items-center gap-2'>
+                      <label
+                        htmlFor={`file-input-${idx}`}
+                        className='cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors'
+                      >
+                        Selecionar arquivo
+                      </label>
+                      <span className='text-gray-700'>
+                        {img[idx] || 'Nenhum arquivo selecionado'}
+                      </span>
+                      <input
+                        id={`file-input-${idx}`}
+                        type='file'
+                        className='hidden'
+                        onChange={(e) => {
+                          if (e.target.files[0])
+                            handleFileChange(e.target.files[0], idx);
+                        }}
+                        disabled={loading}
+                      />
+                      <button
+                        className='bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700'
+                        onClick={() => {
+                          removerImagem(idx);
+                        }}
+                      >
+                        X
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
           <button
             type='button'
             onClick={adicionarImagem}

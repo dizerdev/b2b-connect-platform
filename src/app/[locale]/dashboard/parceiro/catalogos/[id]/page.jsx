@@ -136,7 +136,18 @@ export default function CatalogoDetalhesPage() {
                   key={p.id}
                   className='bg-gray-50 p-2 rounded shadow flex justify-between items-center'
                 >
-                  {p.nome}
+                  <div className='flex items-center gap-2'>
+                    {/* Miniatura da primeira imagem */}
+                    {p.imagens?.[0] && (
+                      <img
+                        src={p.imagens[0]}
+                        alt={p.nome}
+                        className='w-12 h-12 object-cover rounded'
+                      />
+                    )}
+                    <span>{p.nome}</span>
+                  </div>
+
                   <button
                     onClick={() => handleVerProduto(p.id)}
                     className='text-blue-500 hover:underline text-sm flex items-center gap-1'
@@ -152,7 +163,7 @@ export default function CatalogoDetalhesPage() {
         </section>
 
         {/* Metadados */}
-        <section className='p-4 bg-white rounded-lg shadow flex flex-col gap-3'>
+        <section className='p-4 bg-white rounded-2xl shadow flex flex-col gap-4'>
           <div className='flex justify-between items-center'>
             <h2 className='text-xl font-semibold'>Metadados</h2>
             <button
@@ -162,31 +173,48 @@ export default function CatalogoDetalhesPage() {
               <Database size={16} /> Definir
             </button>
           </div>
-          <p>
-            <strong>Continente:</strong>{' '}
-            {catalogo.catalogo.metadados?.continente || '-'}
-          </p>
-          <p>
-            <strong>País:</strong> {catalogo.catalogo.metadados?.pais || '-'}
-          </p>
-          <p>
-            <strong>Categoria:</strong>{' '}
-            {catalogo.catalogo.metadados?.categoria || '-'}
-          </p>
-          <p>
-            <strong>Subcategoria:</strong>{' '}
-            {catalogo.catalogo.metadados?.sub_categoria || '-'}
-          </p>
-          {Array.isArray(catalogo.catalogo.metadados?.especificacao) &&
-          catalogo.catalogo.metadados.especificacao.length > 0 ? (
-            <ul className='list-disc pl-6'>
-              {catalogo.catalogo.metadados.especificacao.map((esp, idx) => (
-                <li key={idx}>{esp}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>-</p>
-          )}
+
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3'>
+            <div className='bg-gray-50 p-3 rounded-lg hover:shadow-lg transition'>
+              <p className='text-gray-500 text-sm'>Continente</p>
+              <p className='font-medium text-gray-800'>
+                {catalogo.catalogo.metadados?.continente || '-'}
+              </p>
+            </div>
+
+            <div className='bg-gray-50 p-3 rounded-lg hover:shadow-lg transition'>
+              <p className='text-gray-500 text-sm'>País</p>
+              <p className='font-medium text-gray-800'>
+                {catalogo.catalogo.metadados?.pais || '-'}
+              </p>
+            </div>
+
+            <div className='bg-gray-50 p-3 rounded-lg hover:shadow-lg transition'>
+              <p className='text-gray-500 text-sm'>Categoria</p>
+              <p className='font-medium text-gray-800'>
+                {catalogo.catalogo.metadados?.categoria || '-'}
+              </p>
+            </div>
+
+            <div className='bg-gray-50 p-3 rounded-lg hover:shadow-lg transition'>
+              <p className='text-gray-500 text-sm'>Subcategoria</p>
+              <p className='font-medium text-gray-800'>
+                {catalogo.catalogo.metadados?.sub_categoria || '-'}
+              </p>
+            </div>
+
+            {Array.isArray(catalogo.catalogo.metadados?.especificacao) &&
+            catalogo.catalogo.metadados.especificacao.length > 0 ? (
+              <div className='bg-gray-50 p-3 rounded-lg hover:shadow-lg transition col-span-full'>
+                <p className='text-gray-500 text-sm mb-1'>Especificações</p>
+                <ul className='list-disc pl-5 text-gray-700'>
+                  {catalogo.catalogo.metadados.especificacao.map((esp, idx) => (
+                    <li key={idx}>{esp}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+          </div>
         </section>
       </div>
     </PartnerGuard>

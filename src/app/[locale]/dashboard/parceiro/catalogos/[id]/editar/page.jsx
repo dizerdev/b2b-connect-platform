@@ -40,6 +40,8 @@ export default function EdicaoCatalogoPage() {
     }
   }, [catalogoId, router]);
 
+  console.log(imagemUrl);
+
   const handleFileChange = async (file) => {
     try {
       setLoading(true);

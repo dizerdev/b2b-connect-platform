@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import SellerGuard from 'components/SellerGuard';
-import Banner from 'components/shared/Banner';
+import ProductGallery from 'components/shared/ProductGallery';
 
 export default function DetalhesProdutoLojistaPage() {
   const { pid } = useParams();
@@ -30,12 +30,15 @@ export default function DetalhesProdutoLojistaPage() {
     return <div className='p-6'>Carregando produto...</div>;
   }
 
+  const imagens = produto.produto.imagens || [];
+  const catalogo = produto.catalogos?.[0];
+
   return (
     <SellerGuard>
-      <div className='max-w-5xl mx-auto p-6'>
+      <div className='max-w-6xl mx-auto p-6'>
         {/* Header */}
         <div className='flex justify-between items-center mb-6'>
-          <h1 className='text-2xl font-bold'>{produto.nome}</h1>
+          <h1 className='text-2xl font-bold'>{produto.produto.nome}</h1>
           <button
             onClick={() => router.back()}
             className='bg-gray-200 px-4 py-2 rounded hover:bg-gray-300'
@@ -43,62 +46,58 @@ export default function DetalhesProdutoLojistaPage() {
             Voltar
           </button>
         </div>
-        <Banner src={produto.produto.imagens[0]} alt='Catálogo X' />
-        <br />
-        {/* Fotos */}
-        <div className='flex gap-4 overflow-x-auto mb-6'>
-          {produto.produto.imagens?.length > 0 ? (
-            produto.produto.imagens.map((foto, index) => (
-              <img
-                key={index}
-                src={foto}
-                alt={`Foto ${index + 1}`}
-                className='h-48 w-48 object-cover rounded'
-              />
-            ))
+
+        {/* Layout principal */}
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+          {/* Galeria de imagens */}
+          {imagens.length > 0 ? (
+            <ProductGallery images={imagens} />
           ) : (
-            <div className='text-gray-500'>Sem fotos disponíveis</div>
+            <div className='flex items-center justify-center h-80 bg-gray-100 text-gray-500 rounded'>
+              Sem fotos disponíveis
+            </div>
           )}
+
+          {/* Informações do produto */}
+          <div className='flex flex-col gap-4'>
+            <div className='bg-white rounded-lg shadow p-4'>
+              <p className='mb-2'>
+                <span className='font-semibold'>Nome:</span>{' '}
+                {produto.produto.nome || '—'}
+              </p>
+              <p className='mb-2'>
+                <span className='font-semibold'>Descrição:</span>{' '}
+                {produto.produto.descricao || '—'}
+              </p>
+              <p className='mb-2'>
+                <span className='font-semibold'>Preço:</span>{' '}
+                {catalogo?.preco ? `R$ ${catalogo.preco.toFixed(2)}` : '—'}
+              </p>
+              <p className='mb-2'>
+                <span className='font-semibold'>Fornecedor:</span>{' '}
+                {catalogo?.catalogo_nome || '—'}
+              </p>
+              <p>
+                <span className='font-semibold'>Rating:</span> ⭐{' '}
+                {produto.rating || 'N/A'}
+              </p>
+            </div>
+
+            <button
+              onClick={() =>
+                router.push(
+                  `/dashboard/lojista/vitrines/individual/${catalogo?.fornecedor_id}`
+                )
+              }
+              className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700'
+            >
+              Ver Vitrine do Fornecedor
+            </button>
+          </div>
         </div>
 
-        {/* Informações básicas */}
-        <div className='bg-white rounded-lg shadow p-4 mb-6'>
-          <p className='mb-2'>
-            <span className='font-semibold'>Nome:</span>{' '}
-            {produto.produto.nome || '—'}
-          </p>
-          <p className='mb-2'>
-            <span className='font-semibold'>Descrição:</span>{' '}
-            {produto.produto.descricao || '—'}
-          </p>
-          <p className='mb-2'>
-            <span className='font-semibold'>Preço:</span> R${' '}
-            {produto.catalogos[0].preco?.toFixed(2) || '—'}
-          </p>
-          <p className='mb-2'>
-            <span className='font-semibold'>Fornecedor:</span>{' '}
-            {produto.fornecedor?.nome || '—'}
-          </p>
-          <p>
-            <span className='font-semibold'>Rating:</span> ⭐{' '}
-            {produto.rating || 'N/A'}
-          </p>
-        </div>
-        <div>
-          <button
-            onClick={() =>
-              router.push(
-                `/dashboard/lojista/vitrines/individual/${produto.catalogos[0].fornecedor_id}`
-              )
-            }
-            className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700'
-          >
-            Ver Vitrine do Fornecedor
-          </button>
-        </div>
-        <br />
         {/* Grades */}
-        <div className='bg-white rounded-lg shadow p-4'>
+        <div className='bg-white rounded-lg shadow p-4 mt-8'>
           <h2 className='text-lg font-semibold mb-4'>Grades disponíveis</h2>
           {produto.grades?.length > 0 ? (
             <table className='w-full border-collapse border'>

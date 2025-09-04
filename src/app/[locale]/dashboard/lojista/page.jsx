@@ -13,28 +13,94 @@ export default function DashboardLojista() {
 
   const parceiros = [
     {
-      nome: 'Brasil',
-      x: '36%',
-      y: '73%',
+      nome: 'Canadá',
+      x: '20%',
+      y: '24%',
+      href: '/dashboard/lojista/vitrines/principal?pais=Canadá',
+    },
+    {
+      nome: 'Nova York',
+      x: '27.5%',
+      y: '33%',
+      href: '/dashboard/lojista/vitrines/principal?pais=EUA',
+    },
+    {
+      nome: 'Miami',
+      x: '26.5%',
+      y: '43.5%',
+      href: '/dashboard/lojista/vitrines/principal?pais=EUA',
+    },
+    {
+      nome: 'México',
+      x: '22%',
+      y: '48%',
+      href: '/dashboard/lojista/vitrines/principal?pais=México',
+    },
+    {
+      nome: 'Buenos Aires',
+      x: '31.5%',
+      y: '80%',
+      href: '/dashboard/lojista/vitrines/principal?pais=Argentina',
+    },
+    {
+      nome: 'São Paulo',
+      x: '34%',
+      y: '74%',
       href: '/dashboard/lojista/vitrines/principal?pais=Brasil',
     },
     {
-      nome: 'EUA',
-      x: '28%',
+      nome: 'Casablanca',
+      x: '43.8%',
+      y: '39%',
+      href: '/dashboard/lojista/vitrines/principal?pais=Marrocos',
+    },
+    {
+      nome: 'Milão',
+      x: '48%',
+      y: '30%',
+      href: '/dashboard/lojista/vitrines/principal?pais=Itália',
+    },
+    {
+      nome: 'Cairo',
+      x: '52.8%',
+      y: '41%',
+      href: '/dashboard/lojista/vitrines/principal?pais=Egito',
+    },
+    {
+      nome: 'Johannesburg',
+      x: '52%',
+      y: '72.9%',
+      href: '/dashboard/lojista/vitrines/principal?pais=África%20do%20Sul',
+    },
+    {
+      nome: 'New Delphi',
+      x: '63.5%',
+      y: '43%',
+      href: '/dashboard/lojista/vitrines/principal?pais=Índia',
+    },
+    {
+      nome: 'Bangladesh',
+      x: '66.7%',
+      y: '45%',
+      href: '/dashboard/lojista/vitrines/principal?pais=Bangladesh',
+    },
+    {
+      nome: 'Wenzhou',
+      x: '73.5%',
       y: '42%',
-      href: '/dashboard/lojista/vitrines/principal?pais=eua',
-    },
-    {
-      nome: 'Portugal',
-      x: '50%',
-      y: '40%',
-      href: '/dashboard/lojista/vitrines/principal?pais=Portugal',
-    },
-    {
-      nome: 'China',
-      x: '72%',
-      y: '48%',
       href: '/dashboard/lojista/vitrines/principal?pais=China',
+    },
+    {
+      nome: 'Guangzhou',
+      x: '72%',
+      y: '45%',
+      href: '/dashboard/lojista/vitrines/principal?pais=China',
+    },
+    {
+      nome: 'Austrália',
+      x: '78%',
+      y: '82%',
+      href: '/dashboard/lojista/vitrines/principal?pais=Autrália',
     },
   ];
 

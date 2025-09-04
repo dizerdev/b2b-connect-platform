@@ -16,6 +16,12 @@ const CONTINENTES = [
 ];
 const PAISES = [
   'China',
+  'EUA',
+  'México',
+  'Argentina',
+  'Marrocos',
+  'África do Sul',
+  'Austrália',
   'Vietnã',
   'Indonésia',
   'Alemanha',

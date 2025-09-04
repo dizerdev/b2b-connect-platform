@@ -136,9 +136,9 @@ export default function DashboardLayout({ children }) {
         <div className='flex flex-col items-center space-y-2 sm:flex-row sm:justify-between sm:space-y-0'>
           <span>&copy; {new Date().getFullYear()} Shoesnetworld</span>
           <div className='flex space-x-4'>
-            <Link href='/contato'>Contato</Link>
-            <Link href='/suporte'>Suporte</Link>
-            <Link href='/sobre'>Sobre</Link>
+            <Link href='/public/contato'>Contato</Link>
+            <Link href='/public/suporte'>Suporte</Link>
+            <Link href='/public/sobre'>Sobre</Link>
           </div>
         </div>
       </footer>

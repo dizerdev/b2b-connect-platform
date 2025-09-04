@@ -40,17 +40,17 @@ export default function MapaMundi({ parceiros }) {
             className='group flex flex-col items-center'
           >
             {/* Ícone */}
-            <Image
+            <img
               src='/icons/ping.svg'
               alt='Globo'
               width={24}
-              height={24}
+              height={42}
               className='
                 text-white-100 
                 hover:text-blue-400 
                 hover:brightness-200 
                 hover:drop-shadow-[0_0_20px_rgba(59,130,246,1)]
-                transition-all w-7 h-7 cursor-pointer
+                transition-all cursor-pointer
               '
             />
 

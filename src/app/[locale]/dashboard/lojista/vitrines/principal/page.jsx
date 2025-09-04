@@ -118,6 +118,12 @@ export default function VitrinePrincipalPage() {
             label='País'
             options={[
               'China',
+              'EUA',
+              'México',
+              'Argentina',
+              'Marrocos',
+              'África do Sul',
+              'Austrália',
               'Vietnã',
               'Indonésia',
               'Alemanha',
@@ -256,10 +262,26 @@ export default function VitrinePrincipalPage() {
         </div>
 
         {/* SECTIONS FIXAS */}
-        <Section title='Top Calçados' data={topCalcados} />
-        <Section title='Top Acessórios' data={topAcessorios} />
-        <Section title='Top Máquinas' data={topMaquinas} />
-        <Section title='Top Couros' data={topCouros} />
+        <Section
+          title='Top Calçados'
+          data={topCalcados}
+          filter={'categoria=Calçados'}
+        />
+        <Section
+          title='Top Acessórios'
+          data={topAcessorios}
+          filter={'categoria=Acessórios'}
+        />
+        <Section
+          title='Top Máquinas'
+          data={topMaquinas}
+          filter={'categoria=Máquinas'}
+        />
+        <Section
+          title='Top Couros'
+          data={topCouros}
+          filter={'categoria=Couros'}
+        />
       </div>
     </SellerGuard>
   );

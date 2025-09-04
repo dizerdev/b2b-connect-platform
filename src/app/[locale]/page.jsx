@@ -18,7 +18,7 @@ export default function SplashPage() {
         });
 
         if (!res.ok) {
-          router.replace('/mapa');
+          router.replace('/public/mapa');
           return;
         }
 
@@ -38,7 +38,7 @@ export default function SplashPage() {
             break;
         }
       } catch {
-        router.replace('/mapa');
+        router.replace('/public/mapa');
       }
     };
 

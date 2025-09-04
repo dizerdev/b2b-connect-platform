@@ -20,7 +20,7 @@ export default function LogoutButton() {
     } catch (error) {
       console.error(error);
     } finally {
-      router.replace('/login');
+      router.replace('/public/mapa');
     }
   };
 

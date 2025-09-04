@@ -28,12 +28,14 @@ export default function MapaLayout({ children }) {
       {/* Header */}
       <header className='flex items-center justify-between bg-gray-900 px-6 py-4 text-white'>
         <div className='flex items-center'>
-          <Image
-            src='/assets/logos/shoesnetworld.png'
-            width={50}
-            height={50}
-            alt='Shoesnetworld Logo'
-          />
+          <Link href='/public/mapa'>
+            <Image
+              src='/assets/logos/shoesnetworld.png'
+              width={50}
+              height={50}
+              alt='Shoesnetworld Logo'
+            />
+          </Link>
           <h1 className='text-lg font-bold pl-5'>Shoesnetworld</h1>
           <Loader />
         </div>
@@ -71,9 +73,9 @@ export default function MapaLayout({ children }) {
             &copy; {new Date().getFullYear()} {t('Owner')}
           </span>
           <div className='flex space-x-4'>
-            <Link href='/contato'>{t('Contact')}</Link>
-            <Link href='/suporte'>{t('Support')}</Link>
-            <Link href='/sobre'>{t('About')}</Link>
+            <Link href='/public/contato'>{t('Contact')}</Link>
+            <Link href='/public/suporte'>{t('Support')}</Link>
+            <Link href='/public/sobre'>{t('About')}</Link>
           </div>
         </div>
       </footer>

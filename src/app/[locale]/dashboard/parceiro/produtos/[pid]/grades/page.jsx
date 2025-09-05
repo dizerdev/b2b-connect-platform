@@ -1,17 +1,41 @@
-// app/catalogos/[catalogoId]/produtos/[produtoId]/grades/page.jsx
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { toast } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 
 export default function DefinicaoGradesPage() {
   const router = useRouter();
   const params = useParams();
   const { pid } = params;
 
-  const [grades, setGrades] = useState([{ cor: '', tamanho: '', estoque: 0 }]);
+  const [grades, setGrades] = useState([]);
+  const [produto, setProduto] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const fetchProduto = async () => {
+    try {
+      const res = await fetch(`/api/v1/produtos/${pid}`);
+      if (!res.ok) throw new Error('Erro ao buscar produto');
+      const data = await res.json();
+      setProduto(data);
+      if (data.grades && Array.isArray(data.grades)) {
+        setGrades(data.grades);
+      } else {
+        setGrades([
+          { cor: '', tamanho: '', tipo: '', pronta_entrega: false, estoque: 0 },
+        ]);
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProduto();
+  }, [pid]);
 
   const handleChange = (index, field, value) => {
     const novasGrades = [...grades];
@@ -20,7 +44,10 @@ export default function DefinicaoGradesPage() {
   };
 
   const adicionarLinha = () => {
-    setGrades([...grades, { cor: '', tamanho: '', estoque: 0 }]);
+    setGrades([
+      ...grades,
+      { cor: '', tamanho: '', tipo: '', pronta_entrega: false, estoque: 0 },
+    ]);
   };
 
   const removerLinha = (index) => {
@@ -72,6 +99,8 @@ export default function DefinicaoGradesPage() {
             <tr className='bg-gray-100'>
               <th className='border border-gray-300 p-2'>Cor</th>
               <th className='border border-gray-300 p-2'>Tamanho</th>
+              <th className='border border-gray-300 p-2'>Tipo</th>
+              <th className='border border-gray-300 p-2'>Pronta Entrega</th>
               <th className='border border-gray-300 p-2'>Estoque</th>
               <th className='border border-gray-300 p-2'></th>
             </tr>
@@ -97,6 +126,30 @@ export default function DefinicaoGradesPage() {
                       handleChange(idx, 'tamanho', e.target.value)
                     }
                     required
+                  />
+                </td>
+                <td className='border border-gray-300 p-2'>
+                  <select
+                    className='w-full border rounded p-1'
+                    value={grade.tipo}
+                    onChange={(e) => handleChange(idx, 'tipo', e.target.value)}
+                    required
+                  >
+                    <option value=''></option>
+                    <option value='pr'>Par</option>
+                    <option value='cx'>Caixa</option>
+                    <option value='un'>Unitário</option>
+                  </select>
+                </td>
+                <td className='border border-gray-300 p-2'>
+                  <input
+                    type='checkbox'
+                    className='w-full border rounded p-1'
+                    value={grade.pronta_entrega}
+                    checked={grade.pronta_entrega}
+                    onChange={(e) =>
+                      handleChange(idx, 'pronta_entrega', e.target.checked)
+                    }
                   />
                 </td>
                 <td className='border border-gray-300 p-2'>
@@ -149,6 +202,7 @@ export default function DefinicaoGradesPage() {
           </button>
         </div>
       </form>
+      <Toaster />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
-import PartnerGuard from 'components/PartnerGuard';
+import AdminGuard from 'components/AdminGuard';
 
 export default function DetalhesProdutoPage() {
   const { pid } = useParams();
@@ -33,12 +33,12 @@ export default function DetalhesProdutoPage() {
   if (!produto) return <p className='p-4'>Produto não encontrado.</p>;
 
   return (
-    <PartnerGuard>
+    <AdminGuard>
       <div className='p-6 space-y-6'>
         <header className='flex justify-between items-center'>
           <h1 className='text-2xl font-bold'>Detalhes do Produto</h1>
           <Link
-            href={`/dashboard/parceiro/catalogos/${produto.catalogos[0].catalogo_id}`}
+            href={`/dashboard/admin/catalogos/${produto.catalogos[0].catalogo_id}`}
             className='text-blue-500 hover:underline'
           >
             ← Voltar
@@ -84,8 +84,6 @@ export default function DetalhesProdutoPage() {
                 <tr className='bg-gray-100'>
                   <th className='border px-2 py-1 text-left'>Cor</th>
                   <th className='border px-2 py-1 text-left'>Tamanho</th>
-                  <th className='border px-2 py-1 text-left'>Tipo</th>
-                  <th className='border px-2 py-1 text-left'>Pronta Entrega</th>
                   <th className='border px-2 py-1 text-left'>Estoque</th>
                   <th className='border px-2 py-1 text-left'>Criado em</th>
                 </tr>
@@ -95,10 +93,6 @@ export default function DetalhesProdutoPage() {
                   <tr key={idx}>
                     <td className='border px-2 py-1'>{grade.cor}</td>
                     <td className='border px-2 py-1'>{grade.tamanho}</td>
-                    <td className='border px-2 py-1'>{grade.tipo}</td>
-                    <td className='border px-2 py-1'>
-                      {grade.pronta_entrega ? 'Sim' : 'Não'}
-                    </td>
                     <td className='border px-2 py-1'>{grade.estoque}</td>
                     <td className='border px-2 py-1'>
                       {new Date(grade.created_at).toLocaleDateString()}
@@ -109,25 +103,6 @@ export default function DetalhesProdutoPage() {
             </table>
           </section>
         )}
-
-        {/* Ações extras */}
-        <section className='bg-white shadow rounded p-4 space-y-4'>
-          <h2 className='text-lg font-semibold'>Ações</h2>
-          <div className='flex gap-4'>
-            <Link
-              href={`/dashboard/parceiro/produtos/${pid}/grades`}
-              className='px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700'
-            >
-              Gerenciar Grades
-            </Link>
-            <Link
-              href={`/dashboard/parceiro/produtos/${pid}/editar`}
-              className='px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700'
-            >
-              Editar Produto
-            </Link>
-          </div>
-        </section>
 
         {/* Imagens do produto */}
         {produto.produto.imagens && produto.produto.imagens.length > 0 && (
@@ -146,6 +121,6 @@ export default function DetalhesProdutoPage() {
           </section>
         )}
       </div>
-    </PartnerGuard>
+    </AdminGuard>
   );
 }

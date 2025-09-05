@@ -14,8 +14,8 @@ export default function HomePage() {
     { nome: 'Johannesburg', x: '52%', y: '72.9%' },
     { nome: 'New Delphi', x: '63.5%', y: '43%' },
     { nome: 'Bangladesh', x: '66.7%', y: '45%' },
-    { nome: 'Wenzhou', x: '73.5%', y: '42%' },
     { nome: 'Guangzhou', x: '72%', y: '45%' },
+    { nome: 'Wenzhou', x: '73.5%', y: '42%' },
     { nome: 'Austrália', x: '78%', y: '82%' },
   ];
 

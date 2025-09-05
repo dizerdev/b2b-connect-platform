@@ -18,7 +18,8 @@ export async function GET(req, { params }) {
     const { id } = await params;
     const result = await db.query(
       `
-      SELECT id, nome, nome_fantasia, email, papel, ativo, criado_em, vitrine_id
+      SELECT id, email, nome, nome_fantasia, telefone, celular, cnpj,
+      logradouro, numero, complemento, cidade, pais, papel, vitrine_id, ativo
       FROM usuarios
       WHERE id = $1
       LIMIT 1

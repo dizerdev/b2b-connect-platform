@@ -57,18 +57,7 @@ export async function GET(req, { params }) {
 
     // Busca grades
     const gradesRes = await db.query(
-      `SELECT cor, tamanho, estoque, created_at FROM grades WHERE produto_id = $1`,
-      [produtoId]
-    );
-
-    // Busca imagens
-    const imagensRes = await db.query(
-      `
-      SELECT id, url, nome_arquivo, tamanho_bytes, created_at
-      FROM produto_imagens
-      WHERE produto_id = $1
-      ORDER BY created_at ASC
-    `,
+      `SELECT cor, tamanho, tipo, pronta_entrega, estoque, created_at FROM grades WHERE produto_id = $1`,
       [produtoId]
     );
 
@@ -80,7 +69,6 @@ export async function GET(req, { params }) {
           preco: c.preco !== null ? parseFloat(c.preco) : null,
         })),
         grades: gradesRes.rows,
-        imagens: imagensRes.rows,
       },
       { status: 200 }
     );

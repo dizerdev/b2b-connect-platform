@@ -12,7 +12,20 @@ export async function PATCH(req, { params }) {
   }
 
   const { id } = await params;
-  const { nome, email, papel, nome_fantasia } = await req.json();
+  const {
+    nome,
+    email,
+    papel,
+    nome_fantasia,
+    telefone,
+    celular,
+    cnpj,
+    logradouro,
+    numero,
+    complemento,
+    cidade,
+    pais,
+  } = await req.json();
 
   if (!nome && !email && !papel && !nome_fantasia) {
     return Response.json({ error: 'Nada para atualizar' }, { status: 400 });
@@ -32,9 +45,37 @@ export async function PATCH(req, { params }) {
     values.push(nome);
   }
 
-  if (nome_fantasia) {
-    fields.push(`nome_fantasia = $${index++}`);
-    values.push(nome_fantasia);
+  if (telefone) {
+    fields.push(`telefone = $${index++}`);
+    values.push(telefone);
+  }
+  if (celular) {
+    fields.push(`celular = $${index++}`);
+    values.push(celular);
+  }
+  if (cnpj) {
+    fields.push(`cnpj = $${index++}`);
+    values.push(cnpj);
+  }
+  if (logradouro) {
+    fields.push(`logradouro = $${index++}`);
+    values.push(logradouro);
+  }
+  if (numero) {
+    fields.push(`numero = $${index++}`);
+    values.push(numero);
+  }
+  if (complemento) {
+    fields.push(`complemento = $${index++}`);
+    values.push(complemento);
+  }
+  if (cidade) {
+    fields.push(`cidade = $${index++}`);
+    values.push(cidade);
+  }
+  if (pais) {
+    fields.push(`pais = $${index++}`);
+    values.push(pais);
   }
 
   if (papel) {
@@ -55,7 +96,7 @@ export async function PATCH(req, { params }) {
 
   const query = `
     UPDATE usuarios
-    SET ${fields.join(', ')}
+    SET ${fields.join(', ')}, atualizado_em = NOW()
     WHERE id = $${index}
     RETURNING id, email, nome, nome_fantasia, ativo, criado_em
   `;

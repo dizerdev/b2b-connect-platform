@@ -7,12 +7,14 @@ import Banner from 'components/shared/Banner';
 import Section from 'components/shared/Section';
 import Link from 'next/link';
 import Dropdown from 'components/shared/Dropdown';
+import { useRouter } from 'next/navigation';
 
 export default function VitrinePrincipalPage() {
   const searchParams = useSearchParams();
   const paisParam = searchParams.get('pais') || '';
   const categoriaParam = searchParams.get('categoria') || '';
   const [catalogos, setCatalogos] = useState([]);
+  const router = useRouter();
 
   const [topCalcados, setTopCalcados] = useState([]);
   const [topAcessorios, setTopAcessorios] = useState([]);
@@ -212,7 +214,7 @@ export default function VitrinePrincipalPage() {
         </div>
 
         {/* Lista de Catálogos */}
-        <div className='mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
+        <div className='mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4'>
           {catalogos.length === 0 ? (
             <p>Nenhum catálogo encontrado.</p>
           ) : (
@@ -220,6 +222,11 @@ export default function VitrinePrincipalPage() {
               <div
                 key={catalogo.id}
                 className='border rounded-lg shadow hover:shadow-lg transition cursor-pointer overflow-hidden'
+                onClick={() => {
+                  router.push(
+                    `/dashboard/lojista/vitrines/catalogos/${catalogo.id}`
+                  );
+                }}
               >
                 {/* 2/3 imagem */}
                 <div className='w-full h-48'>
@@ -249,12 +256,6 @@ export default function VitrinePrincipalPage() {
                     </span>
                   </p>
                   <p className='text-sm'>Rating: ⭐ {catalogo.rating || 0}</p>
-                  <Link
-                    href={`/dashboard/lojista/vitrines/catalogos/${catalogo.id}`}
-                    className='mt-3 inline-block bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700'
-                  >
-                    Ver Detalhes
-                  </Link>
                 </div>
               </div>
             ))

@@ -57,7 +57,7 @@ export default function ListaMensagensLojista() {
 
   return (
     <SellerGuard>
-      <div className='p-6 max-w-6xl mx-auto'>
+      <div className='w-full p-6 mx-auto'>
         <div className='flex justify-between items-center mb-4'>
           <h1 className='text-2xl font-bold'>Minhas Mensagens</h1>
           <div>

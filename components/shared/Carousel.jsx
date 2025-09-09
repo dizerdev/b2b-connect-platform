@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function Carousel({ items }) {
+  const router = useRouter();
   const [current, setCurrent] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(1);
 
@@ -54,17 +56,28 @@ export default function Carousel({ items }) {
             className='w-full flex-shrink-0 px-2'
             style={{ flex: `0 0 ${100 / itemsPerPage}%` }}
           >
-            <div className='bg-white rounded-2xl shadow-lg border p-4 h-full'>
-              <h2 className='text-lg font-bold mb-2'>{item.nome}</h2>
-              <p className='text-sm text-gray-600 mb-2'>
-                Status: {item.status}
-              </p>
-              <p className='text-sm text-gray-600 mb-2'>
-                Rating: {item.rating || '-'}
-              </p>
-              <p className='text-sm text-gray-600'>
-                Criado em: {new Date(`${item.criadoEm}`).toLocaleDateString()}
-              </p>
+            <div
+              className='relative rounded-2xl overflow-hidden h-64 cursor-pointer group'
+              onClick={() => router.push(item.link)}
+            >
+              {/* Imagem de fundo */}
+              <img
+                src={item.imagemUrl || '/assets/placeholder.png'}
+                alt={item.nome}
+                className='w-full h-full object-cover transition-opacity duration-500 opacity-50 group-hover:opacity-100'
+              />
+
+              {/* Texto por cima */}
+              <div className='absolute inset-0 flex flex-col items-center justify-center text-white text-center p-4 transition-opacity duration-500 group-hover:opacity-0'>
+                <h2 className='text-lg font-bold mb-2 drop-shadow-lg'>
+                  {item.nome}
+                </h2>
+                <p className='text-sm'>Status: {item.status}</p>
+                <p className='text-sm'>Rating: {item.rating || '-'}</p>
+                <p className='text-sm'>
+                  Criado em: {new Date(`${item.criadoEm}`).toLocaleDateString()}
+                </p>
+              </div>
             </div>
           </div>
         ))}

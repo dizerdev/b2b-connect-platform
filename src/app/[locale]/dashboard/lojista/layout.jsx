@@ -21,24 +21,56 @@ const produtos = [
     status: 'Disponível',
     rating: 4.5,
     criadoEm: '2025-08-30T10:00:00Z',
+    link: '/dashboard/lojista/vitrines/principal',
+    imagemUrl: '/assets/empty.jpg',
   },
   {
     nome: 'Botas Classic',
     status: 'Indisponível',
     rating: 3.8,
     criadoEm: '2025-08-28T15:30:00Z',
+    link: '/dashboard/lojista/vitrines/principal',
+    imagemUrl: '/assets/empty.jpg',
   },
   {
     nome: 'Sandália Summer',
     status: 'Disponível',
     rating: 4.0,
     criadoEm: '2025-08-29T09:15:00Z',
+    link: '/dashboard/lojista/vitrines/principal',
+    imagemUrl: '/assets/empty.jpg',
   },
   {
     nome: 'Tênis Runner',
     status: 'Disponível',
     rating: 5,
     criadoEm: '2025-08-27T12:45:00Z',
+    link: '/dashboard/lojista/vitrines/principal',
+    imagemUrl: '/assets/empty.jpg',
+  },
+  {
+    nome: 'Tênis Runner',
+    status: 'Disponível',
+    rating: 5,
+    criadoEm: '2025-08-27T12:45:00Z',
+    link: '/dashboard/lojista/vitrines/principal',
+    imagemUrl: '/assets/empty.jpg',
+  },
+  {
+    nome: 'Tênis Runner',
+    status: 'Disponível',
+    rating: 5,
+    criadoEm: '2025-08-27T12:45:00Z',
+    link: '/dashboard/lojista/vitrines/principal',
+    imagemUrl: '/assets/empty.jpg',
+  },
+  {
+    nome: 'Tênis Runner',
+    status: 'Disponível',
+    rating: 5,
+    criadoEm: '2025-08-27T12:45:00Z',
+    link: '/dashboard/lojista/vitrines/principal',
+    imagemUrl: '/assets/empty.jpg',
   },
 ];
 
@@ -105,7 +137,7 @@ export default function DashboardLayout({ children }) {
       </header>
 
       {/* Conteúdo principal */}
-      <main className='flex-1 p-6 sm:py-1 sm:px-6 my-auto justify-items-center'>
+      <main className='flex-1 p-2 sm:py-1 sm:px-6 my-auto justify-items-center'>
         {children}
       </main>
 

@@ -32,7 +32,25 @@ export default function DetalhesVitrinePage() {
 
   return (
     <SellerGuard>
-      <div className='max-w-6xl mx-auto p-6 space-y-10'>
+      {/* Ações */}
+      <div className='px-4 py-3 md:px-10 md:py-3 w-full'>
+        <div className='flex justify-between items-center mb-4'>
+          <button
+            onClick={() => router.push(`/dashboard/lojista/mensagens/${id}`)}
+            className='px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition'
+          >
+            Solicitar Atendimento
+          </button>
+          <Link
+            href='/dashboard/lojista/vitrines/principal'
+            className='text-blue-500 hover:underline'
+          >
+            ← Voltar
+          </Link>
+        </div>
+      </div>
+
+      <div className='w-full mx-auto p-6 space-y-10'>
         {/* Cabeçalho com imagem principal */}
         <div className='flex flex-col md:flex-row gap-6 items-start'>
           <div className='w-full md:w-1/3'>
@@ -62,51 +80,6 @@ export default function DetalhesVitrinePage() {
           </div>
         </div>
 
-        {/* Metadados */}
-        <div>
-          <h2 className='text-xl font-semibold mb-4'>Metadados</h2>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-sm'>
-            <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
-              <p>🌍 Continente: {catalogo.metadados?.continente}</p>
-            </div>
-            <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
-              <p>🇵🇰 País: {catalogo.metadados?.pais}</p>
-            </div>
-            <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
-              <p>📂 Categoria: {catalogo.metadados?.categoria}</p>
-            </div>
-            <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
-              <p>🗂 Subcategoria: {catalogo.metadados?.sub_categoria}</p>
-            </div>
-            <div className='p-4 bg-gray-50 rounded-lg hover:shadow col-span-full'>
-              <p>
-                ⚙️ Especificações:{' '}
-                {catalogo.metadados?.especificacao?.join(', ') || 'Nenhuma'}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Coleções */}
-        <div>
-          <h2 className='text-xl font-semibold mb-4'>Coleções</h2>
-          {catalogo.colecoes?.length ? (
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-              {catalogo.colecoes.map((colecao) => (
-                <div
-                  key={colecao.id}
-                  className='p-4 border rounded-lg hover:shadow-lg transition cursor-pointer'
-                >
-                  <h3 className='font-medium'>{colecao.nome}</h3>
-                  <p className='text-sm text-gray-600'>{colecao.descricao}</p>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className='text-sm text-gray-500'>Nenhuma coleção cadastrada.</p>
-          )}
-        </div>
-
         {/* Produtos */}
         <div>
           <h2 className='text-xl font-semibold mb-4'>Produtos</h2>
@@ -116,6 +89,9 @@ export default function DetalhesVitrinePage() {
                 <div
                   key={produto.id}
                   className='border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition cursor-pointer group'
+                  onClick={() =>
+                    router.push(`/dashboard/lojista/produtos/${produto.id}`)
+                  }
                 >
                   {/* Imagem */}
                   {produto.imagens?.length > 0 && (
@@ -141,12 +117,6 @@ export default function DetalhesVitrinePage() {
                         Destaque
                       </span>
                     )}
-                    <Link
-                      href={`/dashboard/lojista/produtos/${produto.id}`}
-                      className='block text-blue-600 text-sm mt-2 hover:underline'
-                    >
-                      Ver detalhes →
-                    </Link>
                   </div>
                 </div>
               ))}
@@ -156,20 +126,49 @@ export default function DetalhesVitrinePage() {
           )}
         </div>
 
-        {/* Ações */}
-        <div className='flex space-x-4'>
-          <button
-            onClick={() => router.push('/dashboard/lojista/vitrines/principal')}
-            className='px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 transition'
-          >
-            Voltar
-          </button>
-          <button
-            className='px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition'
-            onClick={() => router.push(`/dashboard/lojista/mensagens/${id}`)}
-          >
-            Solicitar Contato
-          </button>
+        {/* Coleções */}
+        <div>
+          <h2 className='text-xl font-semibold mb-4'>Coleções</h2>
+          {catalogo.colecoes?.length ? (
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              {catalogo.colecoes.map((colecao) => (
+                <div
+                  key={colecao.id}
+                  className='p-4 border rounded-lg hover:shadow-lg transition cursor-pointer'
+                >
+                  <h3 className='font-medium'>{colecao.nome}</h3>
+                  <p className='text-sm text-gray-600'>{colecao.descricao}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className='text-sm text-gray-500'>Nenhuma coleção cadastrada.</p>
+          )}
+        </div>
+
+        {/* Metadados */}
+        <div>
+          <h2 className='text-xl font-semibold mb-4'>Metadados</h2>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-sm'>
+            <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
+              <p>🌍 Continente: {catalogo.metadados?.continente}</p>
+            </div>
+            <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
+              <p>🇵🇰 País: {catalogo.metadados?.pais}</p>
+            </div>
+            <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
+              <p>📂 Categoria: {catalogo.metadados?.categoria}</p>
+            </div>
+            <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
+              <p>🗂 Subcategoria: {catalogo.metadados?.sub_categoria}</p>
+            </div>
+            <div className='p-4 bg-gray-50 rounded-lg hover:shadow col-span-full'>
+              <p>
+                ⚙️ Especificações:{' '}
+                {catalogo.metadados?.especificacao?.join(', ') || 'Nenhuma'}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </SellerGuard>

@@ -35,15 +35,15 @@ export default function DetalhesProdutoLojistaPage() {
 
   return (
     <SellerGuard>
-      <div className='max-w-6xl mx-auto p-6'>
+      <div className='w-full mx-auto p-6'>
         {/* Header */}
         <div className='flex justify-between items-center mb-6'>
           <h1 className='text-2xl font-bold'>{produto.produto.nome}</h1>
           <button
             onClick={() => router.back()}
-            className='bg-gray-200 px-4 py-2 rounded hover:bg-gray-300'
+            className='text-blue-500 hover:underline'
           >
-            Voltar
+            ← Voltar
           </button>
         </div>
 

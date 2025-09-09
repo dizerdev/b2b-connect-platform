@@ -127,7 +127,7 @@ export default function LoginPage() {
             />
             <div className='text-right mt-2'>
               <a
-                href='/recuperar-senha'
+                href='/forgot'
                 className='text-sm text-blue-300 hover:underline'
               >
                 Esqueceu a senha?

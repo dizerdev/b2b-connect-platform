@@ -84,6 +84,8 @@ export default function DetalhesProdutoPage() {
                 <tr className='bg-gray-100'>
                   <th className='border px-2 py-1 text-left'>Cor</th>
                   <th className='border px-2 py-1 text-left'>Tamanho</th>
+                  <th className='border px-2 py-1 text-left'>Tipo</th>
+                  <th className='border px-2 py-1 text-left'>Pronta Entrega</th>
                   <th className='border px-2 py-1 text-left'>Estoque</th>
                   <th className='border px-2 py-1 text-left'>Criado em</th>
                 </tr>
@@ -93,7 +95,13 @@ export default function DetalhesProdutoPage() {
                   <tr key={idx}>
                     <td className='border px-2 py-1'>{grade.cor}</td>
                     <td className='border px-2 py-1'>{grade.tamanho}</td>
-                    <td className='border px-2 py-1'>{grade.estoque}</td>
+                    <td className='border px-2 py-1'>{grade.tipo}</td>
+                    <td className='border px-2 py-1'>
+                      {grade.pronta_entrega ? 'Sim' : 'Não'}
+                    </td>
+                    <td className='border px-2 py-1'>
+                      {grade.estoque > 0 ? grade.estoque : '-'}
+                    </td>
                     <td className='border px-2 py-1'>
                       {new Date(grade.created_at).toLocaleDateString()}
                     </td>

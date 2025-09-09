@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import AdminGuard from 'components/AdminGuard';
-import { Plus, Eye, Edit, Database } from 'lucide-react';
+import { Eye } from 'lucide-react';
 
 export default function CatalogoDetalhesPage() {
   const router = useRouter();

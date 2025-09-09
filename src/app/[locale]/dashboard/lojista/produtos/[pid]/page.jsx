@@ -105,6 +105,8 @@ export default function DetalhesProdutoLojistaPage() {
                 <tr className='bg-gray-100'>
                   <th className='border px-4 py-2'>Cor</th>
                   <th className='border px-4 py-2'>Tamanho</th>
+                  <th className='border px-4 py-2'>Tipo</th>
+                  <th className='border px-4 py-2'>Pronta Entrega</th>
                   <th className='border px-4 py-2'>Estoque</th>
                 </tr>
               </thead>
@@ -113,7 +115,13 @@ export default function DetalhesProdutoLojistaPage() {
                   <tr key={idx}>
                     <td className='border px-4 py-2'>{g.cor}</td>
                     <td className='border px-4 py-2'>{g.tamanho}</td>
-                    <td className='border px-4 py-2'>{g.estoque}</td>
+                    <td className='border px-4 py-2'>{g.tipo}</td>
+                    <td className='border px-4 py-2'>
+                      {g.estoque ? 'Sim' : 'Não'}
+                    </td>
+                    <td className='border px-4 py-2'>
+                      {g.estoque > 0 ? g.estoque : '-'}
+                    </td>
                   </tr>
                 ))}
               </tbody>

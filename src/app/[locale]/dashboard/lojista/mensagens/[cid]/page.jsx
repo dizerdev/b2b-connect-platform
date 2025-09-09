@@ -2,14 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { toast } from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 import SellerGuard from 'components/SellerGuard';
 
 export default function EnvioMensagemPage() {
   const [mensagem, setMensagem] = useState('');
   const [loading, setLoading] = useState(false);
   const [catalogo, setCatalogo] = useState(null);
-  const [produtosSelecionados, setProdutosSelecionados] = useState([]);
 
   const router = useRouter();
   const { cid } = useParams();
@@ -34,20 +33,9 @@ export default function EnvioMensagemPage() {
     fetchCatalogo();
   }, [cid]);
 
-  function toggleProduto(id) {
-    setProdutosSelecionados((prev) =>
-      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
-    );
-  }
-
   async function handleEnviar() {
     if (!mensagem.trim()) {
       toast.error('Digite uma mensagem antes de enviar.');
-      return;
-    }
-
-    if (produtosSelecionados.length === 0) {
-      toast.error('Selecione pelo menos um produto.');
       return;
     }
 
@@ -59,7 +47,6 @@ export default function EnvioMensagemPage() {
         body: JSON.stringify({
           catalogo_id: cid,
           mensagem,
-          produtos: produtosSelecionados,
         }),
       });
 
@@ -75,7 +62,6 @@ export default function EnvioMensagemPage() {
   }
 
   if (!catalogo) return <p className='p-4'>Carregando catálogo...</p>;
-  console.log(catalogo);
 
   return (
     <SellerGuard>
@@ -96,28 +82,6 @@ export default function EnvioMensagemPage() {
           <p className='text-gray-700'>{catalogo.nome}</p>
         </div>
 
-        {/* Produtos */}
-        {catalogo.produtos?.length > 0 && (
-          <div className='mb-4'>
-            <label className='block text-sm font-medium mb-1'>Produtos</label>
-            <div className='grid grid-cols-1 sm:grid-cols-2 gap-2'>
-              {catalogo.produtos.map((produto) => (
-                <label
-                  key={produto.id}
-                  className='flex items-center gap-2 border rounded-lg p-2 hover:bg-gray-100 cursor-pointer'
-                >
-                  <input
-                    type='checkbox'
-                    checked={produtosSelecionados.includes(produto.id)}
-                    onChange={() => toggleProduto(produto.id)}
-                  />
-                  <span>{produto.nome}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Mensagem */}
         <div className='mb-4'>
           <label className='block text-sm font-medium mb-1'>Mensagem</label>
@@ -136,13 +100,12 @@ export default function EnvioMensagemPage() {
         {/* Botão */}
         <button
           onClick={handleEnviar}
-          disabled={
-            loading || !mensagem.trim() || produtosSelecionados.length === 0
-          }
+          disabled={loading || !mensagem.trim()}
           className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50'
         >
           {loading ? 'Enviando...' : 'Enviar'}
         </button>
+        <Toaster />
       </div>
     </SellerGuard>
   );

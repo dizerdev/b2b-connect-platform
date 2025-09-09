@@ -60,6 +60,25 @@ export default function UsuariosPage() {
     }
   };
 
+  const handleResetPassword = async (email) => {
+    try {
+      const res = await fetch('/api/v1/auth/forgot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Erro ao enviar e-mail');
+      }
+
+      alert('E-mail de redefinição de senha enviado com sucesso!');
+    } catch (err) {
+      alert(`Erro: ${err.message}`);
+    }
+  };
+
   return (
     <AdminGuard>
       <div className='p-6'>
@@ -156,7 +175,7 @@ export default function UsuariosPage() {
                     <td className='p-2 border'>
                       {new Date(user.criadoEm).toLocaleDateString('pt-BR')}
                     </td>
-                    <td className='p-2 border flex gap-2'>
+                    <td className='p-2 border flex justify-center gap-2'>
                       <button
                         onClick={() =>
                           router.push(
@@ -176,6 +195,13 @@ export default function UsuariosPage() {
                         }`}
                       >
                         {user.ativo ? 'Desativar' : 'Ativar'}
+                      </button>
+
+                      <button
+                        onClick={() => handleResetPassword(user.email)}
+                        className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600'
+                      >
+                        Redefinir senha
                       </button>
                     </td>
                   </tr>

@@ -6,10 +6,10 @@ export default function FlipCard({ front, back }) {
       <div className='card-flip'>
         <div className='card-inner'>
           <div className='card-front'>
-            <p className='text-white font-bold text-lg'>{front}</p>
+            <p className='text-white font-bold text-lg p-4'>{front}</p>
           </div>
           <div className='card-back'>
-            <p className='text-white font-bold text-lg'>{back}</p>
+            <p className='text-white font-bold text-lg p-4'>{back}</p>
           </div>
         </div>
       </div>

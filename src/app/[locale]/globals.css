@@ -76,6 +76,7 @@ body {
     box-shadow: 0 0 20px rgba(252, 203, 144, 0.5);
     transform: rotateY(180deg);
   }
+
   /*Loader*/
   .loader-words {
     @apply relative overflow-hidden;

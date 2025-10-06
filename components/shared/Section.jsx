@@ -1,7 +1,11 @@
+'use client';
+
 import CatalogoCard from 'components/shared/CatalogoCard';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export default function Section({ title, data, filter }) {
+  const t = useTranslations('Section');
   if (!data || data.length === 0) return null;
   return (
     <div className='mt-10 min-w-[70vw]'>
@@ -11,7 +15,7 @@ export default function Section({ title, data, filter }) {
           href={`/dashboard/lojista/vitrines/principal?${filter}`}
           className='text-blue-500 hover:underline'
         >
-          Ver mais →
+          {t('SeeMore')} →
         </Link>
       </div>
       <div className='grid grid-cols-2 sm:grid-cols-4 gap-4'>

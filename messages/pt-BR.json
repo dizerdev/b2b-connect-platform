@@ -17,5 +17,49 @@
     "Accessories": "Acessórios",
     "Machines": "Maquinas",
     "Chemicals": "Químicos"
+  },
+  "CatalogoCard": {
+    "Supplier": "Fornecedor",
+    "Status": "Status",
+    "Rating": "Avaliação"
+  },
+  "FlipCardGroup": {
+    "MonthlyPlan": "Plano Mensal",
+    "MonthlyPrice": "$15 por mês",
+    "AnnualPlan": "Plano Anual",
+    "AnnualPrice": "$150 por 12 meses Economize 20%",
+    "BeASubscriber": "Seja um assinante",
+    "FullAccess": "Acesso completo à carteira de fabricantes e fornecedores do mundo todo"
+  },
+  "Section": {
+    "SeeMore": "Ver mais"
+  },
+  "LogoutButton": {
+    "Logout": "Sair"
+  },
+  "DashboardAdmin": {
+    "ErrorLoadingCatalog": "Erro ao carregar catálogo",
+    "Loading": "Carregando...",
+    "ErrorLoadingReports": "Erro ao carregar relatórios",
+    "DashboardTitle": "Dashboard Admin",
+    "RegisteredProducts": "Produtos Cadastrados",
+    "ActiveUsers": "Usuários ativos",
+    "ActiveCatalogs": "Catálogos ativos",
+    "PendingApproval": "Pendentes aprovação",
+    "PendingPublication": "Pendentes publicação",
+    "Shortcuts": "Atalhos",
+    "ManageUsers": "Gerenciar Usuários",
+    "ManageUsersDesc": "Adicionar, editar e remover usuários do sistema.",
+    "ManageCatalogs": "Gerenciar Catálogos",
+    "ManageCatalogsDesc": "Aprovar, publicar ou arquivar catálogos.",
+    "Messages": "Mensagens",
+    "MessagesDesc": "Visualizar e responder mensagens dos usuários."
+  },
+  "DashboardLayout": {
+    "Admin": "Admin",
+    "Dashboard": "Dashboard",
+    "Users": "Usuários",
+    "Catalogs": "Catálogos",
+    "Messages": "Mensagens"
   }
 }

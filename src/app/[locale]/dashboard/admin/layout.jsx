@@ -1,11 +1,14 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { Menu, X, Users, Package, FolderClock, FolderOpen } from 'lucide-react';
 import LogoutButton from 'components/ui/auth/LogoutButton';
 import Image from 'next/image';
 
 export default function DashboardLayout({ children }) {
+  const t = useTranslations('DashboardLayout');
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   return (
     <div className='min-h-screen flex flex-col'>
@@ -30,7 +33,9 @@ export default function DashboardLayout({ children }) {
         >
           {/* Header sidebar */}
           <div className='flex items-center justify-between p-4'>
-            {sidebarOpen && <span className='text-lg font-bold'>Admin</span>}
+            {sidebarOpen && (
+              <span className='text-lg font-bold'>{t('Admin')}</span>
+            )}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className='p-2 rounded hover:bg-gray-700'
@@ -48,7 +53,7 @@ export default function DashboardLayout({ children }) {
                   className='flex items-center gap-3 px-4 py-2 hover:bg-gray-700'
                 >
                   <Package size={20} />
-                  {sidebarOpen && 'Dashboard'}
+                  {sidebarOpen && t('Dashboard')}
                 </Link>
               </li>
               <li>
@@ -57,7 +62,7 @@ export default function DashboardLayout({ children }) {
                   className='flex items-center gap-3 px-4 py-2 hover:bg-gray-700'
                 >
                   <Users size={20} />
-                  {sidebarOpen && 'Usuários'}
+                  {sidebarOpen && t('Users')}
                 </Link>
               </li>
               <li>
@@ -66,7 +71,7 @@ export default function DashboardLayout({ children }) {
                   className='flex items-center gap-3 px-4 py-2 hover:bg-gray-700'
                 >
                   <FolderOpen size={20} />
-                  {sidebarOpen && 'Catálogos'}
+                  {sidebarOpen && t('Catalogs')}
                 </Link>
               </li>
               <li>
@@ -75,7 +80,7 @@ export default function DashboardLayout({ children }) {
                   className='flex items-center gap-3 px-4 py-2 hover:bg-gray-700'
                 >
                   <FolderClock size={20} />
-                  {sidebarOpen && 'Mensagens'}
+                  {sidebarOpen && t('Messages')}
                 </Link>
               </li>
             </ul>

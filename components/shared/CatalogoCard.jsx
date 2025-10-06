@@ -1,4 +1,9 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 export default function CatalogoCard({ catalogo, compact = false }) {
+  const t = useTranslations('CatalogoCard');
   return (
     <div className='border rounded-lg shadow hover:shadow-lg transition cursor-pointer overflow-hidden'>
       <div className={compact ? 'w-full h-32' : 'w-full h-48'}>
@@ -13,10 +18,10 @@ export default function CatalogoCard({ catalogo, compact = false }) {
         {!compact && (
           <>
             <p className='text-xs text-gray-600'>
-              Fornecedor: {catalogo.fornecedor_nome}
+              {t('Supplier')}: {catalogo.fornecedor_nome}
             </p>
             <p className='text-xs mt-1'>
-              Status:{' '}
+              {t('Status')}:{' '}
               <span
                 className={`font-semibold ${
                   catalogo.status === 'publicado'
@@ -27,7 +32,9 @@ export default function CatalogoCard({ catalogo, compact = false }) {
                 {catalogo.status}
               </span>
             </p>
-            <p className='text-xs'>Rating: ⭐ {catalogo.rating || 0}</p>
+            <p className='text-xs'>
+              {t('Rating')}: ⭐ {catalogo.rating || 0}
+            </p>
           </>
         )}
       </div>

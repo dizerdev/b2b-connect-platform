@@ -1,6 +1,6 @@
 {
   "RootPage": {
-    "VerifingSession": "Verifing Session..."
+    "VerifingSession": "Verifying Session..."
   },
   "MapPage": {
     "Login": "Login",
@@ -17,5 +17,49 @@
     "Accessories": "Accessories",
     "Machines": "Machines",
     "Chemicals": "Chemicals"
+  },
+  "CatalogoCard": {
+    "Supplier": "Supplier",
+    "Status": "Status",
+    "Rating": "Rating"
+  },
+  "FlipCardGroup": {
+    "MonthlyPlan": "Monthly Plan",
+    "MonthlyPrice": "$15 per month",
+    "AnnualPlan": "Annual Plan",
+    "AnnualPrice": "$150 for 12 months Save 20%",
+    "BeASubscriber": "Become a subscriber",
+    "FullAccess": "Full access to the portfolio of manufacturers and suppliers worldwide"
+  },
+  "Section": {
+    "SeeMore": "See more"
+  },
+  "LogoutButton": {
+    "Logout": "Logout"
+  },
+  "DashboardAdmin": {
+    "ErrorLoadingCatalog": "Error loading catalog",
+    "Loading": "Loading...",
+    "ErrorLoadingReports": "Error loading reports",
+    "DashboardTitle": "Admin Dashboard",
+    "RegisteredProducts": "Registered Products",
+    "ActiveUsers": "Active Users",
+    "ActiveCatalogs": "Active Catalogs",
+    "PendingApproval": "Pending Approval",
+    "PendingPublication": "Pending Publication",
+    "Shortcuts": "Shortcuts",
+    "ManageUsers": "Manage Users",
+    "ManageUsersDesc": "Add, edit, and remove users from the system.",
+    "ManageCatalogs": "Manage Catalogs",
+    "ManageCatalogsDesc": "Approve, publish, or archive catalogs.",
+    "Messages": "Messages",
+    "MessagesDesc": "View and respond to user messages."
+  },
+  "DashboardLayout": {
+    "Admin": "Admin",
+    "Dashboard": "Dashboard",
+    "Users": "Users",
+    "Catalogs": "Catalogs",
+    "Messages": "Messages"
   }
 }

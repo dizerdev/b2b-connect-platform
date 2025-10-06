@@ -2,8 +2,10 @@
 
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function LogoutButton() {
+  const t = useTranslations('LogoutButton');
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -29,7 +31,7 @@ export default function LogoutButton() {
       onClick={handleLogout}
       className='px-3 py-2 bg-red-600 text-white rounded'
     >
-      Sair
+      {t('Logout')}
     </button>
   );
 }

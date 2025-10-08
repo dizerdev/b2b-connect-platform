@@ -8,6 +8,7 @@ import Carousel from 'components/shared/Carousel';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import Loader from 'components/shared/Loader';
+import LanguageSwitcher from 'components/shared/LanguageSwitcher';
 
 const navLinks = [
   { href: '/dashboard/lojista', label: 'Home' },
@@ -155,6 +156,7 @@ export default function DashboardLayout({ children }) {
             ))}
           </nav>
           <div className='mt-2 sm:mt-0 flex items-center gap-4'>
+            <LanguageSwitcher />
             <LogoutButton />
           </div>
         </div>

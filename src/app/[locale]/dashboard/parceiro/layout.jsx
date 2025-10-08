@@ -1,5 +1,6 @@
 'use client';
 import LogoutButton from 'components/ui/auth/LogoutButton';
+import LanguageSwitcher from 'components/shared/LanguageSwitcher';
 import Image from 'next/image';
 import { useState } from 'react';
 import Link from 'next/link';
@@ -19,7 +20,10 @@ export default function DashboardLayout({ children }) {
           />
           <h1 className='text-lg font-bold pl-5'>Shoesnetworld</h1>
         </div>
-        <LogoutButton />
+        <div className='mt-2 sm:mt-0 flex items-center gap-4'>
+          <LanguageSwitcher />
+          <LogoutButton />
+        </div>
       </header>
       <div className='min-h-screen flex bg-gray-100'>
         {/* Sidebar */}

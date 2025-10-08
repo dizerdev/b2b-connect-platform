@@ -6,6 +6,7 @@ import Loader from 'components/shared/Loader';
 import FlipCardGroup from 'components/shared/FlipCardGroup';
 import GradientButton from 'components/shared/GradientButton';
 import WhatsappButton from 'components/shared/WhatsappButton';
+import LanguageSwitcher from 'components/shared/LanguageSwitcher';
 
 const marcas = [
   { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
@@ -39,7 +40,10 @@ export default function MapaLayout({ children }) {
           <h1 className='text-lg font-bold pl-5'>Shoesnetworld</h1>
           <Loader />
         </div>
-        <GradientButton text={t('Login')} href='/login' />
+        <div className='mt-2 sm:mt-0 flex items-center gap-4'>
+          <LanguageSwitcher />
+          <GradientButton text={t('Login')} href='/login' />
+        </div>
       </header>
 
       {/* Conteúdo da página */}

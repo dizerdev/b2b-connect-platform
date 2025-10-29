@@ -11,9 +11,9 @@ const faqs = [
       'Você pode redefinir sua senha acessando a página de login e clicando em "Esqueci minha senha". Um link de recuperação será enviado para seu e-mail.',
   },
   {
-    pergunta: 'Como entro em contato com o suporte técnico?',
+    pergunta: 'Como entro em contato com o suporte?',
     resposta:
-      'Você pode abrir um chamado diretamente nesta página ou enviar um e-mail para suporte@shoesnetworld.com.',
+      'Através do botão de WhatsApp no rodapé do site ou enviando um e-mail para suporte@shoesnetworld.com.',
   },
   {
     pergunta: 'Onde acompanho meus pedidos?',
@@ -60,7 +60,7 @@ export default function SuportePage() {
       {/* Faixa hero */}
       <div className='relative h-64 w-full overflow-hidden'>
         <img
-          src='https://nu6xzmkg6n.ufs.sh/f/1BGrcyVEf97rwypuwZJIdC2t7huEH1bym6MNiXDflUgRz8qF'
+          src='/assets/mapashoesnetworld.jpg'
           alt='Suporte'
           className='absolute inset-0 h-full w-full object-cover'
         />

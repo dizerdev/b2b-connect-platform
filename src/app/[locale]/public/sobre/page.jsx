@@ -6,23 +6,23 @@ import { useState } from 'react';
 
 const depoimentos = [
   {
-    nome: 'Ana Costa',
-    cargo: 'CEO, Loja X',
-    foto: '/assets/clientes/cliente1.jpg',
+    nome: 'Julia Godoy',
+    cargo: 'Representante Comercial',
+    foto: '/assets/clientes/cliente1.png',
     texto:
       'A plataforma revolucionou nossa operação digital. Fácil de usar e com suporte incrível!',
   },
   {
-    nome: 'João Almeida',
-    cargo: 'Diretor de Vendas, Calçados Y',
-    foto: '/assets/clientes/cliente2.jpg',
+    nome: 'Rubens Micael',
+    cargo: 'Diretor de Vendas',
+    foto: '/assets/clientes/cliente2.png',
     texto:
       'Conseguimos aumentar nossas vendas online em 40% após a integração com o sistema.',
   },
   {
-    nome: 'Maria Oliveira',
-    cargo: 'Gestora, Boutique Z',
-    foto: '/assets/clientes/cliente3.jpg',
+    nome: 'Diego Handa',
+    cargo: 'Gestor de Marketing',
+    foto: '/assets/clientes/cliente3.png',
     texto:
       'A experiência é fluida, desde o cadastro de produtos até o atendimento ao cliente.',
   },
@@ -40,7 +40,7 @@ export default function SobrePage() {
           className='object-cover brightness-50'
         />
         <div className='relative z-10 max-w-2xl px-4'>
-          <h1 className='text-4xl font-bold mb-3'>Sobre Nós</h1>
+          <h1 className='text-4xl font-bold mb-3'>Shoesnetworld</h1>
           <p className='text-lg text-gray-200'>
             Conectamos fornecedores, lojistas e representantes em uma plataforma
             única e moderna.
@@ -54,21 +54,47 @@ export default function SobrePage() {
           <div className='bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition'>
             <h3 className='text-xl font-semibold mb-2'>Nossa Missão</h3>
             <p className='text-gray-600'>
-              Simplificar o comércio B2B com tecnologia acessível e inovadora.
+              Conectar o mercado global do setor calçadista por meio de uma
+              plataforma digital completa, promovendo oportunidades de negócios
+              entre fabricantes, distribuidores, lojistas, importadores e
+              prestadores de serviços em todo o mundo.
             </p>
           </div>
           <div className='bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition'>
             <h3 className='text-xl font-semibold mb-2'>Nossos Valores</h3>
             <p className='text-gray-600'>
-              Transparência, eficiência e parceria de longo prazo.
+              <br />
+              <strong>Inovação</strong>
+              <br />
+              <br />
+              <strong>Transparência</strong>
+              <br />
+              <br />
+              <strong>Valorização do setor</strong>
             </p>
           </div>
           <div className='bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition'>
             <h3 className='text-xl font-semibold mb-2'>Nosso Objetivo</h3>
             <p className='text-gray-600'>
-              Ser referência no mercado de soluções digitais para moda e varejo.
+              Ser a principal plataforma digital internacional voltada ao
+              comércio global de calçados, acessórios, componentes, couros,
+              máquinas e serviços.
             </p>
           </div>
+        </div>
+        <br />
+        <div className='max-w-5xl mx-auto text-center mb-10'>
+          <h2 className='text-3xl font-bold mb-3'>Quem somos?</h2>
+          <p className='text-gray-600'>
+            Shoesnetworld é uma plataforma digital internacional voltada ao
+            comércio global de calçados, acessórios, componentes, couros,
+            máquinas e serviços do setor calçadista.
+            <br />
+            Com base no Brasil e uma rede de empresas parceiras da América
+            Latina, Europa e Ásia, oferecemos um ecossistema completo para
+            importadores, distribuidores, lojistas, fabricantes e representantes
+            comerciais.
+          </p>
         </div>
       </section>
 

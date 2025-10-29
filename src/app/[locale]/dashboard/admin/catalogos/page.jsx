@@ -70,6 +70,21 @@ export default function ListaCatalogosPage() {
     }
   }
 
+  async function handleReverter(id) {
+    try {
+      const res = await fetch(`/api/v1/catalogos/${id}/reverter`, {
+        method: 'POST',
+      });
+      if (!res.ok) throw new Error('Erro ao reverter catálogo');
+      setMessage('Catálogo revertido para pendente com sucesso');
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (err) {
+      setMessage('Erro ao reverter catálogo');
+    }
+  }
+
   async function handleAvaliar(id, rating) {
     try {
       const res = await fetch(`/api/v1/catalogos/${id}/rating`, {
@@ -210,6 +225,16 @@ export default function ListaCatalogosPage() {
                           className='flex items-center gap-1 px-3 py-1 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition'
                         >
                           <Upload size={16} /> Publicar
+                        </button>
+                      )}
+
+                    {userRole === 'administrador' &&
+                      cat.status === 'publicado' && (
+                        <button
+                          onClick={() => handleReverter(cat.id)}
+                          className='flex items-center gap-1 px-3 py-1 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition'
+                        >
+                          <Upload size={16} /> Reverter
                         </button>
                       )}
 

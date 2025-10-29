@@ -40,7 +40,7 @@ export async function PATCH(req, { params }) {
     const isAdmin = papel === 'administrador';
     const isDono = userId === catalogo.fornecedor_id;
 
-    if (!isAdmin && (!isDono || catalogo.status === 'publicado')) {
+    if (!isAdmin && !isDono) {
       return Response.json(
         { error: 'Somente catálogos não publicados. Contate o administrador' },
         { status: 403 }

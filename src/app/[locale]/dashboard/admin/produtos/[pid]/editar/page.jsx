@@ -169,7 +169,7 @@ export default function EdicaoProdutoPage() {
       toast.error(err.message);
     } finally {
       setLoading(false);
-      router.push(`/dashboard/parceiro/produtos/${pid}`);
+      router.push(`/dashboard/admin/produtos/${pid}`);
     }
   }
 
@@ -315,7 +315,7 @@ export default function EdicaoProdutoPage() {
           </button>
           <button
             type='button'
-            onClick={() => router.push(`/dashboard/parceiro/produtos/${pid}`)}
+            onClick={() => router.push(`/dashboard/admin/produtos/${pid}`)}
             className='bg-gray-300 px-4 py-2 rounded hover:bg-gray-400'
           >
             Cancelar

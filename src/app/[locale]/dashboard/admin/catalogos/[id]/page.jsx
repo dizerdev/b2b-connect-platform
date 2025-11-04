@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import AdminGuard from 'components/AdminGuard';
-import { Eye } from 'lucide-react';
+import { Plus, Eye, Edit, Database } from 'lucide-react';
 
 export default function CatalogoDetalhesPage() {
   const router = useRouter();
@@ -29,8 +29,12 @@ export default function CatalogoDetalhesPage() {
   if (!catalogo) return <p className='p-4'>Catálogo não encontrado</p>;
 
   // Handlers
+  const handleEditarInfo = () =>
+    router.push(`/dashboard/admin/catalogos/${id}/editar`);
   const handleVerProduto = (produtoId) =>
     router.push(`/dashboard/admin/produtos/${produtoId}`);
+  const handleDefinirMetadados = () =>
+    router.push(`/dashboard/admin/catalogos/${id}/metadados`);
 
   return (
     <AdminGuard>
@@ -50,6 +54,12 @@ export default function CatalogoDetalhesPage() {
         <section className='p-4 bg-white rounded-lg shadow flex flex-col gap-3'>
           <div className='flex justify-between items-center'>
             <h2 className='text-xl font-semibold'>Informações básicas</h2>
+            <button
+              onClick={handleEditarInfo}
+              className='flex items-center gap-1 px-3 py-1 text-sm bg-purple-600 text-white rounded-lg hover:bg-blue-700 transition'
+            >
+              <Edit size={16} /> Editar
+            </button>
           </div>
           <p>
             <strong>Nome:</strong> {catalogo.catalogo.nome}

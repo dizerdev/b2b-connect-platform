@@ -36,7 +36,7 @@ export default function LanguageSwitcher() {
         onClick={toggleDropdown}
         className='flex items-center gap-1 px-4 py-2 rounded-md border border-gray-300 bg-white text-sm text-gray-800 hover:bg-gray-100 transition'
       >
-        🌐 Idioma <ChevronDown size={16} />
+        🌐 <ChevronDown size={16} />
       </button>
 
       {isOpen && (

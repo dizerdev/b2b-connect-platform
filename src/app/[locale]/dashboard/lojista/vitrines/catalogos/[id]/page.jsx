@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import SellerGuard from 'components/SellerGuard';
 import Link from 'next/link';
+import sanitizeHtml from 'sanitize-html';
 
 export default function DetalhesVitrinePage() {
   const { id } = useParams();
@@ -106,11 +107,12 @@ export default function DetalhesVitrinePage() {
                   {/* Infos */}
                   <div className='p-4 space-y-2'>
                     <h3 className='font-semibold'>{produto.nome}</h3>
-                    <p className='text-sm text-gray-600 line-clamp-2'>
-                      {produto.descricao}
-                    </p>
+
                     <p className='text-sm font-medium'>
-                      💰 R$ {produto.preco?.toFixed(2) || 'N/A'}
+                      💰{' '}
+                      {produto.preco?.toFixed(2) == 0.0
+                        ? 'Sob consulta'
+                        : `R$ ${produto.preco?.toFixed(2)}`}
                     </p>
                     {produto.destaque && (
                       <span className='inline-block text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full'>
@@ -127,9 +129,10 @@ export default function DetalhesVitrinePage() {
         </div>
 
         {/* Coleções */}
-        <div>
-          <h2 className='text-xl font-semibold mb-4'>Coleções</h2>
-          {catalogo.colecoes?.length ? (
+
+        {catalogo.colecoes?.length ? (
+          <div>
+            <h2 className='text-xl font-semibold mb-4'>Coleções</h2>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
               {catalogo.colecoes.map((colecao) => (
                 <div
@@ -141,10 +144,8 @@ export default function DetalhesVitrinePage() {
                 </div>
               ))}
             </div>
-          ) : (
-            <p className='text-sm text-gray-500'>Nenhuma coleção cadastrada.</p>
-          )}
-        </div>
+          </div>
+        ) : null}
 
         {/* Metadados */}
         <div>

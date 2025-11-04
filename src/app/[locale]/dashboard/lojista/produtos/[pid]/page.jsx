@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import SellerGuard from 'components/SellerGuard';
 import ProductGallery from 'components/shared/ProductGallery';
+import sanitizeHtml from 'sanitize-html';
 
 export default function DetalhesProdutoLojistaPage() {
   const { pid } = useParams();
@@ -33,6 +34,25 @@ export default function DetalhesProdutoLojistaPage() {
   const imagens = produto.produto.imagens || [];
   const catalogo = produto.catalogos?.[0];
 
+  // Sanitiza o HTML antes de injetar
+  const safeDescription = sanitizeHtml(produto.produto.descricao, {
+    allowedTags: [
+      'div',
+      'h1',
+      'h2',
+      'p',
+      'span',
+      'strong',
+      'em',
+      'ul',
+      'li',
+      'br',
+    ],
+    allowedAttributes: {
+      '*': ['class', 'style'],
+    },
+  });
+
   return (
     <SellerGuard>
       <div className='w-full mx-auto p-6'>
@@ -61,25 +81,19 @@ export default function DetalhesProdutoLojistaPage() {
           {/* Informações do produto */}
           <div className='flex flex-col gap-4'>
             <div className='bg-white rounded-lg shadow p-4'>
+              <p className='mb-2'>{produto.produto.nome || '—'}</p>
+              <div className='mb-2'>
+                <span className='font-semibold'>Descrição</span>{' '}
+                <div
+                  className='prose max-w-none itens-center'
+                  dangerouslySetInnerHTML={{ __html: safeDescription }}
+                />
+              </div>
               <p className='mb-2'>
-                <span className='font-semibold'>Nome:</span>{' '}
-                {produto.produto.nome || '—'}
-              </p>
-              <p className='mb-2'>
-                <span className='font-semibold'>Descrição:</span>{' '}
-                {produto.produto.descricao || '—'}
-              </p>
-              <p className='mb-2'>
-                <span className='font-semibold'>Preço:</span>{' '}
-                {catalogo?.preco ? `R$ ${catalogo.preco.toFixed(2)}` : '—'}
-              </p>
-              <p className='mb-2'>
-                <span className='font-semibold'>Fornecedor:</span>{' '}
-                {catalogo?.catalogo_nome || '—'}
-              </p>
-              <p>
-                <span className='font-semibold'>Rating:</span> ⭐{' '}
-                {produto.rating || 'N/A'}
+                <span className='font-semibold'>Preço</span>{' '}
+                {catalogo?.preco
+                  ? `R$ ${catalogo.preco.toFixed(2)}`
+                  : 'Sob consulta'}
               </p>
             </div>
 

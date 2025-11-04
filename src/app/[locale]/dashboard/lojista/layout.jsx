@@ -13,6 +13,7 @@ import LanguageSwitcher from 'components/shared/LanguageSwitcher';
 const navLinks = [
   { href: '/dashboard/lojista', label: 'Home' },
   { href: '/dashboard/lojista/vitrines/principal', label: 'Pesquisar' },
+  { href: 'https://calçadistabrasil.com.br/', label: 'Galeria Internacional' },
   { href: '/dashboard/lojista/mensagens', label: 'Mensagens' },
 ];
 

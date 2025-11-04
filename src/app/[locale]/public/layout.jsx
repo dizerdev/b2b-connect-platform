@@ -41,6 +41,13 @@ export default function MapaLayout({ children }) {
           <Loader />
         </div>
         <div className='mt-2 sm:mt-0 flex items-center gap-4'>
+          <a
+            href='https://calçadistabrasil.com.br/'
+            className='text-white font-medium hover:text-blue-400 transition-colors duration-200'
+            target='_blank'
+          >
+            {t('InternationalGallery')}
+          </a>
           <LanguageSwitcher />
           <GradientButton text={t('Login')} href='/login' />
         </div>

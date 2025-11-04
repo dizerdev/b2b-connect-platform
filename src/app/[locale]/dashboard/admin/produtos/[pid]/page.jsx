@@ -111,6 +111,18 @@ export default function DetalhesProdutoPage() {
             </table>
           </section>
         )}
+        {/* Ações extras */}
+        <section className='bg-white shadow rounded p-4 space-y-4'>
+          <h2 className='text-lg font-semibold'>Ações</h2>
+          <div className='flex gap-4'>
+            <Link
+              href={`/dashboard/admin/produtos/${pid}/editar`}
+              className='px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700'
+            >
+              Editar Produto
+            </Link>
+          </div>
+        </section>
 
         {/* Imagens do produto */}
         {produto.produto.imagens && produto.produto.imagens.length > 0 && (

@@ -84,6 +84,12 @@ export default function VitrinePrincipalPage() {
   return (
     <SellerGuard>
       <div className='px-4 py-3 md:px-10 md:py-3 w-full'>
+        {/* Banner */}
+        <Banner
+          src='https://nu6xzmkg6n.ufs.sh/f/1BGrcyVEf97rq1ovH5rSxuPhWF6Mc7oXBIw2RyKJN8ZdUbGq'
+          alt='Catálogo X'
+        />
+        <br />
         <div className='flex justify-between items-center mb-4'>
           <h1 className='text-2xl font-bold'>
             Produtos & Serviços Disponíveis
@@ -95,13 +101,6 @@ export default function VitrinePrincipalPage() {
             ← Voltar
           </Link>
         </div>
-
-        {/* Banner */}
-        <Banner
-          src='https://nu6xzmkg6n.ufs.sh/f/1BGrcyVEf97rwypuwZJIdC2t7huEH1bym6MNiXDflUgRz8qF'
-          alt='Catálogo X'
-        />
-
         <div className='mt-6 flex flex-col sm:flex-row flex-wrap justify-center gap-4'>
           <Dropdown
             label='Continente'

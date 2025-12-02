@@ -171,22 +171,6 @@ export default function DashboardLayout({ children }) {
       {/* Seção de cards */}
       <Carousel items={produtos} />
 
-      {/* Marcas em movimento lateral */}
-      <div className='relative overflow-hidden bg-gray-100 py-4'>
-        <div className='flex animate-marquee space-x-12'>
-          {marcas.concat(marcas).map((marca, i) => (
-            <Image
-              key={i}
-              src={marca.src}
-              alt={marca.alt}
-              width={100}
-              height={100}
-              className='object-contain'
-            />
-          ))}
-        </div>
-      </div>
-
       {/* Whatsapp flutuante */}
       <WhatsappButton />
 

@@ -7,6 +7,7 @@ import FlipCardGroup from 'components/shared/FlipCardGroup';
 import GradientButton from 'components/shared/GradientButton';
 import WhatsappButton from 'components/shared/WhatsappButton';
 import LanguageSwitcher from 'components/shared/LanguageSwitcher';
+import Banner from 'components/shared/Banner';
 
 const marcas = [
   { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
@@ -18,7 +19,7 @@ const marcas = [
   { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
   { src: '/assets/logos/shoesnetworld_old.png', alt: 'Shoesnetworld' },
   { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
-  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
+  { src: '/assets/logos/logo_akelian.png', alt: 'AkeliBronzean' },
   { src: '/assets/logos/logo_sneakers_brasil.png', alt: 'Sneakers Brasil' },
 ];
 
@@ -56,24 +57,10 @@ export default function MapaLayout({ children }) {
       {/* Conteúdo da página */}
       <main className='flex-1'>{children}</main>
 
-      {/* Marcas em movimento lateral */}
-      <div className='relative overflow-hidden bg-gray-100 py-4'>
-        <div className='flex animate-marquee space-x-12'>
-          {marcas.concat(marcas).map((marca, i) => (
-            <Image
-              key={i}
-              src={marca.src}
-              alt={marca.alt}
-              width={100}
-              height={100}
-              className='object-contain'
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Seção dos 3 cards */}
-      <FlipCardGroup />
+      <Banner
+        src='https://nu6xzmkg6n.ufs.sh/f/1BGrcyVEf97rL7lWbfypeDObSrsz9Gj7H2NZQFkIxgfPCUyT'
+        alt='Catálogo X'
+      />
 
       <WhatsappButton />
 

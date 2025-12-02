@@ -11,6 +11,10 @@ export default function FlipCardGroup() {
       front: t('AnnualPlan'),
       back: t('AnnualPrice'),
     },
+    {
+      front: t('AnnualPlan'),
+      back: t('AnnualPrice'),
+    },
   ];
 
   return (

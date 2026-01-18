@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import PartnerGuard from 'components/PartnerGuard';
 
 export default function DetalhesProdutoPage() {
+  const t = useTranslations('DashboardParceiro');
   const { pid } = useParams();
 
   const [produto, setProduto] = useState(null);
@@ -15,7 +17,7 @@ export default function DetalhesProdutoPage() {
   const fetchProduto = async () => {
     try {
       const res = await fetch(`/api/v1/produtos/${pid}`);
-      if (!res.ok) throw new Error('Erro ao buscar produto');
+      if (!res.ok) throw new Error(t('ErrorLoadingData'));
       const data = await res.json();
       setProduto(data);
     } catch (err) {
@@ -29,36 +31,36 @@ export default function DetalhesProdutoPage() {
     fetchProduto();
   }, [pid]);
 
-  if (loading) return <p className='p-4'>Carregando...</p>;
-  if (!produto) return <p className='p-4'>Produto não encontrado.</p>;
+  if (loading) return <p className='p-4'>{t('Loading')}</p>;
+  if (!produto) return <p className='p-4'>{t('ProductNotFound')}</p>;
 
   return (
     <PartnerGuard>
       <div className='p-6 space-y-6'>
         <header className='flex justify-between items-center'>
-          <h1 className='text-2xl font-bold'>Detalhes do Produto</h1>
+          <h1 className='text-2xl font-bold'>{t('ProductDetails')}</h1>
           <Link
             href={`/dashboard/parceiro/catalogos/${produto.catalogos[0].catalogo_id}`}
             className='text-blue-500 hover:underline'
           >
-            ← Voltar
+            {t('Back')}
           </Link>
         </header>
 
         {/* Informações básicas */}
         <section className='bg-white shadow rounded p-4 space-y-2'>
-          <h2 className='text-lg font-semibold'>Informações Básicas</h2>
+          <h2 className='text-lg font-semibold'>{t('BasicInformation')}</h2>
           <p>
-            <strong>Nome:</strong> {produto.produto.nome}
+            <strong>{t('Name')}:</strong> {produto.produto.nome}
           </p>
           <p>
-            <strong>Descrição:</strong> {produto.produto.descricao}
+            <strong>{t('Description')}:</strong> {produto.produto.descricao}
           </p>
           <p>
-            <strong>Preço:</strong> R$ {produto.catalogos[0].preco}
+            <strong>{t('Price')}:</strong> R$ {produto.catalogos[0].preco}
           </p>
           <p>
-            <strong>Status:</strong>{' '}
+            <strong>{t('Status')}:</strong>{' '}
             <span
               className={`px-2 py-1 text-sm rounded ${
                 produto.ativo
@@ -66,11 +68,11 @@ export default function DetalhesProdutoPage() {
                   : 'bg-red-200 text-red-800'
               }`}
             >
-              {produto.ativo ? 'Ativo' : 'Inativo'}
+              {produto.ativo ? t('Active') : t('Inactive')}
             </span>
           </p>
           <p>
-            <strong>Criado em:</strong>{' '}
+            <strong>{t('CreatedAt')}:</strong>{' '}
             {new Date(produto.produto.created_at).toLocaleDateString()}
           </p>
         </section>
@@ -78,16 +80,20 @@ export default function DetalhesProdutoPage() {
         {/* Grades do produto */}
         {produto.grades && produto.grades.length > 0 && (
           <section className='bg-white shadow rounded p-4 space-y-2'>
-            <h2 className='text-lg font-semibold'>Grades</h2>
+            <h2 className='text-lg font-semibold'>{t('Grades')}</h2>
             <table className='w-full border border-gray-200'>
               <thead>
                 <tr className='bg-gray-100'>
-                  <th className='border px-2 py-1 text-left'>Cor</th>
-                  <th className='border px-2 py-1 text-left'>Tamanho</th>
-                  <th className='border px-2 py-1 text-left'>Tipo</th>
-                  <th className='border px-2 py-1 text-left'>Pronta Entrega</th>
-                  <th className='border px-2 py-1 text-left'>Estoque</th>
-                  <th className='border px-2 py-1 text-left'>Criado em</th>
+                  <th className='border px-2 py-1 text-left'>{t('Color')}</th>
+                  <th className='border px-2 py-1 text-left'>{t('Size')}</th>
+                  <th className='border px-2 py-1 text-left'>{t('Type')}</th>
+                  <th className='border px-2 py-1 text-left'>
+                    {t('ReadyDelivery')}
+                  </th>
+                  <th className='border px-2 py-1 text-left'>{t('Stock')}</th>
+                  <th className='border px-2 py-1 text-left'>
+                    {t('CreatedAt')}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -97,7 +103,7 @@ export default function DetalhesProdutoPage() {
                     <td className='border px-2 py-1'>{grade.tamanho}</td>
                     <td className='border px-2 py-1'>{grade.tipo}</td>
                     <td className='border px-2 py-1'>
-                      {grade.pronta_entrega ? 'Sim' : 'Não'}
+                      {grade.pronta_entrega ? t('Yes') : t('No')}
                     </td>
                     <td className='border px-2 py-1'>{grade.estoque}</td>
                     <td className='border px-2 py-1'>
@@ -112,19 +118,19 @@ export default function DetalhesProdutoPage() {
 
         {/* Ações extras */}
         <section className='bg-white shadow rounded p-4 space-y-4'>
-          <h2 className='text-lg font-semibold'>Ações</h2>
+          <h2 className='text-lg font-semibold'>{t('ActionsList')}</h2>
           <div className='flex gap-4'>
             <Link
               href={`/dashboard/parceiro/produtos/${pid}/grades`}
               className='px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700'
             >
-              Gerenciar Grades
+              {t('ManageGrades')}
             </Link>
             <Link
               href={`/dashboard/parceiro/produtos/${pid}/editar`}
               className='px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700'
             >
-              Editar Produto
+              {t('EditProduct')}
             </Link>
           </div>
         </section>
@@ -132,7 +138,7 @@ export default function DetalhesProdutoPage() {
         {/* Imagens do produto */}
         {produto.produto.imagens && produto.produto.imagens.length > 0 && (
           <section className='bg-white shadow rounded p-4'>
-            <h2 className='text-lg font-semibold mb-4'>Fotos</h2>
+            <h2 className='text-lg font-semibold mb-4'>{t('Photos')}</h2>
             <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
               {produto.produto.imagens.map((url, idx) => (
                 <img

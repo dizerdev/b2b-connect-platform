@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast } from 'react-hot-toast';
 import PartnerGuard from 'components/PartnerGuard';
 
 export default function CadastroColecaoPage() {
+  const t = useTranslations('DashboardParceiro');
   const router = useRouter();
   const params = useParams();
   const catalogoId = params?.id;
@@ -18,7 +20,7 @@ export default function CadastroColecaoPage() {
     e.preventDefault();
 
     if (!nome.trim()) {
-      toast.error('O nome é obrigatório.');
+      toast.error(t('NameIsRequired'));
       return;
     }
 
@@ -33,10 +35,10 @@ export default function CadastroColecaoPage() {
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || 'Erro ao criar coleção');
+        throw new Error(err.error || t('ErrorCreatingCollection'));
       }
 
-      toast.success('Coleção cadastrada com sucesso!');
+      toast.success(t('CollectionCreated'));
       router.push(`/dashboard/parceiro/catalogos/${catalogoId}`);
     } catch (err) {
       toast.error(err.message);
@@ -48,12 +50,12 @@ export default function CadastroColecaoPage() {
   return (
     <PartnerGuard>
       <div className='p-6 max-w-2xl mx-auto'>
-        <h1 className='text-2xl font-bold mb-4'>Cadastrar Coleção</h1>
+        <h1 className='text-2xl font-bold mb-4'>{t('RegisterCollection')}</h1>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
             <label className='block text-sm font-medium mb-1' htmlFor='nome'>
-              Nome *
+              {t('NameRequired')}
             </label>
             <input
               id='nome'
@@ -70,7 +72,7 @@ export default function CadastroColecaoPage() {
               className='block text-sm font-medium mb-1'
               htmlFor='descricao'
             >
-              Descrição
+              {t('Description')}
             </label>
             <textarea
               id='descricao'
@@ -87,7 +89,7 @@ export default function CadastroColecaoPage() {
               disabled={loading}
               className='bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50'
             >
-              {loading ? 'Salvando...' : 'Salvar'}
+              {loading ? t('Saving') : t('Save')}
             </button>
             <button
               type='button'
@@ -96,7 +98,7 @@ export default function CadastroColecaoPage() {
               }
               className='bg-gray-300 px-4 py-2 rounded hover:bg-gray-400'
             >
-              Cancelar
+              {t('Cancel')}
             </button>
           </div>
         </form>

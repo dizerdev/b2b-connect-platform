@@ -2,10 +2,12 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import AdminGuard from 'components/AdminGuard';
 
 export default function UsuariosPage() {
+  const t = useTranslations('DashboardAdmin');
   const [usuarios, setUsuarios] = useState([]);
   const [busca, setBusca] = useState('');
   const [papel, setPapel] = useState('');
@@ -18,7 +20,7 @@ export default function UsuariosPage() {
     setLoading(true);
     try {
       const res = await fetch('/api/v1/usuarios');
-      if (!res.ok) throw new Error('Erro ao buscar usuários');
+      if (!res.ok) throw new Error(t('ErrorLoadingData'));
       const data = await res.json();
       setUsuarios(Array.isArray(data.usuarios) ? data.usuarios : []);
     } catch (error) {
@@ -53,7 +55,7 @@ export default function UsuariosPage() {
         },
         body: JSON.stringify({ ativo: !ativoAtual }),
       });
-      if (!res.ok) throw new Error('Erro ao atualizar status');
+      if (!res.ok) throw new Error(t('ErrorUpdatingUser'));
       fetchUsuarios();
     } catch (error) {
       console.error(error);
@@ -70,10 +72,10 @@ export default function UsuariosPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || 'Erro ao enviar e-mail');
+        throw new Error(data.error || t('ErrorSendingEmail'));
       }
 
-      alert('E-mail de redefinição de senha enviado com sucesso!');
+      alert(t('ResetEmailSent'));
     } catch (err) {
       alert(`Erro: ${err.message}`);
     }
@@ -83,19 +85,19 @@ export default function UsuariosPage() {
     <AdminGuard>
       <div className='p-6'>
         <div className='flex justify-between items-center mb-4'>
-          <h1 className='text-2xl font-bold'>Usuários</h1>
+          <h1 className='text-2xl font-bold'>{t('Users')}</h1>
           <div>
             <Link
               href='/dashboard/admin'
               className='text-blue-500 hover:underline'
             >
-              ← Voltar
+              {t('Back')}
             </Link>
             <button
               onClick={() => router.push('/dashboard/admin/usuarios/novo')}
               className='bg-blue-600 text-white px-4 py-2 ml-3 rounded hover:bg-blue-700'
             >
-              Novo Usuário
+              {t('NewUser')}
             </button>
           </div>
         </div>
@@ -104,7 +106,7 @@ export default function UsuariosPage() {
         <div className='flex gap-4 mb-4'>
           <input
             type='text'
-            placeholder='Buscar por nome ou e-mail'
+            placeholder={t('SearchByNameOrEmail')}
             className='border p-2 rounded w-1/3'
             value={busca}
             onChange={(e) => setBusca(e.target.value)}
@@ -114,20 +116,20 @@ export default function UsuariosPage() {
             value={papel}
             onChange={(e) => setPapel(e.target.value)}
           >
-            <option value=''>Todos os papéis</option>
-            <option value='administrador'>Administrador</option>
-            <option value='fornecedor'>Fornecedor</option>
-            <option value='representante'>Representante</option>
-            <option value='lojista'>Lojista</option>
+            <option value=''>{t('AllRoles')}</option>
+            <option value='administrador'>{t('Administrator')}</option>
+            <option value='fornecedor'>{t('Supplier')}</option>
+            <option value='representante'>{t('Representative')}</option>
+            <option value='lojista'>{t('Shopkeeper2')}</option>
           </select>
           <select
             className='border p-2 rounded'
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
-            <option value=''>Todos os status</option>
-            <option value='ativo'>Ativo</option>
-            <option value='inativo'>Inativo</option>
+            <option value=''>{t('AllStatus')}</option>
+            <option value='ativo'>{t('Active')}</option>
+            <option value='inativo'>{t('Inactive')}</option>
           </select>
         </div>
 
@@ -136,25 +138,25 @@ export default function UsuariosPage() {
           <table className='w-full border-collapse'>
             <thead className='bg-gray-100'>
               <tr>
-                <th className='p-2 border'>Nome</th>
-                <th className='p-2 border'>E-mail</th>
-                <th className='p-2 border'>Papel</th>
-                <th className='p-2 border'>Status</th>
-                <th className='p-2 border'>Criado em</th>
-                <th className='p-2 border'>Ações</th>
+                <th className='p-2 border'>{t('Name')}</th>
+                <th className='p-2 border'>{t('Email')}</th>
+                <th className='p-2 border'>{t('Role')}</th>
+                <th className='p-2 border'>{t('Status')}</th>
+                <th className='p-2 border'>{t('CreatedAt')}</th>
+                <th className='p-2 border'>{t('Actions')}</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
                   <td colSpan='6' className='text-center p-4'>
-                    Carregando...
+                    {t('Loading')}
                   </td>
                 </tr>
               ) : filtrarUsuarios().length === 0 ? (
                 <tr>
                   <td colSpan='6' className='text-center p-4'>
-                    Nenhum usuário encontrado.
+                    {t('NoUsersFound')}
                   </td>
                 </tr>
               ) : (
@@ -169,7 +171,7 @@ export default function UsuariosPage() {
                           user.ativo ? 'bg-green-500' : 'bg-red-500'
                         }`}
                       >
-                        {user.ativo ? 'Ativo' : 'Inativo'}
+                        {user.ativo ? t('Active') : t('Inactive')}
                       </span>
                     </td>
                     <td className='p-2 border'>
@@ -184,7 +186,7 @@ export default function UsuariosPage() {
                         }
                         className='bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600'
                       >
-                        Editar
+                        {t('Edit')}
                       </button>
                       <button
                         onClick={() => handleToggleAtivo(user.id, user.ativo)}
@@ -194,14 +196,14 @@ export default function UsuariosPage() {
                             : 'bg-green-500 hover:bg-green-600'
                         }`}
                       >
-                        {user.ativo ? 'Desativar' : 'Ativar'}
+                        {user.ativo ? t('Deactivate') : t('Activate')}
                       </button>
 
                       <button
                         onClick={() => handleResetPassword(user.email)}
                         className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600'
                       >
-                        Redefinir senha
+                        {t('ResetPassword')}
                       </button>
                     </td>
                   </tr>

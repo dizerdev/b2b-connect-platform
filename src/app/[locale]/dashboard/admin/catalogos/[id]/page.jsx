@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import AdminGuard from 'components/AdminGuard';
-import { Plus, Eye, Edit, Database } from 'lucide-react';
+import { Eye, Edit } from 'lucide-react';
 
 export default function CatalogoDetalhesPage() {
+  const t = useTranslations('DashboardAdmin');
   const router = useRouter();
   const { id } = useParams();
   const [catalogo, setCatalogo] = useState(null);
@@ -16,59 +18,57 @@ export default function CatalogoDetalhesPage() {
   useEffect(() => {
     fetch(`/api/v1/catalogos/${id}`)
       .then((res) => {
-        if (!res.ok) throw new Error('Erro ao carregar catálogo');
+        if (!res.ok) throw new Error(t('ErrorLoadingData'));
         return res.json();
       })
       .then((data) => setCatalogo(data))
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, t]);
 
-  if (loading) return <p className='p-4'>Carregando...</p>;
+  if (loading) return <p className='p-4'>{t('Loading')}</p>;
   if (error) return <p className='p-4 text-red-500'>{error}</p>;
-  if (!catalogo) return <p className='p-4'>Catálogo não encontrado</p>;
+  if (!catalogo) return <p className='p-4'>{t('CatalogNotFound')}</p>;
 
   // Handlers
   const handleEditarInfo = () =>
     router.push(`/dashboard/admin/catalogos/${id}/editar`);
   const handleVerProduto = (produtoId) =>
     router.push(`/dashboard/admin/produtos/${produtoId}`);
-  const handleDefinirMetadados = () =>
-    router.push(`/dashboard/admin/catalogos/${id}/metadados`);
 
   return (
     <AdminGuard>
       <div className='p-6 space-y-6'>
         {/* Header */}
         <div className='flex justify-between items-center'>
-          <h1 className='text-3xl font-bold'>📚 Detalhes do Catálogo</h1>
+          <h1 className='text-3xl font-bold'>{t('CatalogDetails')}</h1>
           <Link
             href='/dashboard/admin/catalogos'
             className='text-blue-500 hover:underline'
           >
-            ← Voltar
+            {t('Back')}
           </Link>
         </div>
 
         {/* Informações básicas */}
         <section className='p-4 bg-white rounded-lg shadow flex flex-col gap-3'>
           <div className='flex justify-between items-center'>
-            <h2 className='text-xl font-semibold'>Informações básicas</h2>
+            <h2 className='text-xl font-semibold'>{t('BasicInfo')}</h2>
             <button
               onClick={handleEditarInfo}
               className='flex items-center gap-1 px-3 py-1 text-sm bg-purple-600 text-white rounded-lg hover:bg-blue-700 transition'
             >
-              <Edit size={16} /> Editar
+              <Edit size={16} /> {t('Edit')}
             </button>
           </div>
           <p>
-            <strong>Nome:</strong> {catalogo.catalogo.nome}
+            <strong>{t('Name')}:</strong> {catalogo.catalogo.nome}
           </p>
           <p>
-            <strong>Descrição:</strong> {catalogo.catalogo.descricao}
+            <strong>{t('Description')}:</strong> {catalogo.catalogo.descricao}
           </p>
           <p>
-            <strong>Status:</strong>{' '}
+            <strong>{t('Status')}:</strong>{' '}
             <span
               className={`px-2 py-1 rounded-full text-white text-sm font-semibold ${
                 catalogo.catalogo.status === 'pendente_aprovacao'
@@ -82,15 +82,15 @@ export default function CatalogoDetalhesPage() {
             </span>
           </p>
           <p>
-            <strong>Rating:</strong>{' '}
-            {catalogo.catalogo.rating || 'Sem avaliação'}
+            <strong>{t('Rating')}:</strong>{' '}
+            {catalogo.catalogo.rating || t('NoRating')}
           </p>
         </section>
 
         {/* Coleções */}
         <section className='p-4 bg-white rounded-lg shadow flex flex-col gap-3'>
           <div className='flex justify-between items-center'>
-            <h2 className='text-xl font-semibold'>Coleções</h2>
+            <h2 className='text-xl font-semibold'>{t('Collections')}</h2>
           </div>
           {catalogo.catalogo.colecoes?.length ? (
             <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'>
@@ -104,14 +104,14 @@ export default function CatalogoDetalhesPage() {
               ))}
             </ul>
           ) : (
-            <p>Nenhuma coleção cadastrada</p>
+            <p>{t('NoCollections')}</p>
           )}
         </section>
 
         {/* Produtos */}
         <section className='p-4 bg-white rounded-lg shadow flex flex-col gap-3'>
           <div className='flex justify-between items-center'>
-            <h2 className='text-xl font-semibold'>Produtos</h2>
+            <h2 className='text-xl font-semibold'>{t('Products')}</h2>
           </div>
           {catalogo.catalogo.produtos?.length ? (
             <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2'>
@@ -136,46 +136,46 @@ export default function CatalogoDetalhesPage() {
                     onClick={() => handleVerProduto(p.id)}
                     className='text-blue-500 hover:underline text-sm flex items-center gap-1'
                   >
-                    <Eye size={14} /> Ver
+                    <Eye size={14} /> {t('View')}
                   </button>
                 </li>
               ))}
             </ul>
           ) : (
-            <p>Nenhum produto cadastrado</p>
+            <p>{t('NoProducts')}</p>
           )}
         </section>
 
         {/* Metadados */}
         <section className='p-4 bg-white rounded-2xl shadow flex flex-col gap-4'>
           <div className='flex justify-between items-center'>
-            <h2 className='text-xl font-semibold'>Metadados</h2>
+            <h2 className='text-xl font-semibold'>{t('Metadata')}</h2>
           </div>
 
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3'>
             <div className='bg-gray-50 p-3 rounded-lg hover:shadow-lg transition'>
-              <p className='text-gray-500 text-sm'>Continente</p>
+              <p className='text-gray-500 text-sm'>{t('Continent')}</p>
               <p className='font-medium text-gray-800'>
                 {catalogo.catalogo.metadados?.continente || '-'}
               </p>
             </div>
 
             <div className='bg-gray-50 p-3 rounded-lg hover:shadow-lg transition'>
-              <p className='text-gray-500 text-sm'>País</p>
+              <p className='text-gray-500 text-sm'>{t('Country')}</p>
               <p className='font-medium text-gray-800'>
                 {catalogo.catalogo.metadados?.pais || '-'}
               </p>
             </div>
 
             <div className='bg-gray-50 p-3 rounded-lg hover:shadow-lg transition'>
-              <p className='text-gray-500 text-sm'>Categoria</p>
+              <p className='text-gray-500 text-sm'>{t('Category')}</p>
               <p className='font-medium text-gray-800'>
                 {catalogo.catalogo.metadados?.categoria || '-'}
               </p>
             </div>
 
             <div className='bg-gray-50 p-3 rounded-lg hover:shadow-lg transition'>
-              <p className='text-gray-500 text-sm'>Subcategoria</p>
+              <p className='text-gray-500 text-sm'>{t('Subcategory')}</p>
               <p className='font-medium text-gray-800'>
                 {catalogo.catalogo.metadados?.sub_categoria || '-'}
               </p>
@@ -184,7 +184,7 @@ export default function CatalogoDetalhesPage() {
             {Array.isArray(catalogo.catalogo.metadados?.especificacao) &&
             catalogo.catalogo.metadados.especificacao.length > 0 ? (
               <div className='bg-gray-50 p-3 rounded-lg hover:shadow-lg transition col-span-full'>
-                <p className='text-gray-500 text-sm mb-1'>Especificações</p>
+                <p className='text-gray-500 text-sm mb-1'>{t('Specifications')}</p>
                 <ul className='list-disc pl-5 text-gray-700'>
                   {catalogo.catalogo.metadados.especificacao.map((esp, idx) => (
                     <li key={idx}>{esp}</li>

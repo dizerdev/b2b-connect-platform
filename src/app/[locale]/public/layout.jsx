@@ -1,66 +1,90 @@
+'use client';
 // app/mapa/layout.tsx
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import Loader from 'components/shared/Loader';
-import FlipCardGroup from 'components/shared/FlipCardGroup';
 import GradientButton from 'components/shared/GradientButton';
 import WhatsappButton from 'components/shared/WhatsappButton';
 import LanguageSwitcher from 'components/shared/LanguageSwitcher';
-import Banner from 'components/shared/Banner';
+import { Menu } from 'lucide-react';
+import { useState } from 'react';
 
-const marcas = [
-  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
-  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
-  { src: '/assets/logos/shoesnetworld_old.png', alt: 'Shoesnetworld' },
-  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
-  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
-  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
-  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
-  { src: '/assets/logos/shoesnetworld_old.png', alt: 'Shoesnetworld' },
-  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
-  { src: '/assets/logos/logo_akelian.png', alt: 'AkeliBronzean' },
-  { src: '/assets/logos/logo_sneakers_brasil.png', alt: 'Sneakers Brasil' },
-];
+// const marcas = [
+//   { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
+//   { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
+//   { src: '/assets/logos/shoesnetworld_old.png', alt: 'Shoesnetworld' },
+//   { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
+//   { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
+//   { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
+//   { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
+//   { src: '/assets/logos/shoesnetworld_old.png', alt: 'Shoesnetworld' },
+//   { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
+//   { src: '/assets/logos/logo_akelian.png', alt: 'AkeliBronzean' },
+//   { src: '/assets/logos/logo_sneakers_brasil.png', alt: 'Sneakers Brasil' },
+// ];
 
 export default function MapaLayout({ children }) {
   const t = useTranslations('MapPage');
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navLinks = [
+    { href: '/public/contato', label: t('Contact') },
+    { href: '/public/suporte', label: t('Support') },
+    { href: '/public/sobre', label: t('About') },
+  ];
+
   return (
     <div className='flex min-h-screen flex-col'>
       {/* Header */}
       <header className='flex items-center justify-between bg-gray-900 px-6 py-4 text-white'>
-        <div className='flex items-center'>
-          <Link href='/public/mapa'>
-            <Image
-              src='/assets/logos/shoesnetworld.png'
-              width={50}
-              height={50}
-              alt='Shoesnetworld Logo'
-            />
-          </Link>
-          <h1 className='text-lg font-bold pl-5'>Shoesnetworld</h1>
-          <Loader />
-        </div>
-        <div className='mt-2 sm:mt-0 flex items-center gap-4'>
-          <a
-            href='https://calçadistabrasil.com.br/'
-            className='text-white font-medium hover:text-blue-400 transition-colors duration-200'
-            target='_blank'
+        <div className='flex items-center justify-between w-full sm:w-auto'>
+          <div className='flex items-center space-x-4'>
+            <Link href='/public/mapa'>
+              <Image
+                src='/assets/logos/shoesnetworld.png'
+                width={50}
+                height={50}
+                alt='Shoesnetworld Logo'
+              />
+            </Link>
+            <h1 className='text-lg font-bold'>Shoesnetworld</h1>
+            <Loader />
+          </div>
+          <button
+            className='sm:hidden p-2'
+            onClick={() => setMenuOpen(!menuOpen)}
           >
-            {t('InternationalGallery')}
-          </a>
-          <LanguageSwitcher />
-          <GradientButton text={t('Login')} href='/login' />
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        <div
+          className={`flex-col sm:flex-row sm:flex sm:items-center sm:justify-between w-full sm:w-auto mt-3 sm:mt-0 ${
+            menuOpen ? 'flex' : 'hidden sm:flex'
+          } gap-4`}
+        >
+          <nav className='flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center flex-1'>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className='text-white font-medium hover:text-blue-400 transition-colors duration-200'
+                onClick={() => setMenuOpen(false)} // fecha menu ao clicar
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+          <div className='mt-2 sm:mt-0 flex items-center gap-4'>
+            <LanguageSwitcher />
+            <GradientButton text={t('Login')} href='/login' />
+          </div>
         </div>
       </header>
 
       {/* Conteúdo da página */}
       <main className='flex-1'>{children}</main>
-
-      <Banner
-        src='https://nu6xzmkg6n.ufs.sh/f/1BGrcyVEf97rL7lWbfypeDObSrsz9Gj7H2NZQFkIxgfPCUyT'
-        alt='Catálogo X'
-      />
 
       <WhatsappButton />
 

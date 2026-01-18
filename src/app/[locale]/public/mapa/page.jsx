@@ -20,7 +20,7 @@ export default function HomePage() {
   ];
 
   return (
-    <main className='min-h-[50vh] sm:min-h-[70vh] flex items-center justify-center bg-gray-100'>
+    <main className='min-h-[75vh] sm:min-h-[75vh] flex items-center justify-center bg-gray-100'>
       <MapaMundi parceiros={parceiros} />
     </main>
   );

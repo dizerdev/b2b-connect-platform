@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast, Toaster } from 'react-hot-toast';
 import PartnerGuard from 'components/PartnerGuard';
 import { extractFileKey } from 'lib/utils';
 
 export default function EdicaoCatalogoPage() {
+  const t = useTranslations('DashboardParceiro');
   const router = useRouter();
   const params = useParams();
   const catalogoId = params?.id;
@@ -22,7 +24,7 @@ export default function EdicaoCatalogoPage() {
       try {
         const res = await fetch(`/api/v1/catalogos/${catalogoId}`);
         if (!res.ok) {
-          throw new Error('Erro ao buscar catálogo');
+          throw new Error(t('ErrorLoadingData'));
         }
         const data = await res.json();
         setNome(data.catalogo.nome || '');
@@ -38,9 +40,7 @@ export default function EdicaoCatalogoPage() {
     if (catalogoId) {
       fetchCatalogo();
     }
-  }, [catalogoId, router]);
-
-  console.log(imagemUrl);
+  }, [catalogoId, router, t]);
 
   const handleFileChange = async (file) => {
     try {
@@ -63,7 +63,7 @@ export default function EdicaoCatalogoPage() {
         }),
       });
 
-      if (!prepareRes.ok) throw new Error('Erro ao preparar upload');
+      if (!prepareRes.ok) throw new Error(t('UploadError'));
       const { uploadUrls } = await prepareRes.json();
       const uploadData = uploadUrls[0];
 
@@ -77,12 +77,12 @@ export default function EdicaoCatalogoPage() {
         method: 'POST',
         body: formData,
       });
-      if (!uploadRes.ok) throw new Error('Erro no upload do arquivo');
+      if (!uploadRes.ok) throw new Error(t('UploadError'));
 
       let status = 'still working';
       while (status === 'still working') {
         const pollRes = await fetch(
-          `/api/v1/uploadthing/pollUpload?fileKey=${uploadData.key}`
+          `/api/v1/uploadthing/pollUpload?fileKey=${uploadData.key}`,
         );
         const pollData = await pollRes.json();
         status = pollData.status;
@@ -91,9 +91,9 @@ export default function EdicaoCatalogoPage() {
       }
 
       setImagemUrl(uploadData.ufsUrl);
-      toast.success('Upload concluído!');
+      toast.success(t('UploadComplete'));
     } catch (err) {
-      toast.error(err.message || 'Erro no upload');
+      toast.error(err.message || t('UploadError'));
     } finally {
       setLoading(false);
     }
@@ -102,7 +102,7 @@ export default function EdicaoCatalogoPage() {
   const handleDelete = async (fileUrl) => {
     try {
       const fileKey = extractFileKey(fileUrl);
-      if (!fileKey) throw new Error('Chave do arquivo inválida');
+      if (!fileKey) throw new Error(t('UploadError'));
 
       const res = await fetch('/api/v1/uploadthing/deleteFile', {
         method: 'POST',
@@ -111,12 +111,12 @@ export default function EdicaoCatalogoPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erro ao deletar arquivo');
+      if (!res.ok) throw new Error(data.error || t('UploadError'));
 
       setImagemUrl('');
-      toast.success('Imagem removida com sucesso!');
+      toast.success(t('ImageRemoved'));
     } catch (err) {
-      toast.error(err.message || 'Erro ao remover imagem');
+      toast.error(err.message || t('UploadError'));
     }
   };
 
@@ -124,7 +124,7 @@ export default function EdicaoCatalogoPage() {
     e.preventDefault();
 
     if (!nome.trim()) {
-      toast.error('O nome é obrigatório.');
+      toast.error(t('NameIsRequired'));
       return;
     }
 
@@ -139,10 +139,10 @@ export default function EdicaoCatalogoPage() {
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || 'Erro ao atualizar catálogo');
+        throw new Error(err.error || t('ErrorUpdating'));
       }
 
-      toast.success('Catálogo atualizado com sucesso!');
+      toast.success(t('CatalogUpdated'));
       router.push('/dashboard/parceiro/catalogos');
     } catch (err) {
       toast.error(err.message);
@@ -152,18 +152,18 @@ export default function EdicaoCatalogoPage() {
   }
 
   if (fetching) {
-    return <p className='p-6'>Carregando catálogo...</p>;
+    return <p className='p-6'>{t('LoadingCatalog')}</p>;
   }
 
   return (
     <PartnerGuard>
       <div className='p-6 max-w-2xl mx-auto'>
-        <h1 className='text-2xl font-bold mb-4'>Editar Catálogo</h1>
+        <h1 className='text-2xl font-bold mb-4'>{t('EditCatalog')}</h1>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
             <label className='block text-sm font-medium mb-1' htmlFor='nome'>
-              Nome *
+              {t('NameRequired')}
             </label>
             <input
               id='nome'
@@ -180,7 +180,7 @@ export default function EdicaoCatalogoPage() {
               className='block text-sm font-medium mb-1'
               htmlFor='descricao'
             >
-              Descrição
+              {t('Description')}
             </label>
             <textarea
               id='descricao'
@@ -193,7 +193,7 @@ export default function EdicaoCatalogoPage() {
 
           <div>
             <label className='block text-sm font-medium mb-1'>
-              Imagem de Capa
+              {t('CoverImage')}
             </label>
             {imagemUrl ? (
               <div className='flex items-center gap-2'>
@@ -208,7 +208,7 @@ export default function EdicaoCatalogoPage() {
                   className='bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700'
                   disabled={loading}
                 >
-                  Remover
+                  {t('Remove')}
                 </button>
               </div>
             ) : (
@@ -228,14 +228,14 @@ export default function EdicaoCatalogoPage() {
               disabled={loading}
               className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50'
             >
-              {loading ? 'Salvando...' : 'Salvar alterações'}
+              {loading ? t('Saving') : t('SaveChanges')}
             </button>
             <button
               type='button'
               onClick={() => router.push('/dashboard/parceiro/catalogos')}
               className='bg-gray-300 px-4 py-2 rounded hover:bg-gray-400'
             >
-              Cancelar
+              {t('Cancel')}
             </button>
           </div>
         </form>

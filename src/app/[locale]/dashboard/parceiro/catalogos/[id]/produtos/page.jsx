@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast, Toaster } from 'react-hot-toast';
 import PartnerGuard from 'components/PartnerGuard';
 import { extractFileKey } from 'lib/utils';
 
 export default function CadastroProdutoPage() {
+  const t = useTranslations('DashboardParceiro');
   const router = useRouter();
   const params = useParams();
   const catalogoId = params?.id;
@@ -34,12 +36,12 @@ export default function CadastroProdutoPage() {
               customId: null,
             },
           ],
-          callbackUrl: 'https://meusite.com/api/upload/callback', // opcional
+          callbackUrl: 'https://meusite.com/api/upload/callback',
           callbackSlug: 'imageUploader',
         }),
       });
 
-      if (!prepareRes.ok) throw new Error('Erro ao preparar upload');
+      if (!prepareRes.ok) throw new Error(t('UploadError'));
       const { uploadUrls } = await prepareRes.json();
       const uploadData = uploadUrls[0];
       const formData = new FormData();
@@ -52,7 +54,7 @@ export default function CadastroProdutoPage() {
         method: 'POST',
         body: formData,
       });
-      if (!uploadRes.ok) throw new Error('Erro no upload do arquivo');
+      if (!uploadRes.ok) throw new Error(t('UploadError'));
 
       let status = 'still working';
       while (status === 'still working') {
@@ -70,10 +72,10 @@ export default function CadastroProdutoPage() {
         newImgs[index] = uploadData.ufsUrl;
         return newImgs;
       });
-      toast.success('Upload concluído!');
+      toast.success(t('UploadComplete'));
     } catch (err) {
       console.error(err);
-      toast.error(err.message || 'Erro no upload');
+      toast.error(err.message || t('UploadError'));
     } finally {
       setLoading(false);
     }
@@ -88,13 +90,12 @@ export default function CadastroProdutoPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erro ao deletar arquivo');
+      if (!res.ok) throw new Error(data.error || t('UploadError'));
 
-      alert('Imagem deletada com sucesso!');
-      // Atualizar estado da página, remover imagem da lista
+      toast.success(t('ImageRemoved'));
     } catch (err) {
       console.error(err);
-      alert('Erro: ' + err.message);
+      toast.error(err.message);
     }
   };
 
@@ -106,12 +107,12 @@ export default function CadastroProdutoPage() {
     e.preventDefault();
 
     if (!nome.trim()) {
-      toast.error('O nome é obrigatório.');
+      toast.error(t('NameIsRequired'));
       return;
     }
 
     if (!preco || isNaN(preco)) {
-      toast.error('Informe um preço válido.');
+      toast.error(t('InvalidPrice'));
       return;
     }
 
@@ -132,10 +133,10 @@ export default function CadastroProdutoPage() {
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || 'Erro ao criar produto');
+        throw new Error(err.error || t('ErrorCreatingProduct'));
       }
 
-      toast.success('Produto cadastrado com sucesso!');
+      toast.success(t('ProductCreated'));
       setTimeout(() => {
         router.push(`/dashboard/parceiro/catalogos/${catalogoId}`);
       }, 1500);
@@ -150,13 +151,13 @@ export default function CadastroProdutoPage() {
     <PartnerGuard>
       <div className='p-6 max-w-3xl mx-auto'>
         <h1 className='text-3xl font-bold mb-6 text-gray-800'>
-          Cadastrar Produto
+          {t('RegisterProduct')}
         </h1>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
             <label className='block text-sm font-medium mb-1' htmlFor='nome'>
-              Nome *
+              {t('NameRequired')}
             </label>
             <input
               id='nome'
@@ -173,7 +174,7 @@ export default function CadastroProdutoPage() {
               className='block text-sm font-medium mb-1'
               htmlFor='descricao'
             >
-              Descrição
+              {t('Description')}
             </label>
             <textarea
               id='descricao'
@@ -186,7 +187,7 @@ export default function CadastroProdutoPage() {
 
           <div>
             <label className='block text-sm font-medium mb-1' htmlFor='preco'>
-              Preço *
+              {t('PriceRequired')}
             </label>
             <input
               id='preco'
@@ -200,7 +201,7 @@ export default function CadastroProdutoPage() {
           </div>
 
           <div className='space-y-4'>
-            <label className='block text-sm font-medium mb-1'>Imagens</label>
+            <label className='block text-sm font-medium mb-1'>{t('Images')}</label>
 
             {/* Grid de imagens */}
             <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
@@ -224,7 +225,7 @@ export default function CadastroProdutoPage() {
                           }}
                           className='bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700'
                         >
-                          Remover
+                          {t('Remove')}
                         </button>
                       </div>
                     ) : (
@@ -233,10 +234,10 @@ export default function CadastroProdutoPage() {
                           htmlFor={`file-input-${idx}`}
                           className='cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors'
                         >
-                          Selecionar arquivo
+                          {t('SelectFile')}
                         </label>
                         <span className='text-gray-700'>
-                          {img[idx] || 'Nenhum arquivo selecionado'}
+                          {img[idx] || t('NoFileSelected')}
                         </span>
                         <input
                           id={`file-input-${idx}`}
@@ -268,7 +269,7 @@ export default function CadastroProdutoPage() {
               onClick={adicionarImagem}
               className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700'
             >
-              Adicionar Imagem
+              {t('AddImage')}
             </button>
           </div>
 
@@ -280,7 +281,7 @@ export default function CadastroProdutoPage() {
               onChange={(e) => setDestaque(e.target.checked)}
             />
             <label htmlFor='destaque' className='text-sm'>
-              Produto em destaque
+              {t('FeaturedProduct')}
             </label>
           </div>
 
@@ -290,7 +291,7 @@ export default function CadastroProdutoPage() {
               disabled={loading}
               className='bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50'
             >
-              {loading ? 'Salvando...' : 'Salvar'}
+              {loading ? t('Saving') : t('Save')}
             </button>
             <button
               type='button'
@@ -299,7 +300,7 @@ export default function CadastroProdutoPage() {
               }
               className='bg-gray-300 px-4 py-2 rounded hover:bg-gray-400'
             >
-              Cancelar
+              {t('Cancel')}
             </button>
           </div>
           <Toaster />

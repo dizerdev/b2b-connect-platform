@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast } from 'react-hot-toast';
 import PartnerGuard from 'components/PartnerGuard';
 import { X } from 'lucide-react';
@@ -80,6 +81,7 @@ const ESPECIFICACOES_VALIDAS = [
 ];
 
 export default function DefinicaoMetadadosPage() {
+  const t = useTranslations('DashboardParceiro');
   const { id } = useParams();
   const router = useRouter();
 
@@ -96,7 +98,7 @@ export default function DefinicaoMetadadosPage() {
     async function fetchData() {
       try {
         const res = await fetch(`/api/v1/catalogos/${id}/metadados`);
-        if (!res.ok) throw new Error('Erro ao carregar metadados');
+        if (!res.ok) throw new Error(t('ErrorLoadingMetadata'));
         const data = await res.json();
 
         setContinente(data.continente || '');
@@ -111,7 +113,7 @@ export default function DefinicaoMetadadosPage() {
       }
     }
     fetchData();
-  }, [id]);
+  }, [id, t]);
 
   function toggleEspecificacao(item) {
     setEspecificacao((prev) =>
@@ -136,8 +138,8 @@ export default function DefinicaoMetadadosPage() {
         }),
       });
 
-      if (!res.ok) throw new Error('Erro ao salvar metadados');
-      toast.success('Metadados salvos com sucesso!');
+      if (!res.ok) throw new Error(t('ErrorSavingMetadata'));
+      toast.success(t('MetadataSaved'));
       router.push(`/dashboard/parceiro/catalogos/${id}`);
     } catch (err) {
       toast.error(err.message);
@@ -146,23 +148,23 @@ export default function DefinicaoMetadadosPage() {
     }
   }
 
-  if (loading) return <p className='p-4'>Carregando...</p>;
+  if (loading) return <p className='p-4'>{t('Loading')}</p>;
 
   return (
     <PartnerGuard>
       <div className='p-6 max-w-2xl mx-auto'>
-        <h1 className='text-2xl font-bold mb-4'>Definir Metadados</h1>
+        <h1 className='text-2xl font-bold mb-4'>{t('DefineMetadata')}</h1>
 
         <form onSubmit={handleSalvar} className='space-y-4'>
           <div>
-            <label className='block font-medium mb-1'>Continente</label>
+            <label className='block font-medium mb-1'>{t('Continent')}</label>
             <select
               value={continente}
               onChange={(e) => setContinente(e.target.value)}
               className='w-full border px-3 py-2 rounded'
               required
             >
-              <option value=''>Selecione</option>
+              <option value=''>{t('Select')}</option>
               {CONTINENTES.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -172,14 +174,14 @@ export default function DefinicaoMetadadosPage() {
           </div>
 
           <div>
-            <label className='block font-medium mb-1'>País</label>
+            <label className='block font-medium mb-1'>{t('Country')}</label>
             <select
               value={pais}
               onChange={(e) => setPais(e.target.value)}
               className='w-full border px-3 py-2 rounded'
               required
             >
-              <option value=''>Selecione</option>
+              <option value=''>{t('Select')}</option>
               {PAISES.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -189,14 +191,14 @@ export default function DefinicaoMetadadosPage() {
           </div>
 
           <div>
-            <label className='block font-medium mb-1'>Categoria</label>
+            <label className='block font-medium mb-1'>{t('Category')}</label>
             <select
               value={categoria}
               onChange={(e) => setCategoria(e.target.value)}
               className='w-full border px-3 py-2 rounded'
               required
             >
-              <option value=''>Selecione</option>
+              <option value=''>{t('Select')}</option>
               {CATEGORIAS.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -206,14 +208,14 @@ export default function DefinicaoMetadadosPage() {
           </div>
 
           <div>
-            <label className='block font-medium mb-1'>Sub Categoria</label>
+            <label className='block font-medium mb-1'>{t('Subcategory')}</label>
             <select
               value={subcategoria}
               onChange={(e) => setSubcategoria(e.target.value)}
               className='w-full border px-3 py-2 rounded'
               required
             >
-              <option value=''>Selecione</option>
+              <option value=''>{t('Select')}</option>
               {SUBCATEGORIAS.map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -223,7 +225,7 @@ export default function DefinicaoMetadadosPage() {
           </div>
 
           <div>
-            <label className='block font-medium mb-1'>Especificações</label>
+            <label className='block font-medium mb-1'>{t('Specifications')}</label>
             <div className='flex flex-wrap gap-2 mb-2'>
               {ESPECIFICACOES_VALIDAS.map((esp) => {
                 const selected = especificacao.includes(esp);
@@ -252,14 +254,14 @@ export default function DefinicaoMetadadosPage() {
               disabled={saving}
               className='bg-green-600 text-white px-4 py-2 rounded'
             >
-              {saving ? 'Salvando...' : 'Salvar'}
+              {saving ? t('Saving') : t('Save')}
             </button>
             <button
               type='button'
               onClick={() => router.push(`/dashboard/parceiro/catalogos/${id}`)}
               className='bg-gray-300 px-4 py-2 rounded'
             >
-              Cancelar
+              {t('Cancel')}
             </button>
           </div>
         </form>

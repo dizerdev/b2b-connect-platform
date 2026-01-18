@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import SellerGuard from 'components/SellerGuard';
 import ProductGallery from 'components/shared/ProductGallery';
 import sanitizeHtml from 'sanitize-html';
 
 export default function DetalhesProdutoLojistaPage() {
+  const t = useTranslations('LojistaProducts');
   const { pid } = useParams();
   const router = useRouter();
 
@@ -19,7 +21,6 @@ export default function DetalhesProdutoLojistaPage() {
         if (!res.ok) throw new Error('Erro ao buscar produto');
         const data = await res.json();
         setProduto(data);
-        console.log(data);
       } catch (err) {
         console.error(err);
       }
@@ -28,7 +29,7 @@ export default function DetalhesProdutoLojistaPage() {
   }, [pid]);
 
   if (!produto) {
-    return <div className='p-6'>Carregando produto...</div>;
+    return <div className='p-6'>{t('LoadingProduct')}</div>;
   }
 
   const imagens = produto.produto.imagens || [];
@@ -63,7 +64,7 @@ export default function DetalhesProdutoLojistaPage() {
             onClick={() => router.back()}
             className='text-blue-500 hover:underline'
           >
-            ← Voltar
+            {t('Back')}
           </button>
         </div>
 
@@ -74,7 +75,7 @@ export default function DetalhesProdutoLojistaPage() {
             <ProductGallery images={imagens} />
           ) : (
             <div className='flex items-center justify-center h-80 bg-gray-100 text-gray-500 rounded'>
-              Sem fotos disponíveis
+              {t('NoPhotos')}
             </div>
           )}
 
@@ -83,45 +84,45 @@ export default function DetalhesProdutoLojistaPage() {
             <div className='bg-white rounded-lg shadow p-4'>
               <p className='mb-2'>{produto.produto.nome || '—'}</p>
               <div className='mb-2'>
-                <span className='font-semibold'>Descrição</span>{' '}
+                <span className='font-semibold'>{t('Description')}</span>{' '}
                 <div
                   className='prose max-w-none itens-center'
                   dangerouslySetInnerHTML={{ __html: safeDescription }}
                 />
               </div>
               <p className='mb-2'>
-                <span className='font-semibold'>Preço</span>{' '}
+                <span className='font-semibold'>{t('Price')}</span>{' '}
                 {catalogo?.preco
                   ? `R$ ${catalogo.preco.toFixed(2)}`
-                  : 'Sob consulta'}
+                  : t('OnRequest')}
               </p>
             </div>
 
             <button
               onClick={() =>
                 router.push(
-                  `/dashboard/lojista/vitrines/individual/${catalogo?.fornecedor_id}`
+                  `/dashboard/lojista/vitrines/individual/${catalogo?.fornecedor_id}`,
                 )
               }
               className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700'
             >
-              Ver Vitrine do Fornecedor
+              {t('ViewSupplierShowcase')}
             </button>
           </div>
         </div>
 
         {/* Grades */}
         <div className='bg-white rounded-lg shadow p-4 mt-8'>
-          <h2 className='text-lg font-semibold mb-4'>Grades disponíveis</h2>
+          <h2 className='text-lg font-semibold mb-4'>{t('AvailableGrades')}</h2>
           {produto.grades?.length > 0 ? (
             <table className='w-full border-collapse border'>
               <thead>
                 <tr className='bg-gray-100'>
-                  <th className='border px-4 py-2'>Cor</th>
-                  <th className='border px-4 py-2'>Tamanho</th>
-                  <th className='border px-4 py-2'>Tipo</th>
-                  <th className='border px-4 py-2'>Pronta Entrega</th>
-                  <th className='border px-4 py-2'>Estoque</th>
+                  <th className='border px-4 py-2'>{t('Color')}</th>
+                  <th className='border px-4 py-2'>{t('Size')}</th>
+                  <th className='border px-4 py-2'>{t('Type')}</th>
+                  <th className='border px-4 py-2'>{t('ReadyDelivery')}</th>
+                  <th className='border px-4 py-2'>{t('Stock')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -131,7 +132,7 @@ export default function DetalhesProdutoLojistaPage() {
                     <td className='border px-4 py-2'>{g.tamanho}</td>
                     <td className='border px-4 py-2'>{g.tipo}</td>
                     <td className='border px-4 py-2'>
-                      {g.estoque ? 'Sim' : 'Não'}
+                      {g.estoque ? t('Yes') : t('No')}
                     </td>
                     <td className='border px-4 py-2'>
                       {g.estoque > 0 ? g.estoque : '-'}
@@ -141,7 +142,7 @@ export default function DetalhesProdutoLojistaPage() {
               </tbody>
             </table>
           ) : (
-            <p className='text-gray-500'>Nenhuma grade cadastrada</p>
+            <p className='text-gray-500'>{t('NoGrades')}</p>
           )}
         </div>
       </div>

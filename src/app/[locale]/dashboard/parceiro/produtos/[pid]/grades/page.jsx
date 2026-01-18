@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast, Toaster } from 'react-hot-toast';
+import PartnerGuard from 'components/PartnerGuard';
 
 export default function DefinicaoGradesPage() {
+  const t = useTranslations('DashboardParceiro');
   const router = useRouter();
   const params = useParams();
   const { pid } = params;
@@ -16,7 +19,7 @@ export default function DefinicaoGradesPage() {
   const fetchProduto = async () => {
     try {
       const res = await fetch(`/api/v1/produtos/${pid}`);
-      if (!res.ok) throw new Error('Erro ao buscar produto');
+      if (!res.ok) throw new Error(t('ErrorLoadingData'));
       const data = await res.json();
       setProduto(data);
       if (data.grades && Array.isArray(data.grades)) {
@@ -62,7 +65,7 @@ export default function DefinicaoGradesPage() {
     );
 
     if (gradesValidas.length === 0) {
-      toast.error('Adicione pelo menos uma grade válida.');
+      toast.error(t('AtLeastOneGrade'));
       return;
     }
 
@@ -77,10 +80,10 @@ export default function DefinicaoGradesPage() {
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || 'Erro ao salvar grades');
+        throw new Error(err.error || t('ErrorSavingGrades'));
       }
 
-      toast.success('Grades salvas com sucesso!');
+      toast.success(t('GradesSaved'));
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -90,119 +93,121 @@ export default function DefinicaoGradesPage() {
   }
 
   return (
-    <div className='p-6 max-w-4xl mx-auto'>
-      <h1 className='text-2xl font-bold mb-4'>Definir Grades de Estoque</h1>
+    <PartnerGuard>
+      <div className='p-6 max-w-4xl mx-auto'>
+        <h1 className='text-2xl font-bold mb-4'>{t('DefineStockGrades')}</h1>
 
-      <form onSubmit={handleSubmit} className='space-y-4'>
-        <table className='w-full border border-gray-300'>
-          <thead>
-            <tr className='bg-gray-100'>
-              <th className='border border-gray-300 p-2'>Cor</th>
-              <th className='border border-gray-300 p-2'>Tamanho</th>
-              <th className='border border-gray-300 p-2'>Tipo</th>
-              <th className='border border-gray-300 p-2'>Pronta Entrega</th>
-              <th className='border border-gray-300 p-2'>Estoque</th>
-              <th className='border border-gray-300 p-2'></th>
-            </tr>
-          </thead>
-          <tbody>
-            {grades.map((grade, idx) => (
-              <tr key={idx}>
-                <td className='border border-gray-300 p-2'>
-                  <input
-                    type='text'
-                    className='w-full border rounded p-1'
-                    value={grade.cor}
-                    onChange={(e) => handleChange(idx, 'cor', e.target.value)}
-                    required
-                  />
-                </td>
-                <td className='border border-gray-300 p-2'>
-                  <input
-                    type='text'
-                    className='w-full border rounded p-1'
-                    value={grade.tamanho}
-                    onChange={(e) =>
-                      handleChange(idx, 'tamanho', e.target.value)
-                    }
-                    required
-                  />
-                </td>
-                <td className='border border-gray-300 p-2'>
-                  <select
-                    className='w-full border rounded p-1'
-                    value={grade.tipo}
-                    onChange={(e) => handleChange(idx, 'tipo', e.target.value)}
-                    required
-                  >
-                    <option value=''></option>
-                    <option value='pr'>Par</option>
-                    <option value='cx'>Caixa</option>
-                    <option value='un'>Unitário</option>
-                  </select>
-                </td>
-                <td className='border border-gray-300 p-2'>
-                  <input
-                    type='checkbox'
-                    className='w-full border rounded p-1'
-                    value={grade.pronta_entrega}
-                    checked={grade.pronta_entrega}
-                    onChange={(e) =>
-                      handleChange(idx, 'pronta_entrega', e.target.checked)
-                    }
-                  />
-                </td>
-                <td className='border border-gray-300 p-2'>
-                  <input
-                    type='number'
-                    className='w-full border rounded p-1'
-                    value={grade.estoque}
-                    onChange={(e) =>
-                      handleChange(idx, 'estoque', e.target.value)
-                    }
-                    required
-                  />
-                </td>
-                <td className='border border-gray-300 p-2 text-center'>
-                  <button
-                    type='button'
-                    onClick={() => removerLinha(idx)}
-                    className='bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700'
-                  >
-                    Remover
-                  </button>
-                </td>
+        <form onSubmit={handleSubmit} className='space-y-4'>
+          <table className='w-full border border-gray-300'>
+            <thead>
+              <tr className='bg-gray-100'>
+                <th className='border border-gray-300 p-2'>{t('Color')}</th>
+                <th className='border border-gray-300 p-2'>{t('Size')}</th>
+                <th className='border border-gray-300 p-2'>{t('Type')}</th>
+                <th className='border border-gray-300 p-2'>{t('ReadyDelivery')}</th>
+                <th className='border border-gray-300 p-2'>{t('Stock')}</th>
+                <th className='border border-gray-300 p-2'></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {grades.map((grade, idx) => (
+                <tr key={idx}>
+                  <td className='border border-gray-300 p-2'>
+                    <input
+                      type='text'
+                      className='w-full border rounded p-1'
+                      value={grade.cor}
+                      onChange={(e) => handleChange(idx, 'cor', e.target.value)}
+                      required
+                    />
+                  </td>
+                  <td className='border border-gray-300 p-2'>
+                    <input
+                      type='text'
+                      className='w-full border rounded p-1'
+                      value={grade.tamanho}
+                      onChange={(e) =>
+                        handleChange(idx, 'tamanho', e.target.value)
+                      }
+                      required
+                    />
+                  </td>
+                  <td className='border border-gray-300 p-2'>
+                    <select
+                      className='w-full border rounded p-1'
+                      value={grade.tipo}
+                      onChange={(e) => handleChange(idx, 'tipo', e.target.value)}
+                      required
+                    >
+                      <option value=''></option>
+                      <option value='pr'>{t('Pair')}</option>
+                      <option value='cx'>{t('Box')}</option>
+                      <option value='un'>{t('Unit')}</option>
+                    </select>
+                  </td>
+                  <td className='border border-gray-300 p-2'>
+                    <input
+                      type='checkbox'
+                      className='w-full border rounded p-1'
+                      value={grade.pronta_entrega}
+                      checked={grade.pronta_entrega}
+                      onChange={(e) =>
+                        handleChange(idx, 'pronta_entrega', e.target.checked)
+                      }
+                    />
+                  </td>
+                  <td className='border border-gray-300 p-2'>
+                    <input
+                      type='number'
+                      className='w-full border rounded p-1'
+                      value={grade.estoque}
+                      onChange={(e) =>
+                        handleChange(idx, 'estoque', e.target.value)
+                      }
+                      required
+                    />
+                  </td>
+                  <td className='border border-gray-300 p-2 text-center'>
+                    <button
+                      type='button'
+                      onClick={() => removerLinha(idx)}
+                      className='bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700'
+                    >
+                      {t('Remove')}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
-        <button
-          type='button'
-          onClick={adicionarLinha}
-          className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700'
-        >
-          Adicionar Linha
-        </button>
-
-        <div className='flex gap-2 mt-4'>
-          <button
-            type='submit'
-            disabled={loading}
-            className='bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50'
-          >
-            {loading ? 'Salvando...' : 'Salvar'}
-          </button>
           <button
             type='button'
-            onClick={() => router.push(`/dashboard/parceiro/produtos/${pid}`)}
-            className='bg-gray-300 px-4 py-2 rounded hover:bg-gray-400'
+            onClick={adicionarLinha}
+            className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700'
           >
-            Cancelar
+            {t('AddRow')}
           </button>
-        </div>
-      </form>
-      <Toaster />
-    </div>
+
+          <div className='flex gap-2 mt-4'>
+            <button
+              type='submit'
+              disabled={loading}
+              className='bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50'
+            >
+              {loading ? t('Saving') : t('Save')}
+            </button>
+            <button
+              type='button'
+              onClick={() => router.push(`/dashboard/parceiro/produtos/${pid}`)}
+              className='bg-gray-300 px-4 py-2 rounded hover:bg-gray-400'
+            >
+              {t('Cancel')}
+            </button>
+          </div>
+        </form>
+        <Toaster />
+      </div>
+    </PartnerGuard>
   );
 }

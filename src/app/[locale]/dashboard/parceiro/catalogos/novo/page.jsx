@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast, Toaster } from 'react-hot-toast';
 import PartnerGuard from 'components/PartnerGuard';
 
 export default function CadastroCatalogoPage() {
+  const t = useTranslations('DashboardParceiro');
   const router = useRouter();
 
   const [nome, setNome] = useState('');
@@ -34,7 +36,7 @@ export default function CadastroCatalogoPage() {
         }),
       });
 
-      if (!prepareRes.ok) throw new Error('Erro ao preparar upload');
+      if (!prepareRes.ok) throw new Error(t('UploadError'));
       const { uploadUrls } = await prepareRes.json();
       const uploadData = uploadUrls[0];
 
@@ -48,7 +50,7 @@ export default function CadastroCatalogoPage() {
         method: 'POST',
         body: formData,
       });
-      if (!uploadRes.ok) throw new Error('Erro no upload do arquivo');
+      if (!uploadRes.ok) throw new Error(t('UploadError'));
 
       let status = 'still working';
       while (status === 'still working') {
@@ -62,10 +64,10 @@ export default function CadastroCatalogoPage() {
       }
 
       setImagemUrl(uploadData.ufsUrl);
-      toast.success('Upload concluído!');
+      toast.success(t('UploadComplete'));
     } catch (err) {
       console.error(err);
-      toast.error(err.message || 'Erro no upload');
+      toast.error(err.message || t('UploadError'));
     } finally {
       setLoading(false);
     }
@@ -81,13 +83,13 @@ export default function CadastroCatalogoPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erro ao deletar arquivo');
+      if (!res.ok) throw new Error(data.error || t('UploadError'));
 
       setImagemUrl('');
-      toast.success('Imagem removida com sucesso!');
+      toast.success(t('ImageRemoved'));
     } catch (err) {
       console.error(err);
-      toast.error(err.message || 'Erro ao remover imagem');
+      toast.error(err.message || t('UploadError'));
     }
   };
 
@@ -95,7 +97,7 @@ export default function CadastroCatalogoPage() {
     e.preventDefault();
 
     if (!nome.trim()) {
-      toast.error('O nome é obrigatório.');
+      toast.error(t('NameIsRequired'));
       return;
     }
 
@@ -110,10 +112,10 @@ export default function CadastroCatalogoPage() {
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || 'Erro ao criar catálogo');
+        throw new Error(err.error || t('ErrorCreating'));
       }
 
-      toast.success('Catálogo criado com sucesso!');
+      toast.success(t('CatalogCreated'));
       setTimeout(() => {
         router.push('/dashboard/parceiro/catalogos');
       }, 1500);
@@ -127,12 +129,12 @@ export default function CadastroCatalogoPage() {
   return (
     <PartnerGuard>
       <div className='p-6 max-w-2xl mx-auto'>
-        <h1 className='text-2xl font-bold mb-4'>Cadastrar Catálogo</h1>
+        <h1 className='text-2xl font-bold mb-4'>{t('RegisterCatalog')}</h1>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
             <label className='block text-sm font-medium mb-1' htmlFor='nome'>
-              Nome *
+              {t('NameRequired')}
             </label>
             <input
               id='nome'
@@ -149,7 +151,7 @@ export default function CadastroCatalogoPage() {
               className='block text-sm font-medium mb-1'
               htmlFor='descricao'
             >
-              Descrição
+              {t('Description')}
             </label>
             <textarea
               id='descricao'
@@ -162,7 +164,7 @@ export default function CadastroCatalogoPage() {
 
           <div>
             <label className='block text-sm font-medium mb-1'>
-              Imagem de capa
+              {t('CoverImage')}
             </label>
             {imagemUrl ? (
               <div className='flex items-center gap-2'>
@@ -177,7 +179,7 @@ export default function CadastroCatalogoPage() {
                   className='bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700'
                   disabled={loading}
                 >
-                  Remover
+                  {t('Remove')}
                 </button>
               </div>
             ) : (
@@ -197,14 +199,14 @@ export default function CadastroCatalogoPage() {
               disabled={loading}
               className='bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50'
             >
-              {loading ? 'Salvando...' : 'Salvar'}
+              {loading ? t('Saving') : t('Save')}
             </button>
             <button
               type='button'
               onClick={() => router.push('/dashboard/parceiro/catalogos')}
               className='bg-gray-300 px-4 py-2 rounded hover:bg-gray-400'
             >
-              Cancelar
+              {t('Cancel')}
             </button>
           </div>
         </form>

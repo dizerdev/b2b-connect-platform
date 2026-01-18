@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Lock } from 'lucide-react';
 
 export default function ResetPasswordPage() {
+  const t = useTranslations('Auth');
   const { token } = useParams();
   const router = useRouter();
 
@@ -20,7 +22,7 @@ export default function ResetPasswordPage() {
     const checkToken = async () => {
       try {
         const res = await fetch(`/api/v1/auth/reset/${token}`);
-        if (!res.ok) throw new Error('Token inválido ou expirado');
+        if (!res.ok) throw new Error(t('InvalidOrExpiredToken'));
         setValid(true);
       } catch {
         setValid(false);
@@ -29,12 +31,12 @@ export default function ResetPasswordPage() {
       }
     };
     checkToken();
-  }, [token]);
+  }, [token, t]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirm) {
-      setError('As senhas não coincidem');
+      setError(t('PasswordsDoNotMatch'));
       return;
     }
 
@@ -50,9 +52,9 @@ export default function ResetPasswordPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Erro ao alterar senha');
+      if (!res.ok) throw new Error(data.error || t('ErrorChangingPassword'));
 
-      setMessage('Senha alterada com sucesso! Redirecionando...');
+      setMessage(t('PasswordChanged'));
       setTimeout(() => router.push('/login'), 2000);
     } catch (err) {
       setError(err.message);
@@ -68,7 +70,7 @@ export default function ResetPasswordPage() {
         style={{ backgroundImage: "url('/assets/fundo_login.jpg')" }}
       >
         <div className='absolute inset-0 bg-black/70'></div>
-        <p className='relative z-10 text-white text-lg'>Validando link...</p>
+        <p className='relative z-10 text-white text-lg'>{t('ValidatingLink')}</p>
       </div>
     );
   }
@@ -81,15 +83,15 @@ export default function ResetPasswordPage() {
       >
         <div className='absolute inset-0 bg-black/70'></div>
         <div className='relative z-10 max-w-md w-full bg-white/20 backdrop-blur-lg rounded-2xl shadow-xl p-8 text-center'>
-          <h1 className='text-2xl font-bold text-white mb-4'>Link inválido</h1>
+          <h1 className='text-2xl font-bold text-white mb-4'>{t('InvalidLink')}</h1>
           <p className='text-white/80 mb-4'>
-            Este link de redefinição de senha não é válido ou já expirou.
+            {t('InvalidLinkDescription')}
           </p>
           <button
-            onClick={() => router.push('/forgot-password')}
+            onClick={() => router.push('/forgot')}
             className='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg'
           >
-            Solicitar novo link
+            {t('RequestNewLink')}
           </button>
         </div>
       </div>
@@ -105,13 +107,13 @@ export default function ResetPasswordPage() {
 
       <div className='relative z-10 max-w-md w-full bg-white/20 backdrop-blur-lg rounded-2xl shadow-xl p-8'>
         <h1 className='text-3xl font-bold text-center text-white mb-6'>
-          Redefinir senha
+          {t('ResetPassword')}
         </h1>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
             <label className='block text-sm font-medium text-white'>
-              Nova senha
+              {t('NewPassword')}
             </label>
             <div className='flex items-center border border-white/40 rounded-lg px-3 mt-1 bg-white/20'>
               <Lock className='text-white/70 mr-2' size={18} />
@@ -120,7 +122,7 @@ export default function ResetPasswordPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className='flex-1 py-2 bg-transparent text-white placeholder-white/70 outline-none'
-                placeholder='Digite sua nova senha'
+                placeholder={t('TypeNewPassword')}
                 required
               />
             </div>
@@ -128,7 +130,7 @@ export default function ResetPasswordPage() {
 
           <div>
             <label className='block text-sm font-medium text-white'>
-              Confirmar senha
+              {t('ConfirmPassword')}
             </label>
             <div className='flex items-center border border-white/40 rounded-lg px-3 mt-1 bg-white/20'>
               <Lock className='text-white/70 mr-2' size={18} />
@@ -137,7 +139,7 @@ export default function ResetPasswordPage() {
                 value={confirm}
                 onChange={(e) => setConfirm(e.target.value)}
                 className='flex-1 py-2 bg-transparent text-white placeholder-white/70 outline-none'
-                placeholder='Confirme sua nova senha'
+                placeholder={t('ConfirmNewPassword')}
                 required
               />
             </div>
@@ -148,7 +150,7 @@ export default function ResetPasswordPage() {
             disabled={submitting}
             className='w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition disabled:opacity-50'
           >
-            {submitting ? 'Alterando...' : 'Alterar senha'}
+            {submitting ? t('Changing') : t('ChangePassword')}
           </button>
         </form>
 

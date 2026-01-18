@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 async function fetchUser() {
   try {
@@ -14,10 +15,11 @@ async function fetchUser() {
   }
 }
 
-export default function AdminGuard({ children }) {
+export default function SellerGuard({ children }) {
+  const t = useTranslations('Common');
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
 
   useEffect(() => {
     let ignore = false;
@@ -27,7 +29,7 @@ export default function AdminGuard({ children }) {
       if (!user || user.usuario.papel?.toLowerCase() !== 'lojista') {
         router.replace('/mapa');
       } else {
-        setIsAdmin(true);
+        setIsSeller(true);
       }
       setLoading(false);
     });
@@ -38,10 +40,10 @@ export default function AdminGuard({ children }) {
   }, [router]);
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div>{t('Loading')}</div>;
   }
 
-  if (!isAdmin) {
+  if (!isSeller) {
     return null;
   }
 

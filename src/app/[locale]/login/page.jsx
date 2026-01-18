@@ -3,9 +3,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-// import Cookies from 'js-cookie';
+import { useTranslations } from 'next-intl';
 
 export default function LoginPage() {
+  const t = useTranslations('Auth');
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -18,15 +19,15 @@ export default function LoginPage() {
 
     // Validações simples antes de enviar
     if (!email || !senha) {
-      setErro('E-mail e senha são obrigatórios');
+      setErro(t('EmailAndPasswordRequired'));
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setErro('Formato de e-mail inválido');
+      setErro(t('InvalidEmailFormat'));
       return;
     }
     if (senha.length < 6) {
-      setErro('A senha deve ter no mínimo 6 caracteres');
+      setErro(t('PasswordMinLength'));
       return;
     }
 
@@ -41,18 +42,15 @@ export default function LoginPage() {
 
       if (!res.ok) {
         if (res.status === 401) {
-          throw new Error('Credenciais inválidas');
+          throw new Error(t('InvalidCredentials'));
         }
         if (res.status === 400) {
-          throw new Error('Requisição inválida');
+          throw new Error(t('InvalidRequest'));
         }
-        throw new Error('Erro ao autenticar');
+        throw new Error(t('AuthError'));
       }
 
       const data = await res.json();
-
-      // Salvar token
-      // Cookies.set('token', data.token, { secure: true, sameSite: 'strict' });
 
       // Redirecionar conforme papel
       switch (data.usuario.papel) {
@@ -82,7 +80,7 @@ export default function LoginPage() {
     <div
       className='relative min-h-screen flex items-center justify-center bg-cover bg-center'
       style={{
-        backgroundImage: "url('/assets/fundo_login.jpg')", // substitua pela sua imagem
+        backgroundImage: "url('/assets/fundo_login.jpg')",
       }}
     >
       {/* Overlay com opacidade */}
@@ -91,7 +89,7 @@ export default function LoginPage() {
       {/* Card glass */}
       <div className='relative z-10 max-w-md w-full bg-white/20 backdrop-blur-lg rounded-2xl shadow-xl p-8'>
         <h1 className='text-3xl font-bold text-center text-white mb-6'>
-          Login
+          {t('Login')}
         </h1>
 
         <form onSubmit={handleLogin} className='space-y-4'>
@@ -103,7 +101,7 @@ export default function LoginPage() {
 
           <div>
             <label className='block text-sm font-medium text-white'>
-              E-mail
+              {t('Email')}
             </label>
             <input
               type='email'
@@ -116,7 +114,7 @@ export default function LoginPage() {
 
           <div>
             <label className='block text-sm font-medium text-white'>
-              Senha
+              {t('Password')}
             </label>
             <input
               type='password'
@@ -130,7 +128,7 @@ export default function LoginPage() {
                 href='/forgot'
                 className='text-sm text-blue-300 hover:underline'
               >
-                Esqueceu a senha?
+                {t('ForgotPassword')}
               </a>
             </div>
           </div>
@@ -140,7 +138,7 @@ export default function LoginPage() {
             disabled={loading}
             className='w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50'
           >
-            {loading ? 'Entrando...' : 'Entrar'}
+            {loading ? t('SigningIn') : t('SignIn')}
           </button>
         </form>
       </div>

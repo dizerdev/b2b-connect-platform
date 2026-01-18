@@ -9,7 +9,7 @@ export default function LogoutButton() {
   const router = useRouter();
 
   const handleLogout = async () => {
-    if (!window.confirm('Deseja realmente sair?')) return;
+    if (!window.confirm(t('ConfirmLogout'))) return;
 
     try {
       const token = Cookies.get('token');

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Magnifying glass -->
+  <circle cx="90" cy="85" r="40" fill="#F3E8E0" stroke="#B48264" stroke-width="3"/>
+  <path d="M120 115l35 35" stroke="#B48264" stroke-width="6" stroke-linecap="round"/>
+  <!-- X inside -->
+  <path d="M75 70l30 30M105 70l-30 30" stroke="#D4B8A0" stroke-width="3" stroke-linecap="round"/>
+  <!-- Document behind -->
+  <rect x="110" y="50" width="50" height="65" rx="4" fill="#E8D4C4" opacity="0.5"/>
+  <path d="M120 65h30M120 80h25M120 95h20" stroke="#D4B8A0" stroke-width="2" stroke-linecap="round"/>
+  <!-- Decorative elements -->
+  <circle cx="45" cy="140" r="6" fill="#E8D4C4" opacity="0.5"/>
+  <circle cx="165" cy="160" r="4" fill="#E8D4C4" opacity="0.6"/>
+  <path d="M30 100l10-10M35 105l5-5" stroke="#E8D4C4" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+</svg>

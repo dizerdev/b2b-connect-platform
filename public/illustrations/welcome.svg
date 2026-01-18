@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Globe/World -->
+  <circle cx="100" cy="100" r="60" fill="#F3E8E0" stroke="#B48264" stroke-width="2"/>
+  <ellipse cx="100" cy="100" rx="60" ry="25" fill="none" stroke="#D4B8A0" stroke-width="1.5"/>
+  <ellipse cx="100" cy="100" rx="30" ry="60" fill="none" stroke="#D4B8A0" stroke-width="1.5"/>
+  <path d="M40 100h120" stroke="#D4B8A0" stroke-width="1.5"/>
+  <!-- Shoe silhouette -->
+  <path d="M70 90c0-5 10-15 30-15s30 10 30 15l5 25c0 5-15 10-35 10s-35-5-35-10l5-25z" fill="#B48264" opacity="0.3"/>
+  <!-- Stars/sparkles -->
+  <path d="M50 45l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6z" fill="#B48264" opacity="0.6"/>
+  <path d="M160 55l2 4 5 1-4 4 1 5-4-2-4 2 1-5-4-4 5-1 2-4z" fill="#B48264" opacity="0.5"/>
+  <path d="M45 150l2 4 5 1-4 4 1 5-4-2-4 2 1-5-4-4 5-1 2-4z" fill="#E8D4C4" opacity="0.6"/>
+  <path d="M165 140l2 3 4 1-3 3 1 4-4-2-4 2 1-4-3-3 4-1 2-3z" fill="#E8D4C4" opacity="0.5"/>
+  <!-- Connection lines -->
+  <path d="M35 80c10-5 15-10 25-10M175 90c-10 5-15 15-20 20" stroke="#D4B8A0" stroke-width="1" stroke-dasharray="4 2" opacity="0.5"/>
+</svg>

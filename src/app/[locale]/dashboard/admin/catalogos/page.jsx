@@ -2,56 +2,57 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import AdminGuard from 'components/AdminGuard';
 import { Eye, CheckCircle, Upload, Star } from 'lucide-react';
 
 export default function ListaCatalogosPage() {
+  const t = useTranslations('DashboardAdmin');
   const router = useRouter();
 
   const [catalogos, setCatalogos] = useState([]);
   const [statusFilter, setStatusFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
-  const [userRole, setUserRole] = useState(''); // admin | fornecedor | representante | lojista
+  const [userRole, setUserRole] = useState('');
 
   useEffect(() => {
     async function fetchData() {
       try {
-        // Busca catálogos
         const res = await fetch(
           `/api/v1/catalogos?status=${statusFilter || ''}`
         );
-        if (!res.ok) throw new Error('Erro ao carregar catálogos');
+        if (!res.ok) throw new Error(t('ErrorLoadingCatalogs'));
         const data = await res.json();
         setCatalogos(data.catalogos);
 
         const userRes = await fetch('/api/v1/auth/me');
-        if (!userRes.ok) throw new Error('Erro ao carregar usuário');
+        if (!userRes.ok) throw new Error(t('ErrorLoadingData'));
         const userData = await userRes.json();
         setUserRole(userData.usuario.papel);
       } catch (err) {
         console.error(err);
-        setMessage('Erro ao carregar dados');
+        setMessage(t('ErrorLoadingData'));
       } finally {
         setLoading(false);
       }
     }
     fetchData();
-  }, [statusFilter]);
+  }, [statusFilter, t]);
 
   async function handlePublicar(id) {
     try {
       const res = await fetch(`/api/v1/catalogos/${id}/publicar`, {
         method: 'POST',
       });
-      if (!res.ok) throw new Error('Erro ao publicar catálogo');
-      setMessage('Catálogo publicado com sucesso');
+      if (!res.ok) throw new Error(t('ErrorPublishing'));
+      setMessage(t('CatalogPublished'));
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     } catch (err) {
-      setMessage('Erro ao publicar catálogo');
+      setMessage(t('ErrorPublishing'));
     }
   }
 
@@ -60,13 +61,13 @@ export default function ListaCatalogosPage() {
       const res = await fetch(`/api/v1/catalogos/${id}/aprovar`, {
         method: 'POST',
       });
-      if (!res.ok) throw new Error('Erro ao aprovar catálogo');
-      setMessage('Catálogo aprovado com sucesso');
+      if (!res.ok) throw new Error(t('ErrorApproving'));
+      setMessage(t('CatalogApproved'));
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     } catch (err) {
-      setMessage('Erro ao aprovar catálogo');
+      setMessage(t('ErrorApproving'));
     }
   }
 
@@ -75,13 +76,13 @@ export default function ListaCatalogosPage() {
       const res = await fetch(`/api/v1/catalogos/${id}/reverter`, {
         method: 'POST',
       });
-      if (!res.ok) throw new Error('Erro ao reverter catálogo');
-      setMessage('Catálogo revertido para pendente com sucesso');
+      if (!res.ok) throw new Error(t('ErrorReverting'));
+      setMessage(t('CatalogReverted'));
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     } catch (err) {
-      setMessage('Erro ao reverter catálogo');
+      setMessage(t('ErrorReverting'));
     }
   }
 
@@ -92,27 +93,27 @@ export default function ListaCatalogosPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ rating }),
       });
-      if (!res.ok) throw new Error('Erro ao avaliar catálogo');
-      setMessage('Avaliação registrada com sucesso');
+      if (!res.ok) throw new Error(t('ErrorRating'));
+      setMessage(t('RatingRegistered'));
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     } catch (err) {
-      setMessage('Erro ao avaliar catálogo');
+      setMessage(t('ErrorRating'));
     }
   }
-  if (loading) return <p>Carregando...</p>;
+  if (loading) return <p>{t('Loading')}</p>;
 
   return (
     <AdminGuard>
       <div className='p-6'>
         <div className='flex justify-between items-center mb-6'>
-          <h1 className='text-3xl font-bold'>📚 Lista de Catálogos</h1>
+          <h1 className='text-3xl font-bold'>{t('CatalogsList')}</h1>
           <Link
             href='/dashboard/admin'
             className='text-blue-600 hover:underline'
           >
-            ← Voltar
+            {t('Back')}
           </Link>
         </div>
 
@@ -125,10 +126,10 @@ export default function ListaCatalogosPage() {
             onChange={(e) => setStatusFilter(e.target.value)}
             className='border px-3 py-2 rounded-lg shadow-sm'
           >
-            <option value=''>Todos os status</option>
-            <option value='pendente_aprovacao'>Pendente</option>
-            <option value='aprovado'>Aprovado</option>
-            <option value='publicado'>Publicado</option>
+            <option value=''>{t('AllStatus')}</option>
+            <option value='pendente_aprovacao'>{t('Pending')}</option>
+            <option value='aprovado'>{t('Approved')}</option>
+            <option value='publicado'>{t('Published')}</option>
           </select>
         </div>
 
@@ -137,12 +138,12 @@ export default function ListaCatalogosPage() {
           <table className='w-full text-left border-collapse'>
             <thead className='bg-gray-100 text-gray-700'>
               <tr>
-                <th className='px-4 py-3'>Capa</th>
-                <th className='px-4 py-3'>Nome</th>
-                <th className='px-4 py-3'>Status</th>
-                <th className='px-4 py-3'>Rating</th>
-                <th className='px-4 py-3'>Criado em</th>
-                <th className='px-4 py-3'>Ações</th>
+                <th className='px-4 py-3'>{t('Cover')}</th>
+                <th className='px-4 py-3'>{t('Name')}</th>
+                <th className='px-4 py-3'>{t('Status')}</th>
+                <th className='px-4 py-3'>{t('Rating')}</th>
+                <th className='px-4 py-3'>{t('CreatedAt')}</th>
+                <th className='px-4 py-3'>{t('Actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -156,7 +157,6 @@ export default function ListaCatalogosPage() {
                   {/* Miniatura da capa */}
                   <td className='px-4 py-3'>
                     <div className='w-16 h-16 bg-gray-200 rounded flex items-center justify-center overflow-hidden'>
-                      {/* Quando tiver imagem real, trocar src pelo cat.capa */}
                       <img
                         src={cat.imagem_url || '/assets/empty.jpg'}
                         alt={`Imagem ${idx}`}
@@ -205,7 +205,7 @@ export default function ListaCatalogosPage() {
                       }
                       className='flex items-center gap-1 px-3 py-1 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition'
                     >
-                      <Eye size={16} /> Ver
+                      <Eye size={16} /> {t('View')}
                     </button>
 
                     {userRole === 'administrador' &&
@@ -214,7 +214,7 @@ export default function ListaCatalogosPage() {
                           onClick={() => handleAprovar(cat.id)}
                           className='flex items-center gap-1 px-3 py-1 text-sm bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition'
                         >
-                          <CheckCircle size={16} /> Aprovar
+                          <CheckCircle size={16} /> {t('Approve')}
                         </button>
                       )}
 
@@ -224,7 +224,7 @@ export default function ListaCatalogosPage() {
                           onClick={() => handlePublicar(cat.id)}
                           className='flex items-center gap-1 px-3 py-1 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition'
                         >
-                          <Upload size={16} /> Publicar
+                          <Upload size={16} /> {t('Publish')}
                         </button>
                       )}
 
@@ -234,7 +234,7 @@ export default function ListaCatalogosPage() {
                           onClick={() => handleReverter(cat.id)}
                           className='flex items-center gap-1 px-3 py-1 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition'
                         >
-                          <Upload size={16} /> Reverter
+                          <Upload size={16} /> {t('Revert')}
                         </button>
                       )}
 
@@ -246,7 +246,7 @@ export default function ListaCatalogosPage() {
                         }
                         className='border px-2 py-1 rounded text-sm'
                       >
-                        <option value=''>Avaliar</option>
+                        <option value=''>{t('Rate')}</option>
                         {[1, 2, 3, 4, 5].map((n) => (
                           <option key={n} value={n}>
                             {n}

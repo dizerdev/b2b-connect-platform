@@ -1,15 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Footprints, Hammer, Sparkles, Scissors } from 'lucide-react';
 import SellerGuard from 'components/SellerGuard';
 import MapaMundi from 'components/MapaMundi';
 import Section from 'components/shared/Section';
+import Skeleton from 'components/ui/Skeleton';
 
 export default function DashboardLojista() {
+  const t = useTranslations('DashboardLojista');
   const [topCalcados, setTopCalcados] = useState([]);
   const [topAcessorios, setTopAcessorios] = useState([]);
   const [topMaquinas, setTopMaquinas] = useState([]);
   const [topCouros, setTopCouros] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const parceiros = [
     {
@@ -73,7 +78,7 @@ export default function DashboardLojista() {
       href: '/dashboard/lojista/vitrines/principal?pais=África%20do%20Sul',
     },
     {
-      nome: 'New Delphi',
+      nome: 'New Delhi',
       x: '63.5%',
       y: '43%',
       href: '/dashboard/lojista/vitrines/principal?pais=Índia',
@@ -100,15 +105,22 @@ export default function DashboardLojista() {
       nome: 'Austrália',
       x: '78%',
       y: '82%',
-      href: '/dashboard/lojista/vitrines/principal?pais=Autrália',
+      href: '/dashboard/lojista/vitrines/principal?pais=Austrália',
     },
   ];
 
   useEffect(() => {
-    fetchCatalogos('?categoria=Calçados', setTopCalcados);
-    fetchCatalogos('?categoria=Acessórios', setTopAcessorios);
-    fetchCatalogos('?categoria=Máquinas', setTopMaquinas);
-    fetchCatalogos('?categoria=Couros', setTopCouros);
+    async function loadData() {
+      setLoading(true);
+      await Promise.all([
+        fetchCatalogos('?categoria=Calçados', setTopCalcados),
+        fetchCatalogos('?categoria=Acessórios', setTopAcessorios),
+        fetchCatalogos('?categoria=Máquinas', setTopMaquinas),
+        fetchCatalogos('?categoria=Couros', setTopCouros),
+      ]);
+      setLoading(false);
+    }
+    loadData();
   }, []);
 
   async function fetchCatalogos(query = '', setter) {
@@ -121,35 +133,77 @@ export default function DashboardLojista() {
       setter(data.catalogos);
     } catch (err) {
       console.error(err);
+      setter([]);
     }
   }
 
   return (
     <SellerGuard>
-      <div className='min-h-[30vh] flex flex-col'>
-        <MapaMundi parceiros={parceiros} />
+      <div className='min-h-screen'>
+        {/* Hero Section with Map */}
+        <section className='relative py-6'>
+          {/* Background gradient */}
+          <div
+            className='
+            absolute inset-0
+            bg-gradient-to-b from-[var(--color-primary-50)] via-transparent to-transparent
+            pointer-events-none
+            -z-10
+          '
+          />
+
+          {/* Header text */}
+          <div className='text-center mb-8'>
+            <h1
+              className='
+              text-3xl md:text-4xl font-heading font-bold
+              text-[var(--color-gray-900)]
+              mb-2
+            '
+            >
+              Explore o Mercado Global
+            </h1>
+          </div>
+
+          {/* Map */}
+          <MapaMundi parceiros={parceiros} />
+        </section>
+
+        {/* Category Sections */}
+        <div className='max-w-7xl mx-auto px-4 pb-12'>
+          <Section
+            title={t('TopFootwear')}
+            icon={<Footprints size={20} />}
+            data={topCalcados}
+            filter='categoria=Calçados'
+            loading={loading}
+          />
+
+          <Section
+            title={t('TopAccessories')}
+            icon={<Sparkles size={20} />}
+            data={topAcessorios}
+            filter='categoria=Acessórios'
+            loading={loading}
+          />
+
+          <Section
+            title={t('TopMachines')}
+            icon={<Hammer size={20} />}
+            data={topMaquinas}
+            filter='categoria=Máquinas'
+            loading={loading}
+          />
+
+          <Section
+            title={t('TopLeathers')}
+            icon={<Scissors size={20} />}
+            data={topCouros}
+            filter='categoria=Couros'
+            loading={loading}
+          />
+        </div>
       </div>
-      {/* SECTIONS FIXAS */}
-      <Section
-        title='Top Calçados'
-        data={topCalcados}
-        filter={'categoria=Calçados'}
-      />
-      <Section
-        title='Top Acessórios'
-        data={topAcessorios}
-        filter={'categoria=Acessórios'}
-      />
-      <Section
-        title='Top Máquinas'
-        data={topMaquinas}
-        filter={'categoria=Máquinas'}
-      />
-      <Section
-        title='Top Couros'
-        data={topCouros}
-        filter={'categoria=Couros'}
-      />
     </SellerGuard>
   );
 }

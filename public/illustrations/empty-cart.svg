@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Cart -->
+  <path d="M50 70h100l-10 60H60L50 70z" fill="#F3E8E0" stroke="#B48264" stroke-width="2"/>
+  <path d="M60 130l-5 30h90l-5-30" fill="#F3E8E0" stroke="#B48264" stroke-width="2"/>
+  <!-- Wheels -->
+  <circle cx="75" cy="170" r="10" fill="#B48264"/>
+  <circle cx="125" cy="170" r="10" fill="#B48264"/>
+  <!-- Empty indicator -->
+  <path d="M85 95h30M100 80v30" stroke="#D4B8A0" stroke-width="3" stroke-linecap="round"/>
+  <!-- Decorative dots -->
+  <circle cx="40" cy="50" r="4" fill="#E8D4C4" opacity="0.6"/>
+  <circle cx="160" cy="60" r="3" fill="#E8D4C4" opacity="0.6"/>
+  <circle cx="170" cy="150" r="5" fill="#E8D4C4" opacity="0.4"/>
+</svg>

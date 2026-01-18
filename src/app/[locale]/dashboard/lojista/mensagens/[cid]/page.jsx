@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast, Toaster } from 'react-hot-toast';
 import SellerGuard from 'components/SellerGuard';
 
 export default function EnvioMensagemPage() {
+  const t = useTranslations('LojistaMessages');
   const [mensagem, setMensagem] = useState('');
   const [loading, setLoading] = useState(false);
   const [catalogo, setCatalogo] = useState(null);
@@ -22,20 +24,20 @@ export default function EnvioMensagemPage() {
         const res = await fetch(`/api/v1/catalogos/${cid}`, {
           cache: 'no-store',
         });
-        if (!res.ok) throw new Error('Erro ao carregar catálogo.');
+        if (!res.ok) throw new Error(t('ErrorLoading'));
         const data = await res.json();
         setCatalogo(data.catalogo);
       } catch (err) {
-        toast.error(err.message || 'Erro ao carregar catálogo.');
+        toast.error(err.message || t('ErrorLoading'));
       }
     }
 
     fetchCatalogo();
-  }, [cid]);
+  }, [cid, t]);
 
   async function handleEnviar() {
     if (!mensagem.trim()) {
-      toast.error('Digite uma mensagem antes de enviar.');
+      toast.error(t('TypeMessage'));
       return;
     }
 
@@ -50,41 +52,41 @@ export default function EnvioMensagemPage() {
         }),
       });
 
-      if (!res.ok) throw new Error('Erro ao enviar mensagem.');
+      if (!res.ok) throw new Error(t('ErrorSending'));
 
-      toast.success('Mensagem enviada com sucesso!');
+      toast.success(t('SuccessSending'));
       router.push('/dashboard/lojista/mensagens');
     } catch (err) {
-      toast.error(err.message || 'Erro inesperado.');
+      toast.error(err.message || t('ErrorSending'));
     } finally {
       setLoading(false);
     }
   }
 
-  if (!catalogo) return <p className='p-4'>Carregando catálogo...</p>;
+  if (!catalogo) return <p className='p-4'>{t('LoadingCatalog')}</p>;
 
   return (
     <SellerGuard>
       <div className='px-4 py-3 md:px-10 md:py-3 w-full'>
         <div className='flex justify-between items-center mb-4'>
-          <h1 className='text-2xl font-bold mb-4'>Solicitar atendimento</h1>
+          <h1 className='text-2xl font-bold mb-4'>{t('RequestService')}</h1>
           <button
             className='text-blue-500 hover:underline'
             onClick={() => router.back()}
           >
-            ← Voltar
+            {t('Back')}
           </button>
         </div>
 
         {/* Catálogo */}
         <div className='mb-4'>
-          <label className='block text-sm font-medium mb-1'>Catálogo</label>
+          <label className='block text-sm font-medium mb-1'>{t('Catalog')}</label>
           <p className='text-gray-700'>{catalogo.nome}</p>
         </div>
 
         {/* Mensagem */}
         <div className='mb-4'>
-          <label className='block text-sm font-medium mb-1'>Mensagem</label>
+          <label className='block text-sm font-medium mb-1'>{t('Message')}</label>
           <textarea
             className='w-full border rounded-lg p-2 focus:ring focus:ring-blue-500'
             rows={5}
@@ -93,7 +95,7 @@ export default function EnvioMensagemPage() {
             maxLength={500}
           />
           <p className='text-sm text-gray-500 mt-1'>
-            {mensagem.length}/500 caracteres
+            {mensagem.length}/500 {t('Characters')}
           </p>
         </div>
 
@@ -103,7 +105,7 @@ export default function EnvioMensagemPage() {
           disabled={loading || !mensagem.trim()}
           className='bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50'
         >
-          {loading ? 'Enviando...' : 'Enviar'}
+          {loading ? t('Sending') : t('Send')}
         </button>
         <Toaster />
       </div>

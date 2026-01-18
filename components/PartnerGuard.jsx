@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 async function fetchUser() {
   try {
@@ -14,10 +15,11 @@ async function fetchUser() {
   }
 }
 
-export default function AdminGuard({ children }) {
+export default function PartnerGuard({ children }) {
+  const t = useTranslations('Common');
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isPartner, setIsPartner] = useState(false);
 
   useEffect(() => {
     let ignore = false;
@@ -32,7 +34,7 @@ export default function AdminGuard({ children }) {
       ) {
         router.replace('/mapa');
       } else {
-        setIsAdmin(true);
+        setIsPartner(true);
       }
       setLoading(false);
     });
@@ -43,10 +45,10 @@ export default function AdminGuard({ children }) {
   }, [router]);
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div>{t('Loading')}</div>;
   }
 
-  if (!isAdmin) {
+  if (!isPartner) {
     return null;
   }
 

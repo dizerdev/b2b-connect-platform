@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Chat bubbles -->
+  <rect x="40" y="50" width="80" height="55" rx="8" fill="#F3E8E0" stroke="#B48264" stroke-width="2"/>
+  <path d="M60 105l-15 20v-20" fill="#F3E8E0" stroke="#B48264" stroke-width="2"/>
+  <!-- Empty lines in bubble -->
+  <path d="M55 70h50M55 85h35" stroke="#D4B8A0" stroke-width="3" stroke-linecap="round"/>
+  <!-- Second bubble (empty) -->
+  <rect x="90" y="100" width="70" height="45" rx="8" fill="#E8D4C4" opacity="0.6" stroke="#D4B8A0" stroke-width="2"/>
+  <path d="M145 145l12 15v-15" fill="#E8D4C4" opacity="0.6" stroke="#D4B8A0" stroke-width="2"/>
+  <!-- Decorative dots -->
+  <circle cx="170" cy="60" r="5" fill="#E8D4C4" opacity="0.5"/>
+  <circle cx="35" cy="150" r="4" fill="#E8D4C4" opacity="0.6"/>
+  <circle cx="175" cy="130" r="3" fill="#E8D4C4" opacity="0.4"/>
+  <!-- Zzz for inactive -->
+  <text x="130" y="75" font-family="Arial" font-size="14" fill="#D4B8A0" opacity="0.7">z</text>
+  <text x="140" y="65" font-family="Arial" font-size="12" fill="#D4B8A0" opacity="0.5">z</text>
+  <text x="148" y="57" font-family="Arial" font-size="10" fill="#D4B8A0" opacity="0.3">z</text>
+</svg>

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import LogoutButton from 'components/ui/auth/LogoutButton';
 import WhatsappButton from 'components/shared/WhatsappButton';
 import Carousel from 'components/shared/Carousel';
@@ -10,112 +11,98 @@ import { useState } from 'react';
 import Loader from 'components/shared/Loader';
 import LanguageSwitcher from 'components/shared/LanguageSwitcher';
 
-const navLinks = [
-  { href: '/dashboard/lojista', label: 'Home' },
-  { href: '/dashboard/lojista/vitrines/principal', label: 'Pesquisar' },
-  { href: 'https://calçadistabrasil.com.br/', label: 'Galeria Internacional' },
-  { href: '/dashboard/lojista/mensagens', label: 'Mensagens' },
-];
-
-const produtos = [
-  {
-    nome: 'Palm Springs',
-    status: 'Disponível',
-    rating: 5,
-    criadoEm: '',
-    link: '/dashboard/lojista/vitrines/catalogos/8c32b935-4770-41bb-aebe-9b90b05c0d07',
-    imagemUrl: '/assets/destaques/palm_springs.png',
-  },
-  {
-    nome: 'Sneaker Bota',
-    status: 'Disponível',
-    rating: 5,
-    criadoEm: '2025-09-30T15:49:17Z',
-    link: '/dashboard/lojista/vitrines/catalogos/f4e9d37b-9461-43f1-86d6-ad8d3aa9a011',
-    imagemUrl: '/assets/destaques/Bott.png',
-  },
-  {
-    nome: 'Sneaker Brasil',
-    status: 'Disponível',
-    rating: 5,
-    criadoEm: '',
-    link: '/dashboard/lojista/vitrines/catalogos/8378af3c-9252-4c98-816a-4559b64ddec2',
-    imagemUrl: '/assets/destaques/Sneaker_Preto_Destaque.png',
-  },
-  {
-    nome: 'Micassim',
-    status: 'Disponível',
-    rating: 5,
-    criadoEm: '',
-    link: '/dashboard/lojista/vitrines/catalogos/754e12ed-2b35-4145-9ced-ad769106ca27',
-    imagemUrl: '/assets/destaques/hoje_2.png',
-  },
-  {
-    nome: 'Arakelian',
-    status: 'Disponível',
-    rating: 5,
-    criadoEm: '',
-    link: '/dashboard/lojista/vitrines/principal',
-    imagemUrl: '/assets/destaques/Calçado.png',
-  },
-  {
-    nome: 'Sneaker Brasil',
-    status: 'Disponível',
-    rating: 5,
-    criadoEm: '',
-    link: '/dashboard/lojista/vitrines/catalogos/8378af3c-9252-4c98-816a-4559b64ddec2',
-    imagemUrl: '/assets/destaques/PC_001_Destaque.png',
-  },
-  {
-    nome: 'Chinelos',
-    status: 'Disponível',
-    rating: 5,
-    criadoEm: '',
-    link: '/dashboard/lojista/vitrines/principal',
-    imagemUrl: '/assets/destaques/Chinelo_destaque.png',
-  },
-  {
-    nome: 'Full Sneaker',
-    status: 'Disponível',
-    rating: 5,
-    criadoEm: '',
-    link: '/dashboard/lojista/vitrines/principal',
-    imagemUrl: '/assets/destaques/full_sneaker.png',
-  },
-  {
-    nome: 'Arakelian',
-    status: 'Disponível',
-    rating: 5,
-    criadoEm: '',
-    link: '/dashboard/lojista/vitrines/principal',
-    imagemUrl: '/assets/destaques/Arakelian.png',
-  },
-  {
-    nome: 'Sneaker Brasil',
-    status: 'Disponível',
-    rating: 5,
-    criadoEm: '',
-    link: '/dashboard/lojista/vitrines/catalogos/8378af3c-9252-4c98-816a-4559b64ddec2',
-    imagemUrl: '/assets/destaques/Sneaker_Branco_Destaque.png',
-  },
-];
-
-const marcas = [
-  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
-  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
-  { src: '/assets/logos/shoesnetworld.png', alt: 'Shoesnetworld' },
-  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
-  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
-  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
-  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
-  { src: '/assets/logos/shoesnetworld.png', alt: 'Shoesnetworld' },
-  { src: '/assets/logos/logo_palm_springs.jpg', alt: 'Palm Springs' },
-  { src: '/assets/logos/logo_akelian.png', alt: 'Akelian' },
-  { src: '/assets/logos/logo_sneakers_brasil.png', alt: 'Sneakers Brasil' },
-];
-
 export default function DashboardLayout({ children }) {
+  const t = useTranslations('DashboardLojista');
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const navLinks = [
+    { href: '/dashboard/lojista', label: t('Home') },
+    { href: '/dashboard/lojista/vitrines/principal', label: t('Search') },
+    { href: '/dashboard/lojista/mensagens', label: t('Messages') },
+  ];
+
+  const produtos = [
+    {
+      nome: 'Palm Springs',
+      status: t('Available'),
+      rating: 5,
+      criadoEm: '',
+      link: '/dashboard/lojista/vitrines/catalogos/8c32b935-4770-41bb-aebe-9b90b05c0d07',
+      imagemUrl: '/assets/destaques/palm_springs.png',
+    },
+    {
+      nome: 'Sneaker Bota',
+      status: t('Available'),
+      rating: 5,
+      criadoEm: '2025-09-30T15:49:17Z',
+      link: '/dashboard/lojista/vitrines/catalogos/f4e9d37b-9461-43f1-86d6-ad8d3aa9a011',
+      imagemUrl: '/assets/destaques/Bott.png',
+    },
+    {
+      nome: 'Sneaker Brasil',
+      status: t('Available'),
+      rating: 5,
+      criadoEm: '',
+      link: '/dashboard/lojista/vitrines/catalogos/8378af3c-9252-4c98-816a-4559b64ddec2',
+      imagemUrl: '/assets/destaques/Sneaker_Preto_Destaque.png',
+    },
+    {
+      nome: 'Micassim',
+      status: t('Available'),
+      rating: 5,
+      criadoEm: '',
+      link: '/dashboard/lojista/vitrines/catalogos/754e12ed-2b35-4145-9ced-ad769106ca27',
+      imagemUrl: '/assets/destaques/hoje_2.png',
+    },
+    {
+      nome: 'Arakelian',
+      status: t('Available'),
+      rating: 5,
+      criadoEm: '',
+      link: '/dashboard/lojista/vitrines/principal',
+      imagemUrl: '/assets/destaques/Calçado.png',
+    },
+    {
+      nome: 'Sneaker Brasil',
+      status: t('Available'),
+      rating: 5,
+      criadoEm: '',
+      link: '/dashboard/lojista/vitrines/catalogos/8378af3c-9252-4c98-816a-4559b64ddec2',
+      imagemUrl: '/assets/destaques/PC_001_Destaque.png',
+    },
+    {
+      nome: 'Chinelos',
+      status: t('Available'),
+      rating: 5,
+      criadoEm: '',
+      link: '/dashboard/lojista/vitrines/principal',
+      imagemUrl: '/assets/destaques/Chinelo_destaque.png',
+    },
+    {
+      nome: 'Full Sneaker',
+      status: t('Available'),
+      rating: 5,
+      criadoEm: '',
+      link: '/dashboard/lojista/vitrines/principal',
+      imagemUrl: '/assets/destaques/full_sneaker.png',
+    },
+    {
+      nome: 'Arakelian',
+      status: t('Available'),
+      rating: 5,
+      criadoEm: '',
+      link: '/dashboard/lojista/vitrines/principal',
+      imagemUrl: '/assets/destaques/Arakelian.png',
+    },
+    {
+      nome: 'Sneaker Brasil',
+      status: t('Available'),
+      rating: 5,
+      criadoEm: '',
+      link: '/dashboard/lojista/vitrines/catalogos/8378af3c-9252-4c98-816a-4559b64ddec2',
+      imagemUrl: '/assets/destaques/Sneaker_Branco_Destaque.png',
+    },
+  ];
   return (
     <div className='flex min-h-screen flex-col'>
       {/* Header */}
@@ -179,9 +166,9 @@ export default function DashboardLayout({ children }) {
         <div className='flex flex-col items-center space-y-2 sm:flex-row sm:justify-between sm:space-y-0'>
           <span>&copy; {new Date().getFullYear()} Shoesnetworld</span>
           <div className='flex space-x-4'>
-            <Link href='/public/contato'>Contato</Link>
-            <Link href='/public/suporte'>Suporte</Link>
-            <Link href='/public/sobre'>Sobre</Link>
+            <Link href='/public/contato'>{t('Contact')}</Link>
+            <Link href='/public/suporte'>{t('Support')}</Link>
+            <Link href='/public/sobre'>{t('About')}</Link>
           </div>
         </div>
       </footer>

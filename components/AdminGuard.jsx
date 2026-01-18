@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 async function fetchUser() {
   try {
@@ -15,6 +16,7 @@ async function fetchUser() {
 }
 
 export default function AdminGuard({ children }) {
+  const t = useTranslations('Common');
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -38,7 +40,7 @@ export default function AdminGuard({ children }) {
   }, [router]);
 
   if (loading) {
-    return <div>Carregando...</div>;
+    return <div>{t('Loading')}</div>;
   }
 
   if (!isAdmin) {

@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { Mail } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function ForgotPasswordPage() {
+  const t = useTranslations('Auth');
   const router = useRouter();
 
   const [email, setEmail] = useState('');
@@ -27,9 +29,9 @@ export default function ForgotPasswordPage() {
 
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data.error || 'Erro ao enviar e-mail');
+      if (!res.ok) throw new Error(data.error || t('ErrorSendingEmail'));
 
-      setMessage('Instruções enviadas! Verifique seu e-mail.');
+      setMessage(t('InstructionsSent'));
     } catch (err) {
       setError(err.message);
     } finally {
@@ -46,17 +48,16 @@ export default function ForgotPasswordPage() {
 
       <div className='relative z-10 max-w-md w-full bg-white/20 backdrop-blur-lg rounded-2xl shadow-xl p-8'>
         <h1 className='text-3xl font-bold text-center text-white mb-6'>
-          Recuperar senha
+          {t('RecoverPassword')}
         </h1>
         <p className='text-white/80 text-center mb-6'>
-          Digite seu e-mail cadastrado e enviaremos as instruções para redefinir
-          sua senha.
+          {t('RecoverPasswordDescription')}
         </p>
 
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
             <label className='block text-sm font-medium text-white'>
-              E-mail
+              {t('Email')}
             </label>
             <div className='flex items-center border border-white/40 rounded-lg px-3 mt-1 bg-white/20'>
               <Mail className='text-white/70 mr-2' size={18} />
@@ -75,9 +76,8 @@ export default function ForgotPasswordPage() {
             type='submit'
             disabled={loading}
             className='w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition disabled:opacity-50'
-            onClick={() => router.push('/login')}
           >
-            {loading ? 'Enviando...' : 'Enviar instruções'}
+            {loading ? t('Sending') : t('SendInstructions')}
           </button>
         </form>
 

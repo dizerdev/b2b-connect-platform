@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import PartnerGuard from 'components/PartnerGuard';
+import { EmptyState } from 'components/ui';
 import Link from 'next/link';
 import { Eye, Star, SquarePen } from 'lucide-react';
 
 export default function ListaCatalogosPage() {
+  const t = useTranslations('DashboardParceiro');
   const router = useRouter();
 
   const [catalogos, setCatalogos] = useState([]);
@@ -18,20 +21,20 @@ export default function ListaCatalogosPage() {
     async function fetchData() {
       try {
         const res = await fetch(
-          `/api/v1/catalogos/usuario?status=${statusFilter || ''}`
+          `/api/v1/catalogos/usuario?status=${statusFilter || ''}`,
         );
-        if (!res.ok) throw new Error('Erro ao carregar catálogos');
+        if (!res.ok) throw new Error(t('ErrorLoadingData'));
         const data = await res.json();
         setCatalogos(data.catalogos);
       } catch (err) {
         console.error(err);
-        setMessage('Erro ao carregar dados');
+        setMessage(t('ErrorLoadingData'));
       } finally {
         setLoading(false);
       }
     }
     fetchData();
-  }, [statusFilter, router]);
+  }, [statusFilter, router, t]);
 
   function handleCriar() {
     router.push('/dashboard/parceiro/catalogos/novo');
@@ -41,25 +44,25 @@ export default function ListaCatalogosPage() {
     router.push(`/dashboard/parceiro/catalogos/${id}/editar`);
   }
 
-  if (loading) return <p className='p-4'>Carregando...</p>;
+  if (loading) return <p className='p-4'>{t('Loading')}</p>;
 
   return (
     <PartnerGuard>
       <div className='p-6'>
         <div className='flex justify-between items-center mb-6'>
-          <h1 className='text-3xl font-bold'>📚 Lista de Catálogos</h1>
+          <h1 className='text-3xl font-bold'>{t('CatalogsList')}</h1>
           <div className='flex gap-4'>
             <Link
               href='/dashboard/parceiro'
               className='text-sm text-blue-500 hover:underline'
             >
-              ← Voltar
+              {t('Back')}
             </Link>
             <button
               onClick={handleCriar}
               className='bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition'
             >
-              Novo Catálogo
+              {t('NewCatalog')}
             </button>
           </div>
         </div>
@@ -74,10 +77,10 @@ export default function ListaCatalogosPage() {
             onChange={(e) => setStatusFilter(e.target.value)}
             className='border px-3 py-2 rounded-lg shadow-sm'
           >
-            <option value=''>Todos os status</option>
-            <option value='pendente_aprovacao'>Pendente</option>
-            <option value='aprovado'>Aprovado</option>
-            <option value='publicado'>Publicado</option>
+            <option value=''>{t('AllStatus')}</option>
+            <option value='pendente_aprovacao'>{t('Pending')}</option>
+            <option value='aprovado'>{t('Approved')}</option>
+            <option value='publicado'>{t('Published')}</option>
           </select>
         </div>
 
@@ -86,12 +89,12 @@ export default function ListaCatalogosPage() {
           <table className='w-full text-left border-collapse'>
             <thead className='bg-gray-100 text-gray-700'>
               <tr>
-                <th className='px-4 py-3'>Capa</th>
-                <th className='px-4 py-3'>Nome</th>
-                <th className='px-4 py-3'>Status</th>
-                <th className='px-4 py-3'>Rating</th>
-                <th className='px-4 py-3'>Criado em</th>
-                <th className='px-4 py-3'>Ações</th>
+                <th className='px-4 py-3'>{t('Cover')}</th>
+                <th className='px-4 py-3'>{t('Name')}</th>
+                <th className='px-4 py-3'>{t('Status')}</th>
+                <th className='px-4 py-3'>{t('Rating')}</th>
+                <th className='px-4 py-3'>{t('CreatedAt')}</th>
+                <th className='px-4 py-3'>{t('Actions')}</th>
               </tr>
             </thead>
             <tbody>
@@ -123,8 +126,8 @@ export default function ListaCatalogosPage() {
                         cat.status === 'pendente_aprovacao'
                           ? 'bg-yellow-100 text-yellow-700'
                           : cat.status === 'aprovado'
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-blue-100 text-blue-700'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-blue-100 text-blue-700'
                       }`}
                     >
                       {cat.status}
@@ -153,19 +156,23 @@ export default function ListaCatalogosPage() {
                       }
                       className='flex items-center gap-1 px-3 py-1 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition'
                     >
-                      <Eye size={16} /> Ver
+                      <Eye size={16} /> {t('View')}
                     </button>
                     <button
                       onClick={() => handleEditar(cat.id)}
                       className='flex items-center gap-1 px-3 py-1 text-sm bg-purple-600 text-white rounded-lg hover:bg-blue-700 transition'
                     >
-                      <SquarePen size={16} /> Editar
+                      <SquarePen size={16} /> {t('Edit')}
                     </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          {catalogos.length === 0 && (
+            <EmptyState.NoCatalogs createHref='/dashboard/parceiro/catalogos/novo' />
+          )}
         </div>
       </div>
     </PartnerGuard>

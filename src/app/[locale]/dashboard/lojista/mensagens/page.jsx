@@ -2,9 +2,12 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import SellerGuard from 'components/SellerGuard';
+import { EmptyState } from 'components/ui';
 
 export default function ListaMensagensLojista() {
+  const t = useTranslations('LojistaMessages');
   const [mensagens, setMensagens] = useState([]);
   const [statusFiltro, setStatusFiltro] = useState('');
   const [catalogoFiltro, setCatalogoFiltro] = useState('');
@@ -59,13 +62,13 @@ export default function ListaMensagensLojista() {
     <SellerGuard>
       <div className='w-full p-6 mx-auto'>
         <div className='flex justify-between items-center mb-4'>
-          <h1 className='text-2xl font-bold'>Minhas Mensagens</h1>
+          <h1 className='text-2xl font-bold'>{t('MyMessages')}</h1>
           <div>
             <Link
               href='/dashboard/lojista'
               className='text-blue-500 hover:underline'
             >
-              ← Voltar
+              {t('Back')}
             </Link>
           </div>
         </div>
@@ -77,9 +80,9 @@ export default function ListaMensagensLojista() {
             onChange={(e) => setStatusFiltro(e.target.value)}
             className='border p-2 rounded'
           >
-            <option value=''>Todos os status</option>
-            <option value='aguardando'>Aguardando resposta</option>
-            <option value='respondida'>Respondida</option>
+            <option value=''>{t('AllStatus')}</option>
+            <option value='aguardando'>{t('WaitingResponse')}</option>
+            <option value='respondida'>{t('Answered')}</option>
           </select>
 
           <select
@@ -87,7 +90,7 @@ export default function ListaMensagensLojista() {
             onChange={(e) => setCatalogoFiltro(e.target.value)}
             className='border p-2 rounded'
           >
-            <option value=''>Todos os catálogos</option>
+            <option value=''>{t('AllCatalogs')}</option>
             {catalogos.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.nome}
@@ -99,7 +102,7 @@ export default function ListaMensagensLojista() {
         {/* Lista de mensagens */}
         <div className='space-y-4'>
           {mensagensFiltradas.length === 0 ? (
-            <p className='text-gray-500'>Nenhuma mensagem encontrada.</p>
+            <EmptyState.NoMessages />
           ) : (
             mensagensFiltradas.map((msg) => (
               <div
@@ -123,17 +126,17 @@ export default function ListaMensagensLojista() {
                   {msg.status === 'respondida' ? (
                     <div className='bg-green-50 border border-green-200 rounded p-2'>
                       <p className='text-green-700 text-sm'>
-                        <strong>Resposta:</strong> {msg.resposta}
+                        <strong>{t('Response')}</strong> {msg.resposta}
                       </p>
                       <p className='text-xs text-gray-500'>
                         {new Date(msg.resposta_data_hora).toLocaleString(
-                          'pt-BR'
+                          'pt-BR',
                         )}
                       </p>
                     </div>
                   ) : (
                     <span className='text-yellow-600 text-sm font-medium'>
-                      Aguardando resposta do fornecedor
+                      {t('WaitingSupplierResponse')}
                     </span>
                   )}
                 </div>

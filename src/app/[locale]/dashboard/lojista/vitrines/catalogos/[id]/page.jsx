@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import SellerGuard from 'components/SellerGuard';
 import Link from 'next/link';
 import sanitizeHtml from 'sanitize-html';
 
 export default function DetalhesVitrinePage() {
+  const t = useTranslations('LojistaVitrines');
   const { id } = useParams();
   const router = useRouter();
   const [catalogo, setCatalogo] = useState(null);
@@ -28,7 +30,7 @@ export default function DetalhesVitrinePage() {
   }, [id]);
 
   if (!catalogo) {
-    return <p className='p-4'>Carregando catálogo...</p>;
+    return <p className='p-4'>{t('LoadingCatalog')}</p>;
   }
 
   return (
@@ -40,13 +42,13 @@ export default function DetalhesVitrinePage() {
             onClick={() => router.push(`/dashboard/lojista/mensagens/${id}`)}
             className='px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition'
           >
-            Solicitar Atendimento
+            {t('RequestService')}
           </button>
           <Link
             href='/dashboard/lojista/vitrines/principal'
             className='text-blue-500 hover:underline'
           >
-            ← Voltar
+            {t('Back')}
           </Link>
         </div>
       </div>
@@ -67,15 +69,15 @@ export default function DetalhesVitrinePage() {
 
             <div className='flex flex-wrap gap-2 mt-2'>
               <span className='px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full'>
-                Status: {catalogo.status}
+                {t('Status')}: {catalogo.status}
               </span>
               <span className='px-3 py-1 text-sm bg-yellow-100 text-yellow-700 rounded-full'>
-                Rating: ⭐ {catalogo.rating || 'N/A'}
+                {t('Rating')}: ⭐ {catalogo.rating || 'N/A'}
               </span>
             </div>
 
             <p className='text-sm text-gray-500 mt-2'>
-              Fornecedor:{' '}
+              {t('Supplier')}:{' '}
               {catalogo.fornecedor?.nomeFantasia || catalogo.fornecedor?.nome}
             </p>
           </div>
@@ -83,7 +85,7 @@ export default function DetalhesVitrinePage() {
 
         {/* Produtos */}
         <div>
-          <h2 className='text-xl font-semibold mb-4'>Produtos</h2>
+          <h2 className='text-xl font-semibold mb-4'>{t('Products')}</h2>
           {catalogo.produtos?.length ? (
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
               {catalogo.produtos.map((produto) => (
@@ -111,12 +113,12 @@ export default function DetalhesVitrinePage() {
                     <p className='text-sm font-medium'>
                       💰{' '}
                       {produto.preco?.toFixed(2) == 0.0
-                        ? 'Sob consulta'
+                        ? t('OnRequest')
                         : `R$ ${produto.preco?.toFixed(2)}`}
                     </p>
                     {produto.destaque && (
                       <span className='inline-block text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full'>
-                        Destaque
+                        {t('Featured')}
                       </span>
                     )}
                   </div>
@@ -124,7 +126,7 @@ export default function DetalhesVitrinePage() {
               ))}
             </div>
           ) : (
-            <p className='text-sm text-gray-500'>Nenhum produto disponível.</p>
+            <p className='text-sm text-gray-500'>{t('NoProductsAvailable')}</p>
           )}
         </div>
 
@@ -132,7 +134,7 @@ export default function DetalhesVitrinePage() {
 
         {catalogo.colecoes?.length ? (
           <div>
-            <h2 className='text-xl font-semibold mb-4'>Coleções</h2>
+            <h2 className='text-xl font-semibold mb-4'>{t('Collections')}</h2>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
               {catalogo.colecoes.map((colecao) => (
                 <div
@@ -149,24 +151,40 @@ export default function DetalhesVitrinePage() {
 
         {/* Metadados */}
         <div>
-          <h2 className='text-xl font-semibold mb-4'>Metadados</h2>
+          <h2 className='text-xl font-semibold mb-4'>{t('Metadata')}</h2>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 text-sm'>
             <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
-              <p>🌍 Continente: {catalogo.metadados?.continente}</p>
+              <p>
+                🌍 {t('ContinentLabel')}: {catalogo.metadados?.continente}
+              </p>
             </div>
             <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
-              <p>🇵🇰 País: {catalogo.metadados?.pais}</p>
+              <p>
+                🇵🇰 {t('CountryLabel')}: {catalogo.metadados?.pais}
+              </p>
             </div>
             <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
-              <p>📂 Categoria: {catalogo.metadados?.categoria}</p>
+              <p>
+                📂 {t('CategoryLabel')}: {catalogo.metadados?.categoria}
+              </p>
             </div>
             <div className='p-4 bg-gray-50 rounded-lg hover:shadow'>
-              <p>🗂 Subcategoria: {catalogo.metadados?.sub_categoria}</p>
+              <p>
+                🗂 {t('SubcategoryLabel')}: {catalogo.metadados?.sub_categoria}
+              </p>
             </div>
             <div className='p-4 bg-gray-50 rounded-lg hover:shadow col-span-full'>
               <p>
-                ⚙️ Especificações:{' '}
-                {catalogo.metadados?.especificacao?.join(', ') || 'Nenhuma'}
+                ⚙️ {t('Specifications')}:{' '}
+                {catalogo.metadados?.especificacao
+                  ? typeof catalogo.metadados.especificacao === 'object'
+                    ? Object.entries(catalogo.metadados.especificacao)
+                        .map(([key, value]) => `${key}: ${value}`)
+                        .join(' | ')
+                    : Array.isArray(catalogo.metadados.especificacao)
+                      ? catalogo.metadados.especificacao.join(', ')
+                      : String(catalogo.metadados.especificacao)
+                  : t('None')}
               </p>
             </div>
           </div>

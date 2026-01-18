@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import AdminGuard from 'components/AdminGuard';
 
 export default function NovoUsuarioPage() {
+  const t = useTranslations('DashboardAdmin');
   const router = useRouter();
 
   const [form, setForm] = useState({
@@ -30,21 +32,21 @@ export default function NovoUsuarioPage() {
 
     // Validações simples no client
     if (!form.nome.trim())
-      return setMensagem({ tipo: 'erro', texto: 'Nome é obrigatório.' });
+      return setMensagem({ tipo: 'erro', texto: t('NameRequired2') });
     if (!form.nome_fantasia.trim())
       return setMensagem({
         tipo: 'erro',
-        texto: 'Nome Fantasia é obrigatório.',
+        texto: t('TradeNameRequired'),
       });
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-      return setMensagem({ tipo: 'erro', texto: 'E-mail inválido.' });
+      return setMensagem({ tipo: 'erro', texto: t('InvalidEmail') });
     if (form.senha.length < 6)
       return setMensagem({
         tipo: 'erro',
-        texto: 'Senha deve ter no mínimo 6 caracteres.',
+        texto: t('PasswordMinLength'),
       });
     if (!papeis.includes(form.papel))
-      return setMensagem({ tipo: 'erro', texto: 'Papel inválido.' });
+      return setMensagem({ tipo: 'erro', texto: t('InvalidRole') });
 
     try {
       setLoading(true);
@@ -57,10 +59,10 @@ export default function NovoUsuarioPage() {
 
       if (!res.ok) {
         const erro = await res.json();
-        throw new Error(erro.error || 'Erro ao criar usuário');
+        throw new Error(erro.error || t('ErrorCreatingUser'));
       }
 
-      setMensagem({ tipo: 'sucesso', texto: 'Usuário criado com sucesso!' });
+      setMensagem({ tipo: 'sucesso', texto: t('UserCreated') });
 
       setTimeout(() => {
         router.push('/dashboard/admin/usuarios');
@@ -75,7 +77,7 @@ export default function NovoUsuarioPage() {
   return (
     <AdminGuard>
       <div className='p-6 max-w-lg mx-auto'>
-        <h1 className='text-2xl font-bold mb-6'>Novo Usuário</h1>
+        <h1 className='text-2xl font-bold mb-6'>{t('NewUser')}</h1>
 
         {mensagem && (
           <div
@@ -91,7 +93,7 @@ export default function NovoUsuarioPage() {
 
         <form onSubmit={handleSubmit} className='space-y-4'>
           <div>
-            <label className='block mb-1 font-medium'>Nome</label>
+            <label className='block mb-1 font-medium'>{t('Name')}</label>
             <input
               type='text'
               name='nome'
@@ -102,7 +104,7 @@ export default function NovoUsuarioPage() {
           </div>
 
           <div>
-            <label className='block mb-1 font-medium'>Nome Fantasia</label>
+            <label className='block mb-1 font-medium'>{t('TradeName')}</label>
             <input
               type='text'
               name='nome_fantasia'
@@ -113,7 +115,7 @@ export default function NovoUsuarioPage() {
           </div>
 
           <div>
-            <label className='block mb-1 font-medium'>E-mail</label>
+            <label className='block mb-1 font-medium'>{t('Email')}</label>
             <input
               type='email'
               name='email'
@@ -124,7 +126,7 @@ export default function NovoUsuarioPage() {
           </div>
 
           <div>
-            <label className='block mb-1 font-medium'>Senha</label>
+            <label className='block mb-1 font-medium'>{t('Password')}</label>
             <input
               type='password'
               name='senha'
@@ -135,14 +137,14 @@ export default function NovoUsuarioPage() {
           </div>
 
           <div>
-            <label className='block mb-1 font-medium'>Papel</label>
+            <label className='block mb-1 font-medium'>{t('Role')}</label>
             <select
               name='papel'
               value={form.papel}
               onChange={handleChange}
               className='border border-gray-300 rounded px-3 py-2 w-full'
             >
-              <option value=''>Selecione...</option>
+              <option value=''>{t('Select')}</option>
               {papeis.map((p) => (
                 <option key={p} value={p}>
                   {p.charAt(0).toUpperCase() + p.slice(1)}
@@ -157,7 +159,7 @@ export default function NovoUsuarioPage() {
               disabled={loading}
               className='bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded'
             >
-              {loading ? 'Salvando...' : 'Salvar'}
+              {loading ? t('Saving') : t('Save')}
             </button>
 
             <button
@@ -165,7 +167,7 @@ export default function NovoUsuarioPage() {
               onClick={() => router.push('/dashboard/admin/usuarios')}
               className='bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded'
             >
-              Cancelar
+              {t('Cancel')}
             </button>
           </div>
         </form>

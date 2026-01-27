@@ -19,6 +19,10 @@ export default function DashboardLayout({ children }) {
     { href: '/dashboard/lojista', label: t('Home') },
     { href: '/dashboard/lojista/vitrines/principal', label: t('Search') },
     { href: '/dashboard/lojista/mensagens', label: t('Messages') },
+    {
+      href: 'https://calçadistabrasil.com.br',
+      label: t('InternationalGallery'),
+    },
   ];
 
   const produtos = [

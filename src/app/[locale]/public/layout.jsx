@@ -32,6 +32,10 @@ export default function MapaLayout({ children }) {
     { href: '/public/contato', label: t('Contact') },
     { href: '/public/suporte', label: t('Support') },
     { href: '/public/sobre', label: t('About') },
+    {
+      href: 'https://calçadistabrasil.com.br',
+      label: t('InternationalGallery'),
+    },
   ];
 
   return (

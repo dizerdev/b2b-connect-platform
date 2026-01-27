@@ -12,7 +12,11 @@ import {
   Plus,
   ArrowRight,
   Eye,
+  Heart,
+  Archive,
+  Star,
   TrendingUp,
+  Mail,
 } from 'lucide-react';
 import { MetricCard } from 'components/charts';
 import { Button, Card, Badge, Skeleton } from 'components/ui';
@@ -27,28 +31,29 @@ export default function DashboardParceiro() {
     async function loadDashboardData() {
       setLoading(true);
       try {
-        // Fetch stats from API
-        const [catalogsRes, productsRes] = await Promise.all([
-          fetch('/api/v1/meus-catalogos', { cache: 'no-store' }),
-          fetch('/api/v1/meus-produtos', { cache: 'no-store' }),
-        ]);
-
-        const catalogsData = catalogsRes.ok ? await catalogsRes.json() : { catalogos: [] };
-        const productsData = productsRes.ok ? await productsRes.json() : { produtos: [] };
-
-        // Calculate stats
-        const catalogs = catalogsData.catalogos || [];
-        const products = productsData.produtos || [];
-
-        setStats({
-          totalProducts: products.length,
-          activeCatalogs: catalogs.filter(c => c.status === 'publicado').length,
-          pendingApproval: catalogs.filter(c => c.status === 'pendente_aprovacao').length,
-          pendingPublication: catalogs.filter(c => c.status === 'aprovado').length,
+        // Fetch reports from API
+        const reportsRes = await fetch('/api/v1/reports/parceiro', {
+          cache: 'no-store',
         });
 
-        // Get recent catalogs
-        setRecentCatalogs(catalogs.slice(0, 5));
+        const reportsData = reportsRes.ok
+          ? await reportsRes.json()
+          : { relatorios: {} };
+
+        // Set stats from reports
+        const r = reportsData.relatorios || {};
+        setStats({
+          totalProducts: Number(r.produtos_cadastrados) || 0,
+          activeCatalogs: Number(r.catalogos_publicados) || 0,
+          pendingApproval: Number(r.catalogos_pendentes) || 0,
+          pendingPublication: Number(r.catalogos_aprovados) || 0,
+          totalMessages: Number(r.total_mensagens) || 0,
+          pendingMessages: Number(r.mensagens_pendentes) || 0,
+          totalFavorites: Number(r.total_favoritos) || 0,
+          totalStock: Number(r.estoque_total) || 0,
+          avgRating: Number(r.media_avaliacoes) || 0,
+          totalRatings: Number(r.total_avaliacoes) || 0,
+        });
       } catch (error) {
         console.error('Error loading dashboard:', error);
         setStats({
@@ -56,6 +61,11 @@ export default function DashboardParceiro() {
           activeCatalogs: 0,
           pendingApproval: 0,
           pendingPublication: 0,
+          totalMessages: 0,
+          pendingMessages: 0,
+          totalFavorites: 0,
+          totalStock: 0,
+          avgRating: 0,
         });
       } finally {
         setLoading(false);
@@ -80,34 +90,32 @@ export default function DashboardParceiro() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className='space-y-8'>
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
         <div>
-          <h1 className="text-2xl font-heading font-bold text-[var(--color-gray-900)]">
+          <h1 className='text-2xl font-heading font-bold text-[var(--color-gray-900)]'>
             {t('DashboardTitle')}
           </h1>
-          <p className="text-[var(--color-gray-500)] mt-1">
+          <p className='text-[var(--color-gray-500)] mt-1'>
             Bem-vindo de volta! Aqui está um resumo da sua conta.
           </p>
         </div>
-        <Link href="/dashboard/parceiro/catalogos/novo">
-          <Button icon={Plus}>
-            Novo Catálogo
-          </Button>
+        <Link href='/dashboard/parceiro/catalogos/novo'>
+          <Button icon={Plus}>Novo Catálogo</Button>
         </Link>
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
         <MetricCard
           title={t('RegisteredProducts')}
           value={stats?.totalProducts ?? 0}
           icon={Package}
           trend={12}
-          trendLabel="vs. mês anterior"
+          trendLabel='vs. mês anterior'
           sparklineData={sparklineData.products}
-          color="blue"
+          color='blue'
           loading={loading}
         />
         <MetricCard
@@ -115,9 +123,9 @@ export default function DashboardParceiro() {
           value={stats?.activeCatalogs ?? 0}
           icon={FolderCheck}
           trend={8}
-          trendLabel="vs. mês anterior"
+          trendLabel='vs. mês anterior'
           sparklineData={sparklineData.catalogs}
-          color="emerald"
+          color='emerald'
           loading={loading}
         />
         <MetricCard
@@ -125,7 +133,7 @@ export default function DashboardParceiro() {
           value={stats?.pendingApproval ?? 0}
           icon={FolderClock}
           sparklineData={null}
-          color="amber"
+          color='amber'
           loading={loading}
         />
         <MetricCard
@@ -133,48 +141,44 @@ export default function DashboardParceiro() {
           value={stats?.pendingPublication ?? 0}
           icon={FolderOpen}
           sparklineData={null}
-          color="rose"
+          color='rose'
           loading={loading}
         />
       </div>
 
       {/* Secondary Metrics */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
         <MetricCard
-          title="Visualizações este mês"
-          value={1247}
+          title='Favoritos recebidos'
+          value={stats?.totalFavorites ?? 0}
           icon={Eye}
-          trend={23}
-          trendLabel="vs. mês anterior"
           sparklineData={sparklineData.views}
-          color="primary"
+          color='primary'
           loading={loading}
         />
         <MetricCard
-          title="Mensagens recebidas"
-          value={12}
+          title='Mensagens recebidas'
+          value={stats?.totalMessages ?? 0}
           icon={MessageSquare}
-          trend={5}
-          trendLabel="vs. mês anterior"
           sparklineData={sparklineData.messages}
-          color="blue"
+          color='blue'
           loading={loading}
         />
       </div>
 
       {/* Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
         {/* Recent Catalogs */}
-        <div className="lg:col-span-2">
-          <Card variant="default" padding={false} className="overflow-hidden">
-            <div className="p-5 border-b border-[var(--color-gray-100)]">
-              <div className="flex items-center justify-between">
-                <h2 className="font-semibold text-[var(--color-gray-900)]">
+        <div className='lg:col-span-2'>
+          <Card variant='default' padding={false} className='overflow-hidden'>
+            <div className='p-5 border-b border-[var(--color-gray-100)]'>
+              <div className='flex items-center justify-between'>
+                <h2 className='font-semibold text-[var(--color-gray-900)]'>
                   Catálogos Recentes
                 </h2>
                 <Link
-                  href="/dashboard/parceiro/catalogos"
-                  className="text-sm text-[var(--color-primary-600)] hover:text-[var(--color-primary-700)] flex items-center gap-1"
+                  href='/dashboard/parceiro/catalogos'
+                  className='text-sm text-[var(--color-primary-600)] hover:text-[var(--color-primary-700)] flex items-center gap-1'
                 >
                   Ver todos
                   <ArrowRight size={14} />
@@ -182,10 +186,10 @@ export default function DashboardParceiro() {
               </div>
             </div>
 
-            <div className="divide-y divide-[var(--color-gray-100)]">
+            <div className='divide-y divide-[var(--color-gray-100)]'>
               {loading ? (
                 Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="p-4">
+                  <div key={i} className='p-4'>
                     <Skeleton.TableRow columns={4} />
                   </div>
                 ))
@@ -194,37 +198,42 @@ export default function DashboardParceiro() {
                   <Link
                     key={catalog.id}
                     href={`/dashboard/parceiro/catalogos/${catalog.id}`}
-                    className="flex items-center gap-4 p-4 hover:bg-[var(--color-gray-50)] transition-colors"
+                    className='flex items-center gap-4 p-4 hover:bg-[var(--color-gray-50)] transition-colors'
                   >
-                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-[var(--color-gray-100)] flex-shrink-0">
+                    <div className='w-12 h-12 rounded-lg overflow-hidden bg-[var(--color-gray-100)] flex-shrink-0'>
                       {catalog.imagem_url ? (
                         <img
                           src={catalog.imagem_url}
                           alt={catalog.nome}
-                          className="w-full h-full object-cover"
+                          className='w-full h-full object-cover'
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-[var(--color-gray-400)]">
+                        <div className='w-full h-full flex items-center justify-center text-[var(--color-gray-400)]'>
                           <FolderOpen size={20} />
                         </div>
                       )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-medium text-[var(--color-gray-900)] truncate">
+                    <div className='flex-1 min-w-0'>
+                      <p className='font-medium text-[var(--color-gray-900)] truncate'>
                         {catalog.nome}
                       </p>
-                      <p className="text-sm text-[var(--color-gray-500)]">
-                        {new Date(catalog.created_at).toLocaleDateString('pt-BR')}
+                      <p className='text-sm text-[var(--color-gray-500)]'>
+                        {new Date(catalog.created_at).toLocaleDateString(
+                          'pt-BR',
+                        )}
                       </p>
                     </div>
-                    <Badge variant={statusColors[catalog.status]} size="sm" dot>
-                      {catalog.status === 'publicado' ? 'Publicado' : 
-                       catalog.status === 'aprovado' ? 'Aprovado' : 'Pendente'}
+                    <Badge variant={statusColors[catalog.status]} size='sm' dot>
+                      {catalog.status === 'publicado'
+                        ? 'Publicado'
+                        : catalog.status === 'aprovado'
+                          ? 'Aprovado'
+                          : 'Pendente'}
                     </Badge>
                   </Link>
                 ))
               ) : (
-                <div className="p-8 text-center text-[var(--color-gray-500)]">
+                <div className='p-8 text-center text-[var(--color-gray-500)]'>
                   Nenhum catálogo encontrado
                 </div>
               )}
@@ -233,14 +242,15 @@ export default function DashboardParceiro() {
         </div>
 
         {/* Quick Actions */}
-        <div className="space-y-6">
+        <div className='space-y-6'>
           <Card>
-            <h2 className="font-semibold text-[var(--color-gray-900)] mb-4">
+            <h2 className='font-semibold text-[var(--color-gray-900)] mb-4'>
               {t('Shortcuts')}
             </h2>
-            <div className="space-y-3">
-              <Link href="/dashboard/parceiro/catalogos" className="block">
-                <div className="
+            <div className='space-y-3'>
+              <Link href='/dashboard/parceiro/catalogos' className='block'>
+                <div
+                  className='
                   flex items-center gap-3 p-3
                   rounded-lg
                   bg-[var(--color-gray-50)]
@@ -249,8 +259,10 @@ export default function DashboardParceiro() {
                   hover:border-[var(--color-primary-200)]
                   transition-all
                   group
-                ">
-                  <div className="
+                '
+                >
+                  <div
+                    className='
                     w-10 h-10
                     flex items-center justify-center
                     rounded-lg
@@ -258,22 +270,24 @@ export default function DashboardParceiro() {
                     text-[var(--color-primary-600)]
                     group-hover:bg-[var(--color-primary-200)]
                     transition-colors
-                  ">
+                  '
+                  >
                     <FolderOpen size={18} />
                   </div>
                   <div>
-                    <p className="font-medium text-[var(--color-gray-900)]">
+                    <p className='font-medium text-[var(--color-gray-900)]'>
                       {t('ManageCatalogs')}
                     </p>
-                    <p className="text-xs text-[var(--color-gray-500)]">
+                    <p className='text-xs text-[var(--color-gray-500)]'>
                       {t('ManageCatalogsDesc')}
                     </p>
                   </div>
                 </div>
               </Link>
 
-              <Link href="/dashboard/parceiro/produtos" className="block">
-                <div className="
+              <Link href='/dashboard/parceiro/produtos' className='block'>
+                <div
+                  className='
                   flex items-center gap-3 p-3
                   rounded-lg
                   bg-[var(--color-gray-50)]
@@ -282,8 +296,10 @@ export default function DashboardParceiro() {
                   hover:border-[var(--color-primary-200)]
                   transition-all
                   group
-                ">
-                  <div className="
+                '
+                >
+                  <div
+                    className='
                     w-10 h-10
                     flex items-center justify-center
                     rounded-lg
@@ -291,22 +307,24 @@ export default function DashboardParceiro() {
                     text-blue-600
                     group-hover:bg-blue-200
                     transition-colors
-                  ">
+                  '
+                  >
                     <Package size={18} />
                   </div>
                   <div>
-                    <p className="font-medium text-[var(--color-gray-900)]">
+                    <p className='font-medium text-[var(--color-gray-900)]'>
                       {t('ManageProducts')}
                     </p>
-                    <p className="text-xs text-[var(--color-gray-500)]">
+                    <p className='text-xs text-[var(--color-gray-500)]'>
                       {t('ManageProductsDesc')}
                     </p>
                   </div>
                 </div>
               </Link>
 
-              <Link href="/dashboard/parceiro/mensagens" className="block">
-                <div className="
+              <Link href='/dashboard/parceiro/mensagens' className='block'>
+                <div
+                  className='
                   flex items-center gap-3 p-3
                   rounded-lg
                   bg-[var(--color-gray-50)]
@@ -315,8 +333,10 @@ export default function DashboardParceiro() {
                   hover:border-[var(--color-primary-200)]
                   transition-all
                   group
-                ">
-                  <div className="
+                '
+                >
+                  <div
+                    className='
                     w-10 h-10
                     flex items-center justify-center
                     rounded-lg
@@ -324,14 +344,15 @@ export default function DashboardParceiro() {
                     text-emerald-600
                     group-hover:bg-emerald-200
                     transition-colors
-                  ">
+                  '
+                  >
                     <MessageSquare size={18} />
                   </div>
                   <div>
-                    <p className="font-medium text-[var(--color-gray-900)]">
+                    <p className='font-medium text-[var(--color-gray-900)]'>
                       Mensagens
                     </p>
-                    <p className="text-xs text-[var(--color-gray-500)]">
+                    <p className='text-xs text-[var(--color-gray-500)]'>
                       Ver mensagens de lojistas
                     </p>
                   </div>
@@ -341,18 +362,19 @@ export default function DashboardParceiro() {
           </Card>
 
           {/* Performance Card */}
-          <Card className="bg-gradient-to-br from-[var(--color-primary-500)] to-[var(--color-primary-700)] text-white border-0">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center">
+          <Card className='bg-gradient-to-br from-[var(--color-primary-500)] to-[var(--color-primary-700)] text-white border-0'>
+            <div className='flex items-center gap-3 mb-4'>
+              <div className='w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center'>
                 <TrendingUp size={20} />
               </div>
               <div>
-                <p className="text-white/80 text-sm">Performance</p>
-                <p className="font-bold text-lg">Excelente!</p>
+                <p className='text-white/80 text-sm'>Performance</p>
+                <p className='font-bold text-lg'>Excelente!</p>
               </div>
             </div>
-            <p className="text-white/90 text-sm">
-              Seus catálogos receberam 23% mais visualizações este mês. Continue assim!
+            <p className='text-white/90 text-sm'>
+              Seus catálogos receberam 23% mais visualizações este mês. Continue
+              assim!
             </p>
           </Card>
         </div>
